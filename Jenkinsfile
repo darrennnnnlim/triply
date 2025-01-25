@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven_3.9.9'
+    }
 
     stages {
         stage('Checkout') {
@@ -10,7 +13,11 @@ pipeline {
 
         stage('Build & Test backend') {
             steps {
-                sh 'echo "Running Backend Build & Test..."'
+                sh 'echo "Running Frontend Build & Test..."'
+                sh '''
+                    cd triply-api
+                    mvn clean install
+                '''
             }
         }
 
