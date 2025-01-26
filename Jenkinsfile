@@ -56,7 +56,7 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 dir(env.FRONTEND_DIR) {
-                    sh 'docker build -t triply-frontend:latest .'
+                    sh 'docker build -t triply-frontend:latest -f triply-app/Dockerfile triply-app/'
                 }
             }
         }
@@ -73,7 +73,7 @@ pipeline {
         
         stage('Deploy Stack') {
             steps {
-                sh 'docker stack deploy -c docker-compose.yml triply'
+                sh 'docker stack deploy -c /home/ec2-user/triply-deployment/docker-compose.yml triply'
             }
         }
 
