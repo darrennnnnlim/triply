@@ -73,7 +73,7 @@ pipeline {
         
         stage('Deploy Stack') {
             steps {
-                sh 'docker stack deploy -c /home/ec2-user/triply-deployment/docker-compose.yml triply'
+                sh 'docker stack deploy -c docker-compose.yml triply'
             }
         }
 
