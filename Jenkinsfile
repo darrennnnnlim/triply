@@ -56,7 +56,7 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 dir(env.FRONTEND_DIR) {
-                    sh 'docker build -t triply-frontend:latest -f triply-app/Dockerfile triply-app/'
+                    sh 'docker build -t triply-frontend:latest -f Dockerfile .'
                 }
             }
         }
