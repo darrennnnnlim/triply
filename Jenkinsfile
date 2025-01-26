@@ -70,9 +70,7 @@ pipeline {
         
         stage('Deploy Stack') {
             steps {
-                dir(env.DEPLOYMENT_DIR) {
-                    sh 'docker stack deploy -c docker-compose.yml triply'
-                }
+                sh 'docker stack deploy -c docker-compose.yml triply'
             }
         }
     }
