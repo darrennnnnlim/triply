@@ -8,6 +8,8 @@ RUN npm run build
 
 # Serve stage
 FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*  # Ensure no default Nginx files
+COPY --from=build /app/dist/triply-app .  # Update to match the Angular output path
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
