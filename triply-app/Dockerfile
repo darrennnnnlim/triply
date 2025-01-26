@@ -10,6 +10,6 @@ RUN npm run build
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*  # Remove any default Nginx files
-COPY --from=build /app/dist/triply-app/browser .
+COPY --from=build /app/dist/triply-app/browser/* .
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
