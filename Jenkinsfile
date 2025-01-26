@@ -52,6 +52,8 @@ pipeline {
             }
         }
 
+        // TODO
+        // docker build -t triply-frontend:${BUILD_NUMBER} .
         stage('Build Frontend Image') {
             steps {
                 dir(env.FRONTEND_DIR) {
@@ -60,7 +62,9 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
+        // TODO
+        // docker build -t triply-backend:${BUILD_NUMBER} .
+        stage('Build Backend Image') {
             steps {
                 dir(env.BACKEND_DIR) {
                     sh 'docker build -t triply-backend:latest .'
@@ -71,6 +75,14 @@ pipeline {
         stage('Deploy Stack') {
             steps {
                 sh 'docker stack deploy -c docker-compose.yml triply'
+            }
+        }
+
+        // TODO
+        // Might change this to cron job
+        stage('Docker Image Cleanup') {
+            steps {
+                sh 'docker image prune -f'
             }
         }
     }
