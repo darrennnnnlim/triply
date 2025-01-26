@@ -10,7 +10,7 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - "80:80" # Publish port 80 for the frontend
+      - "8081:80" # Publish port 80 for the frontend
 
   backend:
     image: triply-backend:latest
@@ -21,7 +21,7 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - "8080:8080" # Publish port 8080 for the backend
+      - "8082:8080" # Publish port 8080 for the backend
 
   database:
     image: postgres:16
