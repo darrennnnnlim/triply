@@ -2,6 +2,14 @@ pipeline {
     agent any
     tools {
         maven 'Maven_3.9.9'
+        nodejs 'NodeJS_22.13.0'
+    }
+
+    // Might shift this to Jenkins environment placeholder
+    environment {
+        FRONTEND_DIR = 'triply-app'
+        BACKEND_DIR = 'triply-api'
+        DEPLOYMENT_DIR = 'triply-deployment'
     }
 
     stages {
@@ -11,19 +19,24 @@ pipeline {
             }
         }
 
-        stage('Build & Test backend') {
-            steps {
-                sh 'echo "Running Frontend Build & Test..."'
-                sh '''
-                    cd triply-api
-                    mvn clean install
-                '''
-            }
-        }
-
         stage('Build & Test Frontend') {
             steps {
                 sh 'echo "Running Frontend Build & Test..."'
+                dir(env.FRONTEND_DIR) {
+                    sh '''
+                        npm install
+                        npm run build
+                    '''
+                }
+            }
+        }
+
+        stage('Build & Test Backend') {
+            steps {
+                sh 'echo "Running Frontend Build & Test..."'
+                dir(env.BACKEND_DIR) {
+                    sh 'mvn clean install'
+                }
             }
         }
 
@@ -39,29 +52,40 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('Build Frontend Image') {
             steps {
-                sh 'echo "Running Docker Build..."'
+                dir(env.FRONTEND_DIR) {
+                    sh 'docker build -t triply-frontend:latest .'
+                }
             }
         }
 
-        stage('Push to ECR') {
+        stage('Build Backend') {
             steps {
-                sh 'echo "Running Push to ECR..."'
+                dir(env.BACKEND_DIR) {
+                    sh 'docker build -t triply-backend:latest .'
+                }
             }
         }
-
-        stage('Deploy to ECS Fargate') {
+        
+        stage('Deploy Stack') {
             steps {
-                sh 'echo "Running Deploy to ECS Fargate..."'
+                dir(env.DEPLOYMENT_DIR) {
+                    sh 'docker stack deploy -c docker-compose.yml triply'
+                }
             }
         }
-
     }
 
     post {
         always {
             echo "Pipeline finished!"
+        }
+        success {
+            echo "Pipeline completed successfully!"
+        }
+        failure {
+            echo "Pipeline failed!"
         }
     }
 }
