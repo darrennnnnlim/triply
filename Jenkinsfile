@@ -9,7 +9,6 @@ pipeline {
     environment {
         FRONTEND_DIR = 'triply-app'
         BACKEND_DIR = 'triply-api'
-        DEPLOYMENT_DIR = 'triply-deployment'
     }
 
     stages {
