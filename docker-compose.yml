@@ -10,7 +10,8 @@ services:
       restart_policy:
         condition: on-failure
     ports:
-      - "8081:80" # Publish port 80 for the frontend
+      - "8081:4200"  # Map host port 8081 to container port 4200
+
 
   backend:
     image: triply-backend:latest
