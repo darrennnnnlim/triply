@@ -84,15 +84,6 @@ pipeline {
             }
         }
 
-        stage('Update Docker Swarm') {
-            steps {
-                sh '''
-                    docker service update --force triply_frontend
-                    docker service update --force triply_backend
-                '''
-            }
-        }
-
         // TODO
         // Might change this to cron job
         stage('Docker Image Cleanup') {
