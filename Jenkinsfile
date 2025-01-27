@@ -97,11 +97,13 @@ pipeline {
         stage('Docker Image Cleanup') {
             steps {
                 sh '''
-                    docker images --format "{{.ID}}" | while read id; do
-                        build_number=$(docker inspect "$id" | grep -i '"build-number":' | awk -F '"' '{print $4}')
-                        if [ "$build_number" != "${BUILD_TAG}" ]; then
-                            echo "Removing image: $id with build-number $build_number"
-                            docker rmi -f "$id"
+                    docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | while read repo_tag id; do
+                        if [[ "$repo_tag" == triply-backend* || "$repo_tag" == triply-frontend* ]]; then
+                            build_number=$(docker inspect "$id" | grep -i '"build-number":' | awk -F '"' '{print $4}')
+                            if [ "$build_number" != "${BUILD_TAG}" ]; then
+                                echo "Removing image: $id from $repo_tag with build-number $build_number"
+                                docker rmi -f "$id"
+                            fi
                         fi
                     done
                 '''
