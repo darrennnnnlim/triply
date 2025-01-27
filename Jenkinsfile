@@ -80,7 +80,7 @@ pipeline {
         
         stage('Deploy Stack') {
             steps {
-                sh 'docker stack deploy -c docker-compose.yml triply'
+                sh 'docker stack deploy -c docker-compose.yml triply --with-registry-auth --force-update'
             }
         }
 
@@ -89,10 +89,7 @@ pipeline {
         stage('Docker Image Cleanup') {
             steps {
                 sh '''
-                    docker image prune -f
-                    docker rmi $(docker images -f "dangling=true" -q) || true
-                    docker rmi $(docker images "triply-frontend" --format "{{.ID}}" | tail -n +2) || true
-                    docker rmi $(docker images "triply-backend" --format "{{.ID}}" | tail -n +2) || true
+                    docker image prune -af --filter "label=build-number!=${BUILD_TAG}" || true
                 '''
             }
         }
