@@ -58,7 +58,7 @@ pipeline {
             steps {
                 dir(env.FRONTEND_DIR) {
                     sh '''
-                        docker build -t triply-frontend:${BUILD_TAG} -f Dockerfile .
+                        docker build -t triply-frontend:${BUILD_TAG} --label build-number=${BUILD_TAG} -f Dockerfile .
                         docker tag triply-frontend:${BUILD_TAG} triply-frontend:latest
                     '''
                 }
@@ -71,7 +71,7 @@ pipeline {
             steps {
                 dir(env.BACKEND_DIR) {
                     sh '''
-                        docker build -t triply-backend:${BUILD_TAG} .
+                        docker build -t triply-backend:${BUILD_TAG} --label build-number=${BUILD_TAG} .
                         docker tag triply-backend:${BUILD_TAG} triply-backend:latest
                     '''
                 }
@@ -81,6 +81,14 @@ pipeline {
         stage('Deploy Docker Stack') {
             steps {
                 sh 'docker stack deploy -c docker-compose.yml triply --with-registry-auth'
+            }
+        }
+
+        // TODO
+        // Might shift this to post-success
+        stage('Docker Container Cleanup') {
+            steps {
+                sh 'docker container prune -f'
             }
         }
 
