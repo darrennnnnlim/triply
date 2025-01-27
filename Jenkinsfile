@@ -78,9 +78,18 @@ pipeline {
             }
         }
         
-        stage('Deploy Stack') {
+        stage('Deploy Docker Stack') {
             steps {
-                sh 'docker stack deploy -c docker-compose.yml triply --with-registry-auth --force-update'
+                sh 'docker stack deploy -c docker-compose.yml triply --with-registry-auth'
+            }
+        }
+
+        stage('Update Docker Swarm') {
+            steps {
+                sh '''
+                    docker service update --force triply_frontend
+                    docker service update --force triply_backend
+                '''
             }
         }
 
