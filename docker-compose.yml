@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    image: triply-frontend:${BUILD_TAG}
+    image: triply-frontend:latest
     networks:
       - triply-network
     deploy:
@@ -13,7 +13,7 @@ services:
       - "8081:80"  # Map host port 8081 to container port 4200
 
   backend:
-    image: triply-backend:${BUILD_TAG}
+    image: triply-backend:latest
     networks:
       - triply-network
     deploy:
