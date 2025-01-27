@@ -97,7 +97,13 @@ pipeline {
         stage('Docker Image Cleanup') {
             steps {
                 sh '''
-                    docker image prune -af --filter "label=build-number!=${BUILD_TAG}" || true
+                    docker images --format "{{.ID}}" | while read id; do
+                        build_number=$(docker inspect "$id" | grep -i '"build-number":' | awk -F '"' '{print $4}')
+                        if [ "$build_number" != "${BUILD_TAG}" ]; then
+                            echo "Removing image: $id with build-number $build_number"
+                            docker rmi -f "$id"
+                        fi
+                    done
                 '''
             }
         }
