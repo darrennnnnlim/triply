@@ -9,6 +9,7 @@ pipeline {
     environment {
         FRONTEND_DIR = 'triply-app'
         BACKEND_DIR = 'triply-api'
+        BUILD_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
@@ -56,7 +57,10 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 dir(env.FRONTEND_DIR) {
-                    sh 'docker build -t triply-frontend:latest -f Dockerfile .'
+                    sh '''
+                        docker build -t triply-frontend:${BUILD_TAG} -f Dockerfile .
+                        docker tag triply-frontend:${BUILD_TAG} triply-frontend:latest
+                    '''
                 }
             }
         }
@@ -66,7 +70,10 @@ pipeline {
         stage('Build Backend Image') {
             steps {
                 dir(env.BACKEND_DIR) {
-                    sh 'docker build -t triply-backend:latest .'
+                    sh '''
+                        docker build -t triply-backend:${BUILD_TAG} .
+                        docker tag triply-backend:${BUILD_TAG} triply-backend:latest
+                    '''
                 }
             }
         }
@@ -81,7 +88,12 @@ pipeline {
         // Might change this to cron job
         stage('Docker Image Cleanup') {
             steps {
-                sh 'docker image prune -f'
+                sh '''
+                    docker image prune -f
+                    docker rmi $(docker images -f "dangling=true" -q) || true
+                    docker rmi $(docker images "triply-frontend" --format "{{.ID}}" | tail -n +2) || true
+                    docker rmi $(docker images "triply-backend" --format "{{.ID}}" | tail -n +2) || true
+                '''
             }
         }
     }
