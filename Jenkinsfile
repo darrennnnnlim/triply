@@ -40,9 +40,9 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                sh 'echo "Running SonarQube..."'
+        stage('SonarCloud analysis') {
+            withSonarQubeEnv(credentialsId: env.SONARCLOUD_CREDENTIAL_ID, installationName: 'SonarCloud') {
+                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
             }
         }
 
