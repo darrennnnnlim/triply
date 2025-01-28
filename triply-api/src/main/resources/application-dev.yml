@@ -1,0 +1,10 @@
+triply:
+  api-version: v1
+
+spring:
+  application:
+    name: triply
+
+springdoc:
+  api-docs:
+    enabled: true
