@@ -122,7 +122,7 @@ pipeline {
                     docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | while read repo_tag id; do
                         if [[ "$repo_tag" == "<none>:<none>" ]]; then
                             image_name=$(docker inspect "$id" | grep -o '"RepoTags": \\["[^"]*' | awk -F'["[]' '{print $3}')
-                            if [[ "$image_name" == triply-frontend* || "$image_name" == triply-backend* ]]; then
+                            if [[ "$image_name" == ${DOCKER_REPO_FRONTEND}* || "$image_name" == ${DOCKER_REPO_BACKEND}* ]]; then
                                 echo "Removing dangling image: $id ($image_name)"
                                 docker rmi -f "$id"
                             fi
@@ -131,7 +131,7 @@ pipeline {
 
                     echo "Removing old triply-backend and triply-frontend images..."
                     docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | while read repo_tag id; do
-                        if [[ "$repo_tag" == triply-backend:* || "$repo_tag" == triply-frontend:* ]]; then
+                        if [[ "$repo_tag" == ${DOCKER_REPO_FRONTEND}:* || "$repo_tag" == ${DOCKER_REPO_BACKEND}:* ]]; then
                             latest_id=$(docker images "$repo_tag" --format "{{.ID}}" | head -n 1)
                             if [ "$id" != "$latest_id" ]; then
                                 echo "Removing old image: $id from $repo_tag"
