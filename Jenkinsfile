@@ -10,8 +10,8 @@ pipeline {
         FRONTEND_DIR = 'triply-app'
         BACKEND_DIR = 'triply-api'
         BUILD_TAG = "${env.BUILD_NUMBER}"
-        DOCKER_REPO_FRONTEND = "darrennnnnlim/triply-frontend"
-        DOCKER_REPO_BACKEND = "darrennnnnlim/triply-backend"
+        DOCKER_REPO_FRONTEND = "darrennnnlim/triply-frontend"
+        DOCKER_REPO_BACKEND = "darrennnnlim/triply-backend"
     }
 
     stages {
