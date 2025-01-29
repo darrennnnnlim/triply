@@ -118,11 +118,23 @@ pipeline {
         stage('Docker Image Cleanup') {
             steps {
                 sh '''
+                    echo "Removing untagged (<none>:<none>) images for triply-frontend and triply-backend..."
                     docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | while read repo_tag id; do
-                        if [[ "$repo_tag" == triply-backend* || "$repo_tag" == triply-frontend* ]]; then
-                            build_number=$(docker inspect "$id" | grep -i '"build-number":' | awk -F '"' '{print $4}')
-                            if [ "$build_number" != "${BUILD_TAG}" ]; then
-                                echo "Removing image: $id from $repo_tag with build-number $build_number"
+                        if [[ "$repo_tag" == "<none>:<none>" ]]; then
+                            image_name=$(docker inspect "$id" | grep -o '"RepoTags": \["[^"]*' | awk -F'["[]' '{print $3}')
+                            if [[ "$image_name" == triply-frontend* || "$image_name" == triply-backend* ]]; then
+                                echo "Removing dangling image: $id ($image_name)"
+                                docker rmi -f "$id"
+                            fi
+                        fi
+                    done
+
+                    echo "Removing old triply-backend and triply-frontend images..."
+                    docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | while read repo_tag id; do
+                        if [[ "$repo_tag" == triply-backend:* || "$repo_tag" == triply-frontend:* ]]; then
+                            latest_id=$(docker images "$repo_tag" --format "{{.ID}}" | head -n 1)
+                            if [ "$id" != "$latest_id" ]; then
+                                echo "Removing old image: $id from $repo_tag"
                                 docker rmi -f "$id"
                             fi
                         fi
