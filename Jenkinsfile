@@ -121,7 +121,7 @@ pipeline {
                     echo "Removing untagged (<none>:<none>) images for triply-frontend and triply-backend..."
                     docker images --format "{{.Repository}}:{{.Tag}} {{.ID}}" | while read repo_tag id; do
                         if [[ "$repo_tag" == "<none>:<none>" ]]; then
-                            image_name=$(docker inspect "$id" | grep -o '"RepoTags": \["[^"]*' | awk -F'["[]' '{print $3}')
+                            image_name=$(docker inspect "$id" | grep -o '"RepoTags": \\["[^"]*' | awk -F'["[]' '{print $3}')
                             if [[ "$image_name" == triply-frontend* || "$image_name" == triply-backend* ]]; then
                                 echo "Removing dangling image: $id ($image_name)"
                                 docker rmi -f "$id"
