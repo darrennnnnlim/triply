@@ -23,6 +23,6 @@ public class AuthResourceTest {
 
     @Test
     void loginTest() throws Exception {
-        mockMvc.perform(get("/api/" + apiVersion + "/auth")).andExpect(status().isOk()).andExpect(content().string("Done"));
+        mockMvc.perform(get("/api/" + apiVersion + "/auth/login")).andExpect(status().isOk()).andExpect(content().string("Done"));
     }
 }
