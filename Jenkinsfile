@@ -63,9 +63,7 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 dir(env.FRONTEND_DIR) {
-                    sh '''
-                        docker build -t ${DOCKER_REPO_FRONTEND}:latest .
-                    '''
+                    sh 'docker build -t ${DOCKER_REPO_FRONTEND}:latest .'
                 }
             }
         }
@@ -75,8 +73,17 @@ pipeline {
         stage('Build Backend Image') {
             steps {
                 dir(env.BACKEND_DIR) {
+                    sh 'docker build -t ${DOCKER_REPO_BACKEND}:latest .'
+                }
+            }
+        }
+
+        stage('Push Docker Images to Docker Hub') {
+            steps {
+                dir(env.BACKEND_DIR) {
                     sh '''
-                        docker build -t ${DOCKER_REPO_BACKEND}:latest .
+                        docker push ${DOCKER_REPO_FRONTEND}:latest
+                        docker push ${DOCKER_REPO_BACKEND}:latest
                     '''
                 }
             }
