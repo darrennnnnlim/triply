@@ -10,6 +10,8 @@ pipeline {
         FRONTEND_DIR = 'triply-app'
         BACKEND_DIR = 'triply-api'
         BUILD_TAG = "${env.BUILD_NUMBER}"
+        DOCKER_REPO_FRONTEND = "darrennnnnlim/triply-frontend"
+        DOCKER_REPO_BACKEND = "darrennnnnlim/triply-backend"
     }
 
     stages {
@@ -62,8 +64,7 @@ pipeline {
             steps {
                 dir(env.FRONTEND_DIR) {
                     sh '''
-                        docker build -t triply-frontend:${BUILD_TAG} --label build-number=${BUILD_TAG} -f Dockerfile .
-                        docker tag triply-frontend:${BUILD_TAG} triply-frontend:latest
+                        docker build -t ${DOCKER_REPO_FRONTEND}:latest .
                     '''
                 }
             }
@@ -75,8 +76,7 @@ pipeline {
             steps {
                 dir(env.BACKEND_DIR) {
                     sh '''
-                        docker build -t triply-backend:${BUILD_TAG} --label build-number=${BUILD_TAG} .
-                        docker tag triply-backend:${BUILD_TAG} triply-backend:latest
+                        docker build -t ${DOCKER_REPO_BACKEND}:latest .
                     '''
                 }
             }
