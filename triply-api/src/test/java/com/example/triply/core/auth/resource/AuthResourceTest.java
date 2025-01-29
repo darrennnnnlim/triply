@@ -3,6 +3,7 @@ package com.example.triply.core.auth.resource;
 import com.example.triply.TriplyApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,11 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AuthResource.class)
 public class AuthResourceTest {
 
+    @Value("${triply.api-version}")
+    private String apiVersion;
+
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     void loginTest() throws Exception {
-        mockMvc.perform(get("/api/${triply.api-version}/auth")).andExpect(status().isOk()).andExpect(content().string("Done"));
+        mockMvc.perform(get("/api/" + apiVersion + "/auth")).andExpect(status().isOk()).andExpect(content().string("Done"));
     }
 }
