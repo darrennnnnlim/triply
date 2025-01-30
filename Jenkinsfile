@@ -55,6 +55,21 @@ pipeline {
         stage('Snyk Security Scan') {
             steps {
                 sh 'echo "Running Snyk Security Scan..."'
+                dir('triply-app') {
+                    snykSecurity(
+                        snykInstallation: 'Snyk_Latest',
+                        snykTokenId: env.SNYK_CREDENTIAL_ID,
+                        severity: 'high'
+                    )
+                }
+                
+                dir('triply-api') {
+                    snykSecurity(
+                        snykInstallation: 'Snyk_Latest',
+                        snykTokenId: env.SNYK_CREDENTIAL_ID,
+                        severity: 'high'
+                    )
+                }
             }
         }
 
@@ -109,6 +124,7 @@ pipeline {
         // Might shift this to post-success
         stage('Docker Container Cleanup') {
             steps {
+                sleep 10
                 sh 'docker container prune -f'
             }
         }
