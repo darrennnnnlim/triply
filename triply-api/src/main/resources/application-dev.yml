@@ -1,5 +1,9 @@
 triply:
   api-version: v1
+  cors:
+    allowedOrigins: http://localhost:4200
+    allowedMethods: GET,POST,PUT,DELETE,OPTIONS
+    allowedHeaders: "*"
 
 spring:
   application:
