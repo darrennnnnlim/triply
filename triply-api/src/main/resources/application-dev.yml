@@ -3,8 +3,31 @@ triply:
 
 spring:
   application:
-    name: triply
+    name: Triply
+  datasource:
+    url: jdbc:postgresql://localhost:5432/triply
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  issuer: Triply
+  secret-key: Y4rDYh/8Q9UOnYYSeEErorUepFhVGxI7v0k+K8f/Thk=
+  refresh-secret-key: BIHkmGwx7ePWl2rCe0quZfSSbTxDnaph/ft9McenZk8=
+  access-token:
+    expiry: 900000
+  refresh-token:
+    expiry: 604800000
 
 springdoc:
   api-docs:
     enabled: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
