@@ -3,7 +3,8 @@ triply:
   cors:
     allowedOrigins: http://localhost:4200
     allowedMethods: GET,POST,PUT,DELETE,OPTIONS
-    allowedHeaders: "*"
+    allowedHeaders: Authorization,Content-Type,X-XSRF-TOKEN
+    exposedHeaders: X-XSRF-TOKEN
 
 spring:
   application:
@@ -22,9 +23,11 @@ jwt:
   secret-key: Y4rDYh/8Q9UOnYYSeEErorUepFhVGxI7v0k+K8f/Thk=
   refresh-secret-key: BIHkmGwx7ePWl2rCe0quZfSSbTxDnaph/ft9McenZk8=
   access-token:
-    expiry: 900000
+    expiry: 600000
+    cookie-expiry: 600
   refresh-token:
     expiry: 604800000
+    cookie-expiry: 604800
 
 springdoc:
   api-docs:

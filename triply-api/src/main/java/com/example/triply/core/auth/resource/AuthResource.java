@@ -4,35 +4,53 @@ import com.example.triply.core.auth.dto.AuthRequest;
 import com.example.triply.core.auth.dto.AuthResponse;
 import com.example.triply.core.auth.dto.RefreshRequest;
 import com.example.triply.core.auth.dto.RegisterRequest;
+import com.example.triply.core.auth.entity.RefreshToken;
 import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.JwtService;
+import com.example.triply.core.auth.service.RefreshTokenService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/${triply.api-version}/auth")
 public class AuthResource {
+
+    @Value("${jwt.access-token.cookie-expiry}")
+    private int accessTokenCookieExpiry;
+
+    @Value("${jwt.refresh-token.cookie-expiry}")
+    private int refreshTokenCookieExpiry;
 
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
 
-    public AuthResource(JwtService jwtService, @Lazy AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AuthResource(JwtService jwtService, @Lazy AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @GetMapping("/loginTest")
@@ -41,14 +59,39 @@ public class AuthResource {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest, HttpServletRequest request, HttpServletResponse response) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
-            String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), authRequest.getRole());
-            String refreshToken = jwtService.generateRefreshToken(authRequest.getUsername());
-            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+
+            Optional<User> userOptional = userRepository.findByUsername(authRequest.getUsername());
+            if (userOptional.isPresent()) {
+                String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), authRequest.getRole());
+                RefreshToken refreshToken = refreshTokenService.createRefreshToken(userOptional.get());
+
+                Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+                accessTokenCookie.setHttpOnly(true);
+                accessTokenCookie.setSecure(true);
+                accessTokenCookie.setPath("/");
+                accessTokenCookie.setMaxAge(accessTokenCookieExpiry);
+
+                Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
+                refreshTokenCookie.setHttpOnly(true);
+                refreshTokenCookie.setSecure(true);
+                refreshTokenCookie.setPath("/auth/refresh");
+                refreshTokenCookie.setMaxAge(refreshTokenCookieExpiry);
+
+                response.addCookie(accessTokenCookie);
+                response.addCookie(refreshTokenCookie);
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(Map.of("message", "Login Successful"));
+
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+            }
+
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
@@ -80,9 +123,23 @@ public class AuthResource {
     public ResponseEntity<?> refresh(@RequestBody RefreshRequest refreshRequest) {
         String username = jwtService.extractUsername(refreshRequest.getRefreshToken(), true);
         if (jwtService.isTokenValid(refreshRequest.getRefreshToken(), username, true)) {
-            String newAccessToken = jwtService.generateAccessToken(username, refreshRequest.getRole());
-            return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshRequest.getRefreshToken()));
+            Optional<RefreshToken> refreshTokenOpt = refreshTokenService.getValidRefreshToken(refreshRequest.getRefreshToken());
+            if (refreshTokenOpt.isPresent()) {
+                String newAccessToken = jwtService.generateAccessToken(username, refreshRequest.getRole());
+                return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshRequest.getRefreshToken()));
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or expired refresh token");
+            }
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid refresh token");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody RefreshRequest refreshRequest) {
+        String refreshTokenStr = refreshRequest.getRefreshToken();
+
+        refreshTokenService.getValidRefreshToken(refreshTokenStr).ifPresent(refreshTokenService::revokeToken);
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 }

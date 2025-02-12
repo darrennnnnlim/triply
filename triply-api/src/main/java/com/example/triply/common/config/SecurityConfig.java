@@ -1,5 +1,6 @@
 package com.example.triply.common.config;
 
+import com.example.triply.common.filter.CsrfTokenResponseFilter;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.core.auth.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,11 +15,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -29,40 +31,50 @@ public class SecurityConfig {
     private String allowedOrigins;
 
     @Value("${triply.cors.allowedMethods}")
-    private List<String> allowedMethods;
+    private String allowedMethods;
 
     @Value("${triply.cors.allowedHeaders}")
     private String allowedHeaders;
 
+    @Value("${triply.cors.exposedHeaders}")
+    private String exposedHeaders;
+
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CsrfTokenResponseFilter csrfTokenResponseFilter;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter, CsrfTokenResponseFilter csrfTokenResponseFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.csrfTokenResponseFilter = csrfTokenResponseFilter;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(
             org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/{version}/auth/**")
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/{version}/booking/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService);
+
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(csrfTokenResponseFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of(allowedOrigins));
-        corsConfig.setAllowedMethods(allowedMethods);
-        corsConfig.setAllowedHeaders(List.of(allowedHeaders));
+        corsConfig.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        corsConfig.setAllowedMethods(Arrays.asList(allowedMethods.split(",")));
+        corsConfig.setAllowedHeaders(Arrays.asList(allowedHeaders.split(",")));
+        corsConfig.setExposedHeaders(Arrays.asList(exposedHeaders.split(",")));
         corsConfig.setAllowCredentials(true);
         corsConfig.setMaxAge(3600L);
 

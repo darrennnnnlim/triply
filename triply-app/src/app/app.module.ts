@@ -12,6 +12,9 @@ import { RouterModule } from '@angular/router';
 import { LoginModule } from './auth/login/login.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HomeModule } from './home/home.module';
+import { HomeService } from './home/home.service';
+import { AuthService } from './auth/auth.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
     LoginModule,
+    HomeModule,
   ],
   providers: [
     provideHttpClient(

@@ -38,10 +38,11 @@ export class LoginComponent {
 
     this.authService.login({ username, password, role }).subscribe({
       next: () => {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/']);
         this.isLoading = false;
       },
       error: (err) => {
+        console.log(err);
         this.errorMessage = err.error?.message || 'Login failed';
         this.isLoading = false;
       },
