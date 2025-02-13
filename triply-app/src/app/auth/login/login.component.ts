@@ -44,7 +44,8 @@ export class LoginComponent {
       },
       error: (err) => {
         console.log(err);
-        this.errorMessage = err.error?.message || 'Login failed';
+        this.errorMessage =
+          err.error?.message || 'Invalid username or password';
         this.isLoading = false;
       },
     });
