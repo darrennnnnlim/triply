@@ -1,0 +1,48 @@
+<div class="nav-controls">
+  <!-- Login Button with rounded edges and no border -->
+  <button
+    class="btn btn-outline-light rounded-pill border-0 me-2"
+    (click)="openLoginModal()"
+  >
+    Login
+  </button>
+  <!-- Hamburger Button with template ref and active state -->
+  <button
+    #hamburgerButton
+    class="btn btn-outline-light rounded-pill border-0"
+    (click)="toggleHamburgerMenu()"
+    [ngClass]="{ active: isHamburgerMenuVisible }"
+  >
+    &#9776;
+  </button>
+</div>
+
+<!-- Hamburger Navigation Menu with template ref -->
+<nav *ngIf="isHamburgerMenuVisible" #hamburgerMenu class="hamburger-menu p-3">
+  <ul class="list-unstyled">
+    <li>
+      <a
+        routerLink="/nav1"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Navigation 1</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/nav2"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Navigation 2</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/nav3"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Navigation 3</a
+      >
+    </li>
+  </ul>
+</nav>
