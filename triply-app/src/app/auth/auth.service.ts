@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
   private readonly API_URL = 'http://localhost:8080/api/v1/auth';
 
@@ -13,7 +15,9 @@ export class AuthService {
     password: string;
     role?: string;
   }): Observable<any> {
-    return this.http.post(`${this.API_URL}/login`, credentials);
+    return this.http.post(`${this.API_URL}/login`, credentials, {
+      withCredentials: true,
+    });
   }
 
   register(credentials: {

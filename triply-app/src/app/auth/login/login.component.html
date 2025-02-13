@@ -1,69 +1,54 @@
-<div class="login-container">
-  <h2>Login</h2>
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Login</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="username">Username</label>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username:</label>
       <input
         type="text"
         id="username"
         formControlName="username"
         class="form-control"
-        [class.is-invalid]="
-          loginForm.get('username')?.invalid &&
-          loginForm.get('username')?.touched
-        "
+        required
       />
-      <div
-        *ngIf="loginForm.get('username')?.errors?.['required'] && loginForm.get('username')?.touched"
-        class="invalid-feedback"
-      >
-        Username is required
-      </div>
     </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password:</label>
       <input
         type="password"
         id="password"
         formControlName="password"
         class="form-control"
-        [class.is-invalid]="
-          loginForm.get('password')?.invalid &&
-          loginForm.get('password')?.touched
-        "
+        required
       />
-      <div
-        *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched"
-        class="invalid-feedback"
-      >
-        Password is required
-      </div>
     </div>
-
-    <div class="form-group">
-      <label for="role">Role</label>
-      <select id="role" formControlName="role" class="form-control">
-        <option value="USER">User</option>
-        <option value="ADMIN">Admin</option>
-      </select>
-    </div>
-
+    <!-- Optionally display an error message -->
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
-
-    <button
-      type="submit"
-      class="btn btn-primary"
-      [disabled]="loginForm.invalid || isLoading"
-    >
-      <span *ngIf="!isLoading">Login</span>
-      <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
-    </button>
-
-    <div class="mt-3">
-      Don't have an account? <a routerLink="/register">Register here</a>
-    </div>
   </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary rounded-pill border-0"
+    (click)="activeModal.dismiss('cancel click')"
+  >
+    Cancel
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary rounded-pill border-0"
+    [disabled]="isLoading"
+    (click)="onSubmit()"
+  >
+    Login
+  </button>
 </div>

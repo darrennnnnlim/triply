@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -79,7 +78,7 @@ public class AuthResource {
                 Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
                 refreshTokenCookie.setHttpOnly(true);
                 refreshTokenCookie.setSecure(true);
-                refreshTokenCookie.setPath("/auth/refresh");
+                refreshTokenCookie.setPath("/");
                 refreshTokenCookie.setMaxAge(refreshTokenCookieExpiry);
 
                 response.addCookie(accessTokenCookie);
@@ -120,19 +119,33 @@ public class AuthResource {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(@RequestBody RefreshRequest refreshRequest) {
-        String username = jwtService.extractUsername(refreshRequest.getRefreshToken(), true);
-        if (jwtService.isTokenValid(refreshRequest.getRefreshToken(), username, true)) {
-            Optional<RefreshToken> refreshTokenOpt = refreshTokenService.getValidRefreshToken(refreshRequest.getRefreshToken());
+    public ResponseEntity<?> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken, HttpServletResponse response) {
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Missing refresh token");
+        }
+
+        String username = jwtService.extractUsername(refreshToken, true);
+        if (jwtService.isTokenValid(refreshToken, username, true)) {
+            Optional<RefreshToken> refreshTokenOpt = refreshTokenService.getValidRefreshToken(refreshToken);
             if (refreshTokenOpt.isPresent()) {
-                String newAccessToken = jwtService.generateAccessToken(username, refreshRequest.getRole());
-                return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshRequest.getRefreshToken()));
+                String newAccessToken = jwtService.generateAccessToken(username, "USER");
+
+                Cookie accessTokenCookie = new Cookie("accessToken", newAccessToken);
+                accessTokenCookie.setHttpOnly(true);
+                accessTokenCookie.setSecure(true);
+                accessTokenCookie.setPath("/");
+                accessTokenCookie.setMaxAge(accessTokenCookieExpiry);
+
+                response.addCookie(accessTokenCookie);
+
+                return ResponseEntity.ok(new AuthResponse(newAccessToken, refreshToken));
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid or expired refresh token");
             }
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid refresh token");
     }
+
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestBody RefreshRequest refreshRequest) {

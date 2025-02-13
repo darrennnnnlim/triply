@@ -9,10 +9,10 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { AuthInterceptor } from '../../interceptors/auth.interceptor';
-import { AuthService } from '../auth.service';
 
 @NgModule({
   declarations: [LoginComponent],
+  exports: [LoginComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,8 +27,6 @@ import { AuthService } from '../auth.service';
       useClass: AuthInterceptor,
       multi: true,
     },
-    AuthService
   ],
-  exports: [LoginComponent],
 })
 export class LoginModule {}

@@ -1,0 +1,104 @@
+.nav-controls {
+  display: flex;
+  align-items: center;
+}
+
+.nav-controls button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* Hamburger Menu Styles */
+.hamburger-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.hamburger-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hamburger-menu li {
+  border-bottom: 1px solid #ddd;
+}
+
+.hamburger-menu li a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.hamburger-menu li a:hover {
+  background-color: #f0f0f0;
+}
+
+/* Modal Styles */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px;
+  position: relative;
+}
+
+.modal .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal .close:hover,
+.modal .close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+/* Main Content */
+main {
+  padding: 20px;
+}
+
+/* Rounded edges and smooth transition for buttons */
+.btn {
+  border-radius: 50px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for the login button */
+.login-btn:hover {
+  background-color: #ffffff;
+  color: #001f3f;
+}
+
+/* Ensure the hamburger button stays highlighted when active */
+.btn.active {
+  background-color: #ffffff;
+  color: #001f3f;
+}

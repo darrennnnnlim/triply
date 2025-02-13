@@ -58,13 +58,13 @@ public class SecurityConfig {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/{version}/booking/**").permitAll()
+                        .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(csrfTokenResponseFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new CsrfTokenResponseFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

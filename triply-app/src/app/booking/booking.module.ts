@@ -2,20 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import {
-  HTTP_INTERCEPTORS,
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { BookingComponent } from './booking.component';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
-import { HomeComponent } from './home.component';
+import { BookingService } from './booking.service';
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [BookingComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule.forChild([{ path: '', component: HomeComponent }]),
+    RouterModule.forChild([{ path: '', component: BookingComponent }]),
   ],
   providers: [
     provideHttpClient(
@@ -26,7 +23,8 @@ import { HomeComponent } from './home.component';
       useClass: AuthInterceptor,
       multi: true,
     },
+    BookingService
   ],
-  exports: [HomeComponent],
+  exports: [BookingComponent],
 })
-export class HomeModule {}
+export class BookingModule {}

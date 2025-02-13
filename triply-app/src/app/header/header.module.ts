@@ -1,21 +1,26 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from './header.component';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
-import { HomeComponent } from './home.component';
+import { LoginModule } from '../auth/login/login.module';
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HeaderComponent],
+  exports: [HeaderComponent],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild([{ path: '', component: HomeComponent }]),
+    RouterModule,
+    RouterOutlet,
+    LoginModule,
   ],
   providers: [
     provideHttpClient(
@@ -27,6 +32,6 @@ import { HomeComponent } from './home.component';
       multi: true,
     },
   ],
-  exports: [HomeComponent],
+  bootstrap: [HeaderComponent],
 })
-export class HomeModule {}
+export class HeaderModule {}

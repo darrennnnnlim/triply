@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
   HTTP_INTERCEPTORS,
+  HttpClientModule,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
@@ -12,9 +13,8 @@ import { RouterModule } from '@angular/router';
 import { LoginModule } from './auth/login/login.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HomeModule } from './home/home.module';
-import { HomeService } from './home/home.service';
-import { AuthService } from './auth/auth.service';
+import { BookingModule } from './booking/booking.module';
+import { HeaderModule } from './header/header.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,8 +24,8 @@ import { AuthService } from './auth/auth.service';
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
-    LoginModule,
-    HomeModule,
+    BookingModule,
+    HeaderModule,
   ],
   providers: [
     provideHttpClient(
