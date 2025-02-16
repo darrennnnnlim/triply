@@ -20,8 +20,8 @@ spring:
 
 jwt:
   issuer: Triply
-  secret-key: Y4rDYh/8Q9UOnYYSeEErorUepFhVGxI7v0k+K8f/Thk=
-  refresh-secret-key: BIHkmGwx7ePWl2rCe0quZfSSbTxDnaph/ft9McenZk8=
+  secret-key:
+  refresh-secret-key:
   access-token:
     expiry: 600000
     cookie-expiry: 600
