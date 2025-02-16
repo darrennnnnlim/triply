@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/${triply.api-version}/auth")
@@ -58,7 +59,7 @@ public class AuthResource {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
@@ -66,7 +67,7 @@ public class AuthResource {
 
             Optional<User> userOptional = userRepository.findByUsername(authRequest.getUsername());
             if (userOptional.isPresent()) {
-                String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), authRequest.getRole());
+                String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), userOptional.get().getRoles());
                 RefreshToken refreshToken = refreshTokenService.createRefreshToken(userOptional.get());
 
                 Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
@@ -113,7 +114,8 @@ public class AuthResource {
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(encodedPassword);
-        newUser.setRole(role);
+        newUser.setRoles(Set.of(role));
+
         userRepository.save(newUser);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
     }
@@ -127,8 +129,10 @@ public class AuthResource {
         String username = jwtService.extractUsername(refreshToken, true);
         if (jwtService.isTokenValid(refreshToken, username, true)) {
             Optional<RefreshToken> refreshTokenOpt = refreshTokenService.getValidRefreshToken(refreshToken);
-            if (refreshTokenOpt.isPresent()) {
-                String newAccessToken = jwtService.generateAccessToken(username, "USER");
+            Optional<User> userOptional = userRepository.findByUsername(username);
+            if (refreshTokenOpt.isPresent() && userOptional.isPresent()) {
+
+                String newAccessToken = jwtService.generateAccessToken(username, userOptional.get().getRoles());
 
                 Cookie accessTokenCookie = new Cookie("accessToken", newAccessToken);
                 accessTokenCookie.setHttpOnly(true);

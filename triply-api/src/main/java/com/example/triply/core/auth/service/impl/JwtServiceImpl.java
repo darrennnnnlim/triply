@@ -1,12 +1,16 @@
 package com.example.triply.core.auth.service.impl;
 
+import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.service.JwtService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class JwtServiceImpl implements JwtService {
@@ -26,7 +30,7 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.refresh-token.expiry}")
     private Long refreshTokenExpiry;
 
-    public String generateAccessToken(String username, String role) {
+    public String generateAccessToken(String username, Set<Role> roles) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + accessTokenExpiry);
 
@@ -35,7 +39,7 @@ public class JwtServiceImpl implements JwtService {
                 .issuer(issuer)
                 .issuedAt(now)
                 .expiration(expiry)
-                .claim("role", role)
+                .claim("roles", roles.stream().map(Role::getName).toList())
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
     }
@@ -77,4 +81,14 @@ public class JwtServiceImpl implements JwtService {
                 .getExpiration();
         return expiration.before(new Date());
     }
+
+    public List<String> extractRoles(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        return claims.get("roles", List.class);    }
+
 }

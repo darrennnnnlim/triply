@@ -24,20 +24,6 @@ main {
   padding: 20px;
 }
 
-/* Footer */
-footer {
-  background-color: #f8f8f8;
-  border-top: 1px solid #ddd;
-  padding: 10px 20px;
-  text-align: center;
-}
-
-footer nav a {
-  margin: 0 5px;
-  text-decoration: none;
-  color: #333;
-}
-
 /* Apply a nicer overall font */
 body {
   font-family: "Open Sans", sans-serif;
