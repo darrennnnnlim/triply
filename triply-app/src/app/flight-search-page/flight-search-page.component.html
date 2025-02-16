@@ -1,0 +1,25 @@
+<div class="flight-search-container">
+  <h1>Flight Search</h1>
+
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+      placeholder="Search by origin, destination, or date..."
+    />
+  </div>
+
+  <div class="flight-offer-cards-container">
+    <a *ngFor="let flightOffer of filteredFlightOffers" class="flight-offer-card" [href]="flightOffer.offerUrl">
+      <div class="flight-details">
+        <h2>{{ flightOffer.origin }} to {{ flightOffer.destination }}</h2>
+        <p>Departure: {{ flightOffer.departureDate }}</p>
+        <p>Arrival: {{ flightOffer.arrivalDate }}</p>
+      </div>
+      <div class="flight-price">
+        <p class="price">$ {{ flightOffer.price }}</p>
+      </div>
+    </a>
+  </div>
+</div>

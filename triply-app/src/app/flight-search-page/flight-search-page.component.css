@@ -1,0 +1,80 @@
+.flight-search-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 80%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.flight-offer-cards-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  overflow-y: auto; /* Enable scrolling if exceed container height */
+  max-height: 80vh;
+  margin-top: 20px;
+}
+
+.flight-offer-card {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: left;
+}
+
+/* Inside a specific class or container */
+.flight-offer-card {
+  text-decoration: none;
+  color: inherit; /* Inherit color from parent element */
+}
+
+.flight-offer-card:hover,
+.flight-offer-card:focus,
+.flight-offer-card:active {
+  text-decoration: none;
+}
+
+
+.flight-details {
+  flex: 1
+}
+
+.flight-price {
+  text-align: right;
+  margin-left: 20px
+}
+
+.flight-offer-card h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.flight-offer-card p {
+  font-size: 14px;
+  color: #555;
+}
+
+.flight-offer-card .price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #28a745;
+  margin-top: 10px;
+}
