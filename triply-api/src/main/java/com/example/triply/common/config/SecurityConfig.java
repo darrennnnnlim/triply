@@ -59,6 +59,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/{version}/booking/test").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService);
