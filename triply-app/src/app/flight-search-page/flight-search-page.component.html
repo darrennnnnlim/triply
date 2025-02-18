@@ -1,14 +1,32 @@
 <div class="flight-search-container">
   <h1>Flight Search</h1>
 
-  <div class="search-bar">
-    <input
-      type="text"
-      [(ngModel)]="searchQuery"
-      (input)="onSearch()"
-      placeholder="Search by origin, destination, or date..."
-    />
-  </div>
+<!--  <div class="search-bar">-->
+<!--    <input-->
+<!--      type="text"-->
+<!--      [(ngModel)]="searchQuery"-->
+<!--      (input)="onSearch()"-->
+<!--      placeholder="Search by origin, destination, or date..."-->
+<!--    />-->
+<!--  </div>-->
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <label>Origin:</label>
+    <input type="text" formControlName="origin" />
+
+    <label>Destination:</label>
+    <input type="text" formControlName="destination" />
+
+    <label>Arrival Date:</label>
+    <input type="text" formControlName="arrivalDate" />
+
+    <label>Departure Date:</label>
+    <input type="text" formControlName="departureDate" />
+
+    <label>Max Price:</label>
+    <input type="number" formControlName="maxPrice" />
+
+    <button type="submit">Search</button>
+  </form>
 
   <div class="flight-offer-cards-container">
     <a *ngFor="let flightOffer of filteredFlightOffers" class="flight-offer-card" [href]="flightOffer.offerUrl">

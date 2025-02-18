@@ -1,7 +1,14 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { FlightSearchPageService } from './flight-search-page.service';
 
-
+interface SearchDTO {
+    origin: string;
+    destination: string;
+    departureDate: string;
+    arrivalDate: string;
+    maxPrice: number;
+}
 
 interface FlightOffer {
   origin: string;
@@ -14,13 +21,14 @@ interface FlightOffer {
 
 @Component({
   selector: 'app-flight-search-page',
-//   imports: [CommonModule, FormsModule],
   standalone: false,
   templateUrl: './flight-search-page.component.html',
   styleUrl: './flight-search-page.component.css'
 })
 export class FlightSearchPageComponent {
-  searchQuery: string = '';
+//   searchQuery: string = '';
+  searchForm: FormGroup;
+
   /* BEGIN: Mock data */
   flightOffers: FlightOffer[] = [
     { origin: 'New York', destination: 'London', departureDate: '2025-03-10', arrivalDate: '2025-03-11', price: 500, offerUrl: '' },
@@ -31,14 +39,37 @@ export class FlightSearchPageComponent {
   /* END: Mock data */
   filteredFlightOffers: FlightOffer[] = this.flightOffers;
 
+  constructor(private fb: FormBuilder, private flightSearchPageService: FlightSearchPageService   ) {
+    this.searchForm = this.fb.group({
+      origin: [''],
+      destination: [''],
+      departureDate: [''],
+      arrivalDate: [''],
+      maxPrice: ['']
+    });
+  }
+
+//   onSearch() {
+//     const query = this.searchQuery.toLowerCase();
+//     this.filteredFlightOffers = this.flightOffers.filter(flightOffers =>
+//       flightOffers.origin.toLowerCase().includes(query) ||
+//       flightOffers.destination.toLowerCase().includes(query) ||
+//       flightOffers.departureDate.includes(query) ||
+//       flightOffers.arrivalDate.includes(query)
+//     );
+//   }
   onSearch() {
-    const query = this.searchQuery.toLowerCase();
-    this.filteredFlightOffers = this.flightOffers.filter(flightOffers =>
-      flightOffers.origin.toLowerCase().includes(query) ||
-      flightOffers.destination.toLowerCase().includes(query) ||
-      flightOffers.departureDate.includes(query) ||
-      flightOffers.arrivalDate.includes(query)
-    );
+    const searchRequest: SearchDTO = {
+      origin: this.searchForm.value.origin,
+      destination: this.searchForm.value.destination,
+      departureDate: this.searchForm.value.departureDate,
+      arrivalDate: this.searchForm.value.arrivalDate,
+      maxPrice: this.searchForm.value.maxPrice ? this.searchForm.value.maxPrice : undefined
+    };
+    console.log(searchRequest)
+    this.flightSearchPageService.searchFlights(searchRequest).subscribe(response => {
+      console.log('Search Results:', response);
+    })
   }
 
   ngOnInit(): void {

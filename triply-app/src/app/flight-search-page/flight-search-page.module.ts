@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
+// import { FormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FlightSearchPageComponent } from './flight-search-page.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
-import { FlightSearchPageService } from './flight-search-page.service';
 
 @NgModule({
   declarations: [FlightSearchPageComponent],
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: FlightSearchPageComponent }]),
   ],
@@ -25,7 +23,6 @@ import { FlightSearchPageService } from './flight-search-page.service';
       useClass: AuthInterceptor,
       multi: true,
     },
-    FlightSearchPageService
   ],
   exports: [FlightSearchPageComponent],
 })
