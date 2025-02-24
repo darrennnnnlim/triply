@@ -1,9 +1,11 @@
 package com.example.triply.core.auth.entity;
 
+import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.util.Set;
 
@@ -12,7 +14,8 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+@Audited
+public class User extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

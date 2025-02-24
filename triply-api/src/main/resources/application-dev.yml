@@ -17,6 +17,11 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        envers:
+          store_data_at_delete: true
+          autoRegisterListeners: true
 
 jwt:
   issuer: Triply

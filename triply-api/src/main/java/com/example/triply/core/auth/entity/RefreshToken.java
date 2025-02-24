@@ -1,15 +1,18 @@
 package com.example.triply.core.auth.entity;
 
+import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-public class RefreshToken {
+@Audited
+public class RefreshToken extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
