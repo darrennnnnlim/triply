@@ -103,6 +103,13 @@
 			<version>0.12.6</version>
 		</dependency>
 
+		<!--Audit-->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-envers</artifactId>
+			<version>6.6.8.Final</version>
+		</dependency>
+
 		<!--Test -->
 		<dependency>
 			<groupId>org.mockito</groupId>
