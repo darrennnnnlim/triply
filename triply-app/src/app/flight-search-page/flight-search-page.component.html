@@ -1,14 +1,6 @@
 <div class="flight-search-container">
   <h1>Flight Search</h1>
 
-<!--  <div class="search-bar">-->
-<!--    <input-->
-<!--      type="text"-->
-<!--      [(ngModel)]="searchQuery"-->
-<!--      (input)="onSearch()"-->
-<!--      placeholder="Search by origin, destination, or date..."-->
-<!--    />-->
-<!--  </div>-->
   <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
     <label>Origin:</label>
     <input type="text" formControlName="origin" />

@@ -49,15 +49,6 @@ export class FlightSearchPageComponent {
     });
   }
 
-//   onSearch() {
-//     const query = this.searchQuery.toLowerCase();
-//     this.filteredFlightOffers = this.flightOffers.filter(flightOffers =>
-//       flightOffers.origin.toLowerCase().includes(query) ||
-//       flightOffers.destination.toLowerCase().includes(query) ||
-//       flightOffers.departureDate.includes(query) ||
-//       flightOffers.arrivalDate.includes(query)
-//     );
-//   }
   onSearch() {
     const searchRequest: SearchDTO = {
       origin: this.searchForm.value.origin,
