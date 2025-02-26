@@ -19,6 +19,7 @@ interface FlightOffer {
   arrivalDate: string;
   price: number;
   offerUrl: string;
+  carrierCode: string;
 }
 
 @Component({
@@ -33,10 +34,10 @@ export class FlightSearchPageComponent {
 
   /* BEGIN: Mock data */
   flightOffers: FlightOffer[] = [
-    { origin: 'New York', destination: 'London', departureDate: '2025-03-10', arrivalDate: '2025-03-11', price: 500, offerUrl: '' },
-    { origin: 'Los Angeles', destination: 'Tokyo', departureDate: '2025-04-01', arrivalDate: '2025-04-02', price: 800, offerUrl: '' },
-    { origin: 'San Francisco', destination: 'Paris', departureDate: '2025-05-15', arrivalDate: '2025-05-16', price: 600, offerUrl: '' },
-    { origin: 'Chicago', destination: 'Dubai', departureDate: '2025-06-20', arrivalDate: '2025-06-21', price: 900, offerUrl: '' },
+    { origin: 'New York', destination: 'London', departureDate: '2025-03-10', arrivalDate: '2025-03-11', price: 500, offerUrl: '', carrierCode: '6X' },
+    { origin: 'Los Angeles', destination: 'Tokyo', departureDate: '2025-04-01', arrivalDate: '2025-04-02', price: 800, offerUrl: '', carrierCode: '6X' },
+    { origin: 'San Francisco', destination: 'Paris', departureDate: '2025-05-15', arrivalDate: '2025-05-16', price: 600, offerUrl: '', carrierCode: '6X' },
+    { origin: 'Chicago', destination: 'Dubai', departureDate: '2025-06-20', arrivalDate: '2025-06-21', price: 900, offerUrl: '', carrierCode: '6X' },
   ];
   /* END: Mock data */
   filteredFlightOffers: FlightOffer[] = this.flightOffers;
