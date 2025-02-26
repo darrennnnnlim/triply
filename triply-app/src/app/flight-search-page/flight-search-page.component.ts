@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FlightSearchPageService } from './flight-search-page.service';
+import { Router } from '@angular/router';
+import { FlightOfferDataService } from '../flight-offer/flight-offer-data.service';
 
 interface SearchDTO {
     origin: string;
@@ -39,7 +41,12 @@ export class FlightSearchPageComponent {
   /* END: Mock data */
   filteredFlightOffers: FlightOffer[] = this.flightOffers;
 
-  constructor(private fb: FormBuilder, private flightSearchPageService: FlightSearchPageService   ) {
+  constructor(
+    private fb: FormBuilder, 
+    private flightSearchPageService: FlightSearchPageService,
+    private router: Router,
+    private flightOfferDataService: FlightOfferDataService
+  ) {
     this.searchForm = this.fb.group({
       origin: [''],
       destination: [''],
@@ -68,6 +75,14 @@ export class FlightSearchPageComponent {
     this.flightOffers.forEach(f => {
       f.offerUrl = 'https://www.google.com';  // Set a placeholder URL for each flight offer
     });
+  }
+
+  onFlightOfferClick(flightOffer: any): void {
+    // Save the selected flight offer in the service
+    this.flightOfferDataService.setFlightOfferData(flightOffer);
+
+    // Navigate to the flight offer details page
+    this.router.navigate(['/flight-offer']);
   }
 }
 

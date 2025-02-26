@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { FlightSearchPageComponent } from './flight-search-page/flight-search-page.component'
 
 export const routes: Routes = [
   {
@@ -21,6 +20,11 @@ export const routes: Routes = [
       path: 'search',
       loadChildren: () =>
             import('./flight-search-page/flight-search-page.module').then((m) => m.FlightSearchPageModule),
+  },
+  {
+    path: 'flight-offer', // Dynamic route for flight offer details
+    loadChildren: () =>
+      import('./flight-offer/flight-offer.module').then((m) => m.FlightOfferModule),
   },
   {
     path: '**',
