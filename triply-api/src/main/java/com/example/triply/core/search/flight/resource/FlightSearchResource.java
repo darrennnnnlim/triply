@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import com.example.triply.core.search.flight.*;
 
 @RestController
-@RequestMapping("/api/v1/flightsearch")
+@RequestMapping("/api/${triply.api-version}/flightsearch")
 public class FlightSearchResource {
 
     @GetMapping("/test")
@@ -17,7 +17,6 @@ public class FlightSearchResource {
     @PostMapping
     public ResponseEntity<String> searchFlights(@RequestBody FlightSearchDTO searchRequest) {
         // Dummy response to simulate search logic
-        // In real use, replace with actual service call and logic
         String responseMessage = "Searching flights from " + searchRequest.getOrigin() 
                                  + " to " + searchRequest.getDestination()
                                  + " between " + searchRequest.getDepartureDate()
