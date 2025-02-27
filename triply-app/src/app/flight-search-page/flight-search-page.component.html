@@ -1,0 +1,36 @@
+<div class="flight-search-container">
+  <h1>Flight Search</h1>
+
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <label>Origin:</label>
+    <input type="text" formControlName="origin" />
+
+    <label>Destination:</label>
+    <input type="text" formControlName="destination" />
+
+    <label>Arrival Date:</label>
+    <input type="text" formControlName="arrivalDate" />
+
+    <label>Departure Date:</label>
+    <input type="text" formControlName="departureDate" />
+
+    <label>Max Price:</label>
+    <input type="number" formControlName="maxPrice" />
+
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="flight-offer-cards-container">
+    <a *ngFor="let flightOffer of filteredFlightOffers" class="flight-offer-card" (click)="onFlightOfferClick(flightOffer)" [routerLink]="['/flight-offer']">
+      <div class="flight-details">
+        <h2>{{ flightOffer.origin }} to {{ flightOffer.destination }}</h2>
+        <p>Departure: {{ flightOffer.departureDate }}</p>
+        <p>Arrival: {{ flightOffer.arrivalDate }}</p>
+        <p>Carrier Code: {{ flightOffer.carrierCode }}</p>
+      </div>
+      <div class="flight-price">
+        <p class="price">$ {{ flightOffer.price }}</p>
+      </div>
+    </a>
+  </div>
+</div>
