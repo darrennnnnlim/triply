@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 import { HistoryComponent } from './history/history.component';
+import { BannedUsersComponent } from './banned-users/banned-users.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +29,7 @@ export const routes: Routes = [
       import('./flight-offer/flight-offer.module').then((m) => m.FlightOfferModule),
   },
   { path: 'history', component: HistoryComponent },  
+  { path: 'banned', component: BannedUsersComponent },  
   {
     path: '**',
     redirectTo: '',

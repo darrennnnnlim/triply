@@ -1,0 +1,22 @@
+<div class="container">
+    <h2>Banned Users</h2>
+    <app-popup *ngIf="isPopup" [message]="popupMsg"></app-popup>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of bannedUsers">
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <button (click)="unbanUser(user.id)" class="button">Unban</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
