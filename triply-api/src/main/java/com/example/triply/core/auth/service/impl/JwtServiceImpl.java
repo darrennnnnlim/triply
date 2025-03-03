@@ -5,6 +5,8 @@ import com.example.triply.core.auth.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -89,6 +91,19 @@ public class JwtServiceImpl implements JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
 
-        return claims.get("roles", List.class);    }
+        return claims.get("roles", List.class);
+    }
+
+    public String extractUsernameFromRequest(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("accessToken".equals(cookie.getName())) {
+                    String token = cookie.getValue();
+                    return extractUsername(token, false);
+                }
+            }
+        }
+        return null;
+    }
 
 }

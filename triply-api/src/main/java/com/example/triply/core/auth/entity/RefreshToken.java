@@ -9,6 +9,7 @@ import org.hibernate.envers.Audited;
 import java.util.Date;
 
 @Entity
+@Table(name = "Refresh_Token")
 @Getter
 @Setter
 @Audited

@@ -17,10 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -36,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = extractTokenFromCookie(request);
+        String token = extractAccessTokenFromCookie(request);
         if (token != null) {
             try {
                 String username = jwtService.extractUsername(token, false);
@@ -58,10 +56,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String extractTokenFromCookie(HttpServletRequest request) {
+    public String extractAccessTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, "accessToken"));
+
+            return accessTokenCookie.map(Cookie::getValue).orElse(null);
+        }
+        return null;
+    }
+
+    public String extractRefreshTokenFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, "refreshToken"));
 
             return accessTokenCookie.map(Cookie::getValue).orElse(null);
         }
