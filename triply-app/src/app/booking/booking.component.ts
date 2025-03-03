@@ -25,4 +25,17 @@ export class BookingComponent {
       },
     });
   }
+
+  postTestApi(): void {
+    this.bookingService.postTest().subscribe({
+      next: (res: any) => {
+        this.response = res;
+        this.errorMessage = null;
+      },
+      error: (err) => {
+        this.errorMessage = `Error: ${err.status} - ${err.statusText}`;
+        console.error(err);
+      },
+    });
+  }
 }

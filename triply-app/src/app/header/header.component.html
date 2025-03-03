@@ -1,12 +1,37 @@
 <div class="nav-controls">
-  <!-- Login Button with rounded edges and no border -->
-  <button
-    class="btn btn-outline-light rounded-pill border-0 me-2"
-    (click)="openLoginModal()"
-  >
-    Login
-  </button>
-  <!-- Hamburger Button with template ref and active state -->
+  <!-- Conditionally show Login or User Dropdown -->
+  <ng-container *ngIf="!isLoggedIn; else loggedIn">
+    <button
+      class="btn btn-outline-light rounded-pill border-0 me-2"
+      (click)="openLoginModal()"
+    >
+      Login
+    </button>
+  </ng-container>
+  <ng-template #loggedIn>
+    <div class="dropdown me-2">
+      <button
+        class="btn btn-outline-light rounded-pill border-0 dropdown-toggle"
+        type="button"
+        id="userDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <!-- Display user's initials or a profile icon -->
+        {{ userInitials }}
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="userDropdown">
+        <li>
+          <a class="dropdown-item" routerLink="/profile">Profile</a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+
+  <!-- Hamburger Button remains unchanged -->
   <button
     #hamburgerButton
     class="btn btn-outline-light rounded-pill border-0"
