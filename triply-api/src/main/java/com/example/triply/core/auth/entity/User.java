@@ -10,7 +10,7 @@ import org.hibernate.envers.Audited;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 @Getter
 @Setter
 @NoArgsConstructor

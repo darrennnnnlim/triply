@@ -22,7 +22,7 @@ public class CsrfTokenResponseFilter extends OncePerRequestFilter {
         CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
 
         if (csrfToken != null) {
-            response.setHeader("X-XSRF_TOKEN", csrfToken.getToken());
+            response.setHeader("X-XSRF-TOKEN", csrfToken.getToken());
         }
 
         filterChain.doFilter(request, response);

@@ -52,7 +52,11 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       }),
       catchError((error) => {
-        if (error.status === 403 && !req.url.includes('auth/refresh')) {
+        const isTokenExpired = error.status === 401;
+        if (
+          (isTokenExpired || error.status === 403) &&
+          !req.url.includes('auth/refresh')
+        ) {
           return this.handle403Error(req, next);
         }
         return throwError(() => error);
@@ -69,24 +73,36 @@ export class AuthInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(false);
 
       return this.authService.refreshToken().pipe(
-        switchMap(() => {
+        switchMap((success) => {
           this.isRefreshing = false;
-          this.refreshTokenSubject.next(true);
-          return next.handle(request);
+          if (success) {
+            this.refreshTokenSubject.next(true);
+            return next.handle(this.addTokenToRequest(request));
+          }
+          return throwError(() => new Error('Refresh failed'));
         }),
-        catchError((err) => {
+        catchError((error) => {
           this.isRefreshing = false;
           this.authService.logout();
-          return throwError(() => err);
+          return throwError(() => error);
         })
       );
     }
 
     return this.refreshTokenSubject.pipe(
-      filter((token) => token !== null),
+      filter((success) => success),
       take(1),
-      switchMap(() => next.handle(request))
+      switchMap(() => next.handle(this.addTokenToRequest(request)))
     );
+  }
+
+  private addTokenToRequest(request: HttpRequest<any>): HttpRequest<any> {
+    const csrfToken = this.getCsrfTokenFromCookie();
+    return request.clone({
+      setHeaders: {
+        'X-XSRF-TOKEN': csrfToken || '',
+      },
+    });
   }
 
   private getCsrfTokenFromCookie(): string | null {

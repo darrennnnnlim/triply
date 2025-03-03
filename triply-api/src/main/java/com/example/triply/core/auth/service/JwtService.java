@@ -1,6 +1,7 @@
 package com.example.triply.core.auth.service;
 
 import com.example.triply.core.auth.entity.Role;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -16,4 +17,6 @@ public interface JwtService {
     public boolean isTokenValid(String token, String username, boolean isRefresh);
 
     public List<String> extractRoles(String token);
+
+    public String extractUsernameFromRequest(HttpServletRequest request);
 }

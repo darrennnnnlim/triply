@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "Roles")
 @Getter
 @Setter
 @NoArgsConstructor
