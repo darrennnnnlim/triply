@@ -14,7 +14,7 @@ import org.hibernate.envers.Audited;
 @Setter
 @NoArgsConstructor
 @Audited
-public class Booking extends Auditable<String> {
+public class Booking extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

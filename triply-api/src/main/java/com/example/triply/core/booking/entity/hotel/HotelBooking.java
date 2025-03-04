@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class HotelBooking extends Auditable<String> {
+public class HotelBooking extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-public class FlightBooking extends Auditable<String> {
+public class FlightBooking extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

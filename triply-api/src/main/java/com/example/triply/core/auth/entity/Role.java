@@ -13,7 +13,7 @@ import org.hibernate.envers.Audited;
 @Setter
 @NoArgsConstructor
 @Audited
-public class Role extends Auditable<String> {
+public class Role extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

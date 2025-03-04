@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Flight extends Auditable<String> {
+public class Flight extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
