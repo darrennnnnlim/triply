@@ -1,6 +1,7 @@
 package com.example.triply.core.booking.entity.hotel;
 
 import com.example.triply.common.audit.Auditable;
+import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.booking.entity.Booking;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,13 +11,13 @@ import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Hotel_Booking")
-@Audited
-@NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "Hotel_Booking")
+@Audited
 public class HotelBooking extends Auditable{
 
     @Id
@@ -24,20 +25,25 @@ public class HotelBooking extends Auditable{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_id", nullable = false)
+    private Hotel hotel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hotel_room_type_id", nullable = false)
+    private HotelRoomType hotelRoomType;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id", nullable = false)
-    private Hotel hotel;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(nullable = false)
-    private LocalDate checkInDate;
+    @Column(name = "check_in", nullable = false)
+    private LocalDateTime checkIn;
 
-    @Column(nullable = false)
-    private LocalDate checkOutDate;
-
-    @Column(nullable = false)
-    private String roomType;
+    @Column(name = "check_out", nullable = false)
+    private LocalDateTime checkOut;
 
 }

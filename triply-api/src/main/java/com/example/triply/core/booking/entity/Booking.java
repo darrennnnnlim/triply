@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Booking")
 @Getter
@@ -24,7 +27,15 @@ public class Booking extends Auditable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+//    // TODO - Payment
+//    @Column(name = "payment_id", nullable = false)
+
+    @Column(name = "final_price", nullable = false)
+    private BigDecimal finalPrice;
+
     @Column(nullable = false)
     private String status;
 
+    @Column(name = "booking_time", nullable = false)
+    private LocalDateTime bookingTime;
 }
