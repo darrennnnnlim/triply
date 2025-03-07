@@ -6,6 +6,4 @@ import com.example.triply.core.booking.entity.Booking;
 public interface BookingService {
 
     public BookingDTO processBooking(BookingDTO type);
-
-    public Booking saveBooking(Booking booking);
 }
