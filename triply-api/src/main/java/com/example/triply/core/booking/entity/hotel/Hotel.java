@@ -1,5 +1,6 @@
 package com.example.triply.core.booking.entity.hotel;
 
+import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @Table(name = "Hotel")
 @Audited
-public class Hotel {
+public class Hotel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

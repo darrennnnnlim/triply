@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @Table(name = "Flight_Booking_Addon")
 @Audited
-public class FlightAddonBooking extends Auditable {
+public class FlightBookingAddon extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
