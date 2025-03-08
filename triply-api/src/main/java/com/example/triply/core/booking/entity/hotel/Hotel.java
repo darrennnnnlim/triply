@@ -1,5 +1,6 @@
 package com.example.triply.core.booking.entity.hotel;
 
+import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,27 +10,22 @@ import org.hibernate.envers.Audited;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "Hotel")
-@Audited
-@NoArgsConstructor
 @Getter
 @Setter
-public class Hotel {
+@Table(name = "Hotel")
+@Audited
+public class Hotel extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "location", nullable = false)
     private String location;
 
-    @Column(nullable = false)
-    private boolean availability;
-
-    @Column(nullable = false)
-    private BigDecimal basePrice;
-
+    @Column(name = "description", nullable = false)
+    private String description;
 }

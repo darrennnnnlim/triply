@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Audited
-public class RefreshToken extends Auditable<String> {
+public class RefreshToken extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

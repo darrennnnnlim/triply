@@ -16,30 +16,28 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Flight extends Auditable<String> {
+public class Flight extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "airline_id", nullable = false)
+    private Airline airline;
+
+    @Column(name = "flight_number", nullable = false)
     private String flightNumber;
 
-    @Column(nullable = false)
-    private String airline;
+    @Column(name = "origin", nullable = false)
+    private String origin;
 
-    @Column(nullable = false)
-    private String departure;
+    @Column(name = "destination", nullable = false)
+    private String destination;
 
-    @Column(nullable = false)
-    private String arrival;
-
-    @Column(nullable = false)
+    @Column(name = "departure_time", nullable = false)
     private LocalDateTime departureTime;
 
-    @Column(nullable = false)
+    @Column(name = "arrival_time", nullable = false)
     private LocalDateTime arrivalTime;
-
-    @Column(nullable = false)
-    private BigDecimal basePrice;
 }

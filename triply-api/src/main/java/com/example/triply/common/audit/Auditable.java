@@ -19,14 +19,14 @@ import java.time.LocalDateTime;
 @Audited
 @Getter
 @Setter
-public abstract class Auditable<U> {
+public abstract class Auditable {
     @CreatedDate
     @Column(name = "created_dt", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
-    private U createdBy;
+    private String createdBy;
 
     @LastModifiedDate
     @Column(name = "updated_dt")
@@ -34,5 +34,5 @@ public abstract class Auditable<U> {
 
     @LastModifiedBy
     @Column(name = "updated_by")
-    private U lastModifiedBy;
+    private String lastModifiedBy;
 }
