@@ -13,7 +13,6 @@ import com.example.triply.core.booking.repository.flight.FlightClassRepository;
 import com.example.triply.core.booking.repository.flight.FlightRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -47,6 +46,8 @@ public class FlightBookingMapper implements BaseMapper<FlightBooking, FlightBook
         dto.setBookingId(entity.getBooking().getId());
         dto.setUserId(entity.getUser().getId());
         dto.setDepartureDate(entity.getDepartureDate());
+
+        mapAuditFieldsToDto(entity, dto);
 
         return dto;
     }
@@ -90,17 +91,9 @@ public class FlightBookingMapper implements BaseMapper<FlightBooking, FlightBook
 
         entity.setDepartureDate(dto.getDepartureDate());
 
+        mapAuditFieldsToEntity(dto, entity);
+
         return entity;
 
-    }
-
-    @Override
-    public List<FlightBookingDTO> toDto(List<FlightBooking> entities) {
-        return List.of();
-    }
-
-    @Override
-    public List<FlightBooking> toEntity(List<FlightBookingDTO> dto) {
-        return List.of();
     }
 }

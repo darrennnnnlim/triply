@@ -9,7 +9,6 @@ import com.example.triply.core.booking.repository.hotel.HotelAddonRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -36,6 +35,8 @@ public class HotelBookingAddonMapper implements BaseMapper<HotelBookingAddon, Ho
         dto.setHotelAddonId(entity.getHotelAddon().getId());
         dto.setQuantity(entity.getQuantity());
         dto.setTotalPrice(entity.getTotalPrice());
+
+        mapAuditFieldsToDto(entity, dto);
 
         return dto;
     }
@@ -66,16 +67,8 @@ public class HotelBookingAddonMapper implements BaseMapper<HotelBookingAddon, Ho
         entity.setQuantity(dto.getQuantity());
         entity.setTotalPrice(dto.getTotalPrice());
 
+        mapAuditFieldsToEntity(dto, entity);
+
         return entity;
-    }
-
-    @Override
-    public List<HotelBookingAddonDTO> toDto(List<HotelBookingAddon> entities) {
-        return List.of();
-    }
-
-    @Override
-    public List<HotelBookingAddon> toEntity(List<HotelBookingAddonDTO> dto) {
-        return dto.stream().map(this::toEntity).toList();
     }
 }
