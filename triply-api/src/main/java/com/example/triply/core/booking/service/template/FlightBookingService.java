@@ -140,13 +140,14 @@ public class FlightBookingService extends BookingTemplate {
         booking.setStatus(BookingStatusEnum.PENDING.name());
         booking.setBookingTime(LocalDateTime.now());
         Booking saveBooking = bookingRepository.save(booking);
-
-//        Booking saveBooking = bookingService.saveBooking(booking);
         request.setId(saveBooking.getId());
+        request.setStatus(saveBooking.getStatus());
+        request.setBookingTime(saveBooking.getBookingTime());
 
         request.getFlightBooking().setBookingId(saveBooking.getId());
         FlightBooking flightBooking = flightBookingMapper.toEntity(request.getFlightBooking());
         FlightBooking saveFlightBooking = flightBookingRepository.save(flightBooking);
+        request.setFlightBooking(flightBookingMapper.toDto(saveFlightBooking));
 
         if (request.getFlightBookingAddon() != null && !request.getFlightBookingAddon().isEmpty()) {
             request.getFlightBookingAddon().forEach(flightBookingAddonDTO -> flightBookingAddonDTO.setFlightBookingId(saveFlightBooking.getId()));

@@ -1,5 +1,6 @@
 package com.example.triply.common.audit;
 
+import com.example.triply.core.auth.entity.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,12 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return Optional.of("System");
         }
-        return Optional.of(authentication.getName());
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof User user) {
+            return Optional.of(user.getUsername());
+        }
+
+        return Optional.of(principal.toString());
     }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Booking } from './booking.model';
 
 @Injectable({ providedIn: 'root' })
 export class BookingService {
@@ -17,5 +18,11 @@ export class BookingService {
       {},
       { withCredentials: true }
     );
+  }
+
+  createBooking(booking: Booking): Observable<Booking> {
+    return this.http.post<Booking>(`${this.API_URL}/createBooking`, booking, {
+      withCredentials: true,
+    });
   }
 }

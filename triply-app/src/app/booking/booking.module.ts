@@ -6,12 +6,14 @@ import { BookingComponent } from './booking.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { BookingService } from './booking.service';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [BookingComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatCardModule,
     RouterModule.forChild([{ path: '', component: BookingComponent }]),
   ],
   providers: [
