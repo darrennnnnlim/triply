@@ -1,6 +1,7 @@
 package com.example.triply.core.ratings.entity;
 
 import com.example.triply.common.audit.Auditable;
+import com.example.triply.core.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Ratings extends Auditable<String> {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private int rating;
@@ -28,13 +34,22 @@ public class Ratings extends Auditable<String> {
     @Column(nullable = false)
     private Long flightHotelId;
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 
     public int getRating() {
         return rating;

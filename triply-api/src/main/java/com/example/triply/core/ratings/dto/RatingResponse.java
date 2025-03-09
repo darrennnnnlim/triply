@@ -8,6 +8,9 @@ import lombok.Data;
 public class RatingResponse {
 
     @NotNull
+    private Long id;
+
+    @NotNull
     private Long userId;
 
     @NotNull
@@ -15,6 +18,14 @@ public class RatingResponse {
 
     @NotBlank
     private Long flightHotelId;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUserId() {
         return userId;
