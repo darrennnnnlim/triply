@@ -29,7 +29,7 @@ public class RatingResource {
 
     @GetMapping("/allRatings")
     public ResponseEntity<?> getAllRatings() {
-        List<Ratings> ratings = ratingService.getAllRatings();
+        List<RatingResponse> ratings = ratingService.getAllRatings();
         if (ratings.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No ratings found");
         }
@@ -44,14 +44,20 @@ public class RatingResource {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Ratings>> getRatingsByUserId(@PathVariable Long userId) {
-        List<Ratings> ratings = ratingService.getRatingsByUserId(userId);
+    public ResponseEntity<List<RatingResponse>> getRatingsByUserId(@PathVariable Long userId) {
+        List<RatingResponse> ratings = ratingService.getRatingsByUserId(userId);
         return ResponseEntity.ok(ratings);
     }
 
-    @GetMapping("/flight_hotel/{flightHotelId}")
-    public ResponseEntity<List<Ratings>> getRatingsByFlightHotelId(@PathVariable Long flightHotelId) {
-        List<Ratings> ratings = ratingService.getRatingsByFlightHotelId(flightHotelId);
+    @GetMapping("/flight/{flightId}")
+    public ResponseEntity<List<RatingResponse>> getRatingsByFlightId(@PathVariable Long flightId) {
+        List<RatingResponse> ratings = ratingService.getRatingsByFlightId(flightId);
+        return ResponseEntity.ok(ratings);
+    }
+
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<RatingResponse>> getRatingsByHotelId(@PathVariable Long hotelId) {
+        List<RatingResponse> ratings = ratingService.getRatingsByHotelId(hotelId);
         return ResponseEntity.ok(ratings);
     }
 

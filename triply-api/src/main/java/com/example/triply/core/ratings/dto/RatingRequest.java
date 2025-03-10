@@ -2,6 +2,7 @@ package com.example.triply.core.ratings.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 
 @Data
@@ -14,8 +15,14 @@ public class RatingRequest {
     @NotNull
     private int rating;
 
-    @NotBlank
-    private Long flightHotelId;
+    @Null
+    private Long flightId;
+
+    @Null
+    private Long hotelId;
+
+
+    private String type;
 
     public Long getUserId() {
         return userId;
@@ -33,14 +40,28 @@ public class RatingRequest {
         this.rating = rating;
     }
 
-    public Long getFlightHotelId() {
-        return flightHotelId;
+    public Long getFlightId() {
+        return flightId;
     }
 
-    public void setFlightHotelId(Long flightHotelId) {
-        this.flightHotelId = flightHotelId;
+    public void setFlightId(Long flightId) {
+        this.flightId = flightId;
     }
 
+    public Long getHotelId() {
+        return hotelId;
+    }
 
+    public void setHotelId(Long hotelId) {
+        this.hotelId = hotelId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
 }

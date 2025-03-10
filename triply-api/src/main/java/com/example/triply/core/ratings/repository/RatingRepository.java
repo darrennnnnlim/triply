@@ -10,6 +10,9 @@ public interface  RatingRepository extends JpaRepository<Ratings, Long> {
     @Query("SELECT r FROM Ratings r WHERE r.user.id = :userId")
     List<Ratings> findByUserId(Long userId);
 
-    @Query("SELECT r FROM Ratings r WHERE r.flightHotelId = :flightHotelId")
-    List<Ratings> findByFlightHotelId(Long flightHotelId);
+    @Query("SELECT r FROM Ratings r WHERE r.flightBooking.id = :flightId")
+    List<Ratings> findByFlightId(Long flightId);
+
+    @Query("SELECT r FROM Ratings r WHERE r.hotelBooking.id = :hotelId")
+    List<Ratings> findByHotelId(Long hotelId);
 }

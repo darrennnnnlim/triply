@@ -2,14 +2,15 @@ package com.example.triply.core.ratings.entity;
 
 import com.example.triply.common.audit.Auditable;
 import com.example.triply.core.auth.entity.User;
+import com.example.triply.core.booking.entity.flight.FlightBooking;
+import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "Ratings")
@@ -31,8 +32,13 @@ public class Ratings extends Auditable<String> {
     @Column(nullable = false)
     private int rating;
 
-    @Column(nullable = false)
-    private Long flightHotelId;
+    @ManyToOne
+    @JoinColumn(name = "flight_booking_id", nullable = true)
+    private FlightBooking flightBooking;
+
+    @ManyToOne
+    @JoinColumn(name = "hotel_booking_id", nullable = true)
+    private HotelBooking hotelBooking;
 
     public Long getId() {
         return id;
@@ -59,12 +65,21 @@ public class Ratings extends Auditable<String> {
         this.rating = rating;
     }
 
-    public Long getFlightHotelId() {
-        return flightHotelId;
+
+    public FlightBooking getFlightBooking() {
+        return flightBooking;
     }
 
-    public void setFlightHotelId(Long flightHotelId) {
-        this.flightHotelId = flightHotelId;
+    public void setFlightBooking(FlightBooking flightBooking) {
+        this.flightBooking = flightBooking;
+    }
+
+    public HotelBooking getHotelBooking() {
+        return hotelBooking;
+    }
+
+    public void setHotelBooking(HotelBooking hotelBooking) {
+        this.hotelBooking = hotelBooking;
     }
 
 
