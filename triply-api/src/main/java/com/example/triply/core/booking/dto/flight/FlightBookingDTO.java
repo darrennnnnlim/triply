@@ -15,4 +15,6 @@ public class FlightBookingDTO extends MutableDTO {
     private Long bookingId;
     private Long userId;
     private LocalDateTime departureDate;
+
+    private FlightDTO flight;
 }

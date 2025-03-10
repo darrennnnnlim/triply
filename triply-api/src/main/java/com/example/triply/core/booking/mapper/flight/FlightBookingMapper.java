@@ -25,12 +25,14 @@ public class FlightBookingMapper implements BaseMapper<FlightBooking, FlightBook
     private final BookingRepository bookingRepository;
 
     private final UserRepository userRepository;
+    private final FlightMapper flightMapper;
 
-    public FlightBookingMapper(FlightRepository flightRepository, FlightClassRepository flightClassRepository, BookingRepository bookingRepository, UserRepository userRepository) {
+    public FlightBookingMapper(FlightRepository flightRepository, FlightClassRepository flightClassRepository, BookingRepository bookingRepository, UserRepository userRepository, FlightMapper flightMapper) {
         this.flightRepository = flightRepository;
         this.flightClassRepository = flightClassRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
+        this.flightMapper = flightMapper;
     }
 
     @Override
@@ -46,6 +48,13 @@ public class FlightBookingMapper implements BaseMapper<FlightBooking, FlightBook
         dto.setBookingId(entity.getBooking().getId());
         dto.setUserId(entity.getUser().getId());
         dto.setDepartureDate(entity.getDepartureDate());
+
+        Optional<Flight> flightOptional = flightRepository.findById(dto.getFlightId());
+        if (flightOptional.isPresent()) {
+            dto.setFlight(flightMapper.toDto(flightOptional.get()));
+        } else {
+            dto.setFlight(null);
+        }
 
         mapAuditFieldsToDto(entity, dto);
 
