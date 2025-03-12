@@ -22,6 +22,10 @@ spring:
         envers:
           store_data_at_delete: true
           autoRegisterListeners: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 
 jwt:
   issuer: Triply
