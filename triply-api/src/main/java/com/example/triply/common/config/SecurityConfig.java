@@ -59,7 +59,7 @@ public class SecurityConfig {
                         .csrfTokenRequestHandler(requestAttributeHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/{version}/ratings/**", "/api/{version}/booking/**", "/api/{version}/hotel/**", "/api/{version}/flight/**").permitAll()
+                        .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/{version}/booking/test", "/api/{version}/ratings/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
