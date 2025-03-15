@@ -60,7 +60,11 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/{version}/auth/check-session").permitAll()
+                        .requestMatchers("/api/{version}/auth/refresh").permitAll()
+                        .requestMatchers("/api/{version}/admin/currentuser").permitAll()
                         .requestMatchers("/api/{version}/booking/test").hasRole("USER")
+                        .requestMatchers("/api/{version}/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService);
