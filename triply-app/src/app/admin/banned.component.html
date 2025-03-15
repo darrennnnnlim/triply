@@ -1,0 +1,24 @@
+<div>
+    <h2>Banned Users</h2>
+
+    <table *ngIf="bannedUsers.length > 0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of bannedUsers">
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.roleName }}</td>
+                <td><span class="banned">{{ user.status }}</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p *ngIf="bannedUsers.length === 0">No banned users found.</p>
+</div>
