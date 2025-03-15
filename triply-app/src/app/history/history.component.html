@@ -1,11 +1,14 @@
 <div class="container">
-    <h2 class="text-center">Boking History</h2>
+    <h2 class="text-center">Booking History</h2>
     <div class="row">
         <div class="col-sm">
             <div *ngFor="let item of items">
                 <div class="card">
                     <h3>{{ item.name }}</h3>
-                    <p> {{ item.desc }}</p>
+                    <p>Flight Number: {{ item.flightNumber }}</p>
+                    <p> Arrtival Date Time: {{ item.arrivalTime }}</p>
+                    <p>Departure Date Time:  {{item.departureTime}}</p>
+                    <p>Seat: {{item.seatClass}}{{item.seatNumber}}</p>
                     <rating *ngIf="expandedId===item.id" [currentRating]="item.rating" [totalStars]="5"
                         (ratingChange)="onRatingChange($event, item.id)" />
                     <button (click)="toggleExpand(item.id)">

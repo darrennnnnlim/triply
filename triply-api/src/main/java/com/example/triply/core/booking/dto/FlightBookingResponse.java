@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class FlightBookingRequest {
+public class FlightBookingResponse {
 
 
     @NotNull
@@ -19,6 +19,10 @@ public class FlightBookingRequest {
 
     @NotBlank
     private String seatNumber;
+
+
+    @NotNull
+    private Long bookingId;
 
     public Long getUserId() {
         return userId;
@@ -51,4 +55,13 @@ public class FlightBookingRequest {
     public void setSeatNumber(String seatNumber) {
         this.seatNumber = seatNumber;
     }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
 }

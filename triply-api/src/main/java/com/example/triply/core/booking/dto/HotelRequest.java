@@ -1,44 +1,25 @@
-package com.example.triply.core.booking.entity.hotel;
+package com.example.triply.core.booking.dto;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.envers.Audited;
+
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "Hotel")
-@Audited
-@NoArgsConstructor
-@Getter
-@Setter
-public class Hotel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class HotelRequest {
+    @NotNull
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private String name;
 
-    @Column(nullable = false)
+    @NotNull
     private String location;
 
-    @Column(nullable = false)
+    @NotNull
     private boolean availability;
 
-    @Column(nullable = false)
+    @NotNull
     private BigDecimal basePrice;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -46,6 +27,14 @@ public class Hotel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLocation() {
@@ -71,4 +60,6 @@ public class Hotel {
     public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
+
+
 }

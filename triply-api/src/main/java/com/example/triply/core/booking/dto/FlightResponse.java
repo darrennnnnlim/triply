@@ -1,48 +1,39 @@
-package com.example.triply.core.booking.entity.flight;
+ package com.example.triply.core.booking.dto;
 
-import com.example.triply.common.audit.Auditable;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.envers.Audited;
+
+
+
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "Flight")
-@Audited
-@Getter
-@Setter
-@NoArgsConstructor
-public class Flight extends Auditable<String> {
+public class FlightResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @NotNull
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
     private String flightNumber;
 
-    @Column(nullable = false)
+    @NotNull
     private String airline;
 
-    @Column(nullable = false)
+    @NotNull
     private String departure;
 
-    @Column(nullable = false)
+    @NotNull
     private String arrival;
 
-    @Column(nullable = false)
+    @NotNull
     private LocalDateTime departureTime;
 
-    @Column(nullable = false)
+    @NotNull
     private LocalDateTime arrivalTime;
 
-    @Column(nullable = false)
+    @NotNull
     private BigDecimal basePrice;
-
 
     public Long getId() {
         return id;
@@ -107,5 +98,4 @@ public class Flight extends Auditable<String> {
     public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
-
 }
