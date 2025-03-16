@@ -106,4 +106,16 @@ public class AdminService {
         entityManager.merge(user);
     }
 
+    public boolean isUserBanned(String username) {
+        String jpql = """
+            SELECT COUNT(u) > 0
+            FROM User u
+            JOIN u.status s
+            WHERE u.username = :username AND s.status = 'BANNED'
+        """;
+        return entityManager.createQuery(jpql, Boolean.class)
+                .setParameter("username", username)
+                .getSingleResult();
+    }
+
 }
