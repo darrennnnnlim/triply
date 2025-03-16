@@ -2,6 +2,7 @@ package com.example.triply.core.booking.service.impl;
 
 import com.example.triply.core.booking.dto.BookingDTO;
 import com.example.triply.core.booking.entity.Booking;
+import com.example.triply.core.booking.entity.BookingStatusEnum;
 import com.example.triply.core.booking.entity.flight.*;
 import com.example.triply.core.booking.entity.hotel.*;
 import com.example.triply.core.booking.mapper.BookingMapper;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -165,5 +167,19 @@ public class BookingServiceImpl implements BookingService {
         });
 
         return bookingDTOList;
+    }
+
+    @Override
+    public BookingDTO cancelBooking(Long id) {
+        Optional<Booking> bookingOptional = bookingRepository.findById(id);
+        if (bookingOptional.isPresent()) {
+            Booking booking = bookingOptional.get();
+            booking.setStatus(BookingStatusEnum.CANCELLED.name());
+            bookingRepository.save(booking);
+
+            return bookingMapper.toDto(booking);
+        }
+
+        return null;
     }
 }

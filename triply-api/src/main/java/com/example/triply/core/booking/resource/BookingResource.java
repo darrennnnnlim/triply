@@ -38,4 +38,10 @@ public class BookingResource {
         List<BookingDTO> bookingDTOList = bookingService.getBooking(username);
         return ResponseEntity.status(HttpStatus.OK).body(bookingDTOList);
     }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<BookingDTO> cancelBooking(@RequestBody Long bookingId) {
+        BookingDTO booking = bookingService.cancelBooking(bookingId);
+        return ResponseEntity.status(HttpStatus.OK).body(booking);
+    }
 }

@@ -9,4 +9,6 @@ public interface BookingService {
     BookingDTO processBooking(BookingDTO type);
 
     List<BookingDTO> getBooking(String username);
+
+    BookingDTO cancelBooking(Long id);
 }
