@@ -1,0 +1,184 @@
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Button Styles */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  button[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  /* special buttons */
+  button.delete-btn {
+    background-color: #d9534f;
+    color: white;
+  }
+  
+  button.delete-btn:hover {
+    background-color: #c9302c;
+  }
+  
+  button.edit-btn {
+    background-color: #3399CC;
+    color: white;
+  }
+  
+  button.edit-btn:hover {
+    background-color: #33b3cc;
+  }
+  
+  button.ban-btn {
+    /* background-color: #FF7440; */
+    background-color: #ff4400;
+    color: white;
+  }
+  
+  button.ban-btn:hover {
+    background-color: #FFA280;
+  }
+  
+  
+  
+  .admin-controls {
+    margin-bottom: 20px;
+    text-align: right;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-blue {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btn-blue:hover {
+    background-color: #0056b3;
+  }
+  
+  /* pop up box */
+  .popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* status color */
+  span.banned {
+    color: red !important;
+    font-weight: bold;
+}
+
+span.active {
+    color: green !important;
+    font-weight: bold;
+}
+
+.top-right-container {
+  display: flex;
+  justify-content: flex-end; /* Aligns the button to the right */
+  margin-bottom: 10px; /* Adds spacing between the button and the table */
+}
+
+/* Style for the "View Banned Users" button */
+.view-banned-btn {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  padding: 10px 15px; /* Add padding */
+  font-size: 14px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.view-banned-btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.cancel-btn {
+  background-color: #ccc; /* Light grey */
+  color: black;
+  /* padding: 10px 20px; */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.confirm-btn {
+  background-color: #f44336; /* Red */
+  color: white;
+  /* padding: 10px 20px; */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #aaa; /* Darker grey */
+}
+
+.confirm-btn:hover {
+  background-color: #d32f2f; /* Darker red */
+}
