@@ -71,9 +71,10 @@ export class AdminService {
 
   getBannedUsers(): Observable<UserRoleDTO[]> {
     return this.http
-      .get<UserRoleDTO[]>(`${this.API_URL}/isbanned`, {
+      .get<UserRoleDTO[]>(`${this.API_URL}/isBanned`, {
         withCredentials: true,
-      })
-      // .pipe(tap((users) => console.log('Raw API response:', users)));
+      });
   }
+  
+  
 }
