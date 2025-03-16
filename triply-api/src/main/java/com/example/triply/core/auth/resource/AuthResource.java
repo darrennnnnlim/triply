@@ -228,4 +228,5 @@ public class AuthResource {
 
         return ResponseEntity.ok().body(Map.of("isLoggedIn", false));
     }
+
 }
