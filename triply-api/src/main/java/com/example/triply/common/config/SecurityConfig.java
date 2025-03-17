@@ -42,10 +42,12 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CsrfTokenResponseFilter csrfTokenResponseFilter;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter, CsrfTokenResponseFilter csrfTokenResponseFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.csrfTokenResponseFilter = csrfTokenResponseFilter;
     }
 
     @Bean
@@ -65,6 +67,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/{version}/admin/currentuser").permitAll()
                         .requestMatchers("/api/{version}/booking/test").hasRole("USER")
                         .requestMatchers("/api/{version}/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/{version}/booking/test", "/api/{version}/ratings/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService);

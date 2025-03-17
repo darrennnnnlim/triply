@@ -3,6 +3,7 @@ package com.example.triply.core.booking.service.template;
 import com.example.triply.core.booking.dto.BookingDTO;
 import com.example.triply.core.booking.dto.HotelBookingAddonDTO;
 import com.example.triply.core.booking.dto.HotelBookingDTO;
+import com.example.triply.core.booking.dto.HotelBookingResponse;
 import com.example.triply.core.booking.entity.Booking;
 import com.example.triply.core.booking.entity.BookingStatusEnum;
 import com.example.triply.core.booking.entity.hotel.*;
@@ -19,7 +20,9 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -175,5 +178,35 @@ public class HotelBookingService extends BookingTemplate {
     @Override
     protected void confirmBooking(Booking booking) {
 
+    }
+
+    public List<HotelBookingResponse> getBookingByUserId (Long userId){
+        List<HotelBooking> hotelBookings = hotelBookingRepository.findByUserId(userId);
+        List<HotelBookingResponse> hotelBookingResponses = new ArrayList<>();
+        for (HotelBooking booking : hotelBookings) {
+            HotelBookingResponse resp = new HotelBookingResponse();
+            resp.setUserId(userId);
+            resp.setHotelId(booking.getHotel().getId());
+            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setRoomType(booking.getHotelRoomType().getName());
+            hotelBookingResponses.add(resp);
+        }
+        return hotelBookingResponses;
+    }
+
+    public List<HotelBookingResponse> getBookingByBookingId (Long bookingId, Long userId){
+        List<HotelBooking> hotelBookings = hotelBookingRepository.findByBookingId(userId);
+        List<HotelBookingResponse> hotelBookingResponses = new ArrayList<>();
+        for (HotelBooking booking : hotelBookings) {
+            HotelBookingResponse resp = new HotelBookingResponse();
+            resp.setUserId(userId);
+            resp.setHotelId(booking.getHotel().getId());
+            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setRoomType(booking.getHotelRoomType().getName());
+            hotelBookingResponses.add(resp);
+        }
+        return hotelBookingResponses;
     }
 }

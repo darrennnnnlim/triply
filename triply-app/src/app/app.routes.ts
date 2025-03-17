@@ -22,6 +22,18 @@ export const routes: Routes = [
       import('./admin/admin.module').then((m) => m.AdminModule),
   },
   {
+      path: 'search',
+      loadChildren: () =>
+            import('./flight-search-page/flight-search-page.module').then((m) => m.FlightSearchPageModule),
+  },
+  {
+    path: 'flight-offer', // Dynamic route for flight offer details
+    loadChildren: () =>
+      import('./flight-offer/flight-offer.module').then((m) => m.FlightOfferModule),
+  },
+  { path: 'history', component: HistoryComponent },
+  { path: 'banned', component: BannedUsersComponent },
+  {
     path: '**',
     redirectTo: '',
   },
