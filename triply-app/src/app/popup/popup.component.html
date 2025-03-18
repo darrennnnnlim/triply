@@ -1,0 +1,8 @@
+
+<div *ngIf="isVisible" class="overlay">
+    <div class="container">
+        <span class="close" (click) = 'close()'>X</span>
+        <p>{{ message }}</p>
+        <button (click) = 'close()'>Close</button>
+    </div>
+</div>

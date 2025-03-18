@@ -27,4 +27,5 @@ export class BookingService {
       withCredentials: true,
     });
   }
+
 }
