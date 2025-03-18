@@ -1,0 +1,58 @@
+<div *ngIf="isAdmin">
+
+    <div class="top-right-container">
+        <button class="view-banned-btn" (click)="toggleView()">
+            {{ showBannedUsers ? 'View All Users' : 'View Banned Users' }}
+        </button>
+    </div>
+
+    <router-outlet *ngIf="showBannedUsers"></router-outlet>
+
+    <div *ngIf="!showBannedUsers">
+        <h2>All Users</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of usersWithRoles">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.roleName }}</td>
+                    <td>
+                        <span
+                            [ngClass]="{'banned': user.status.toLowerCase().trim() === 'banned', 'active': user.status.toLowerCase().trim() !== 'banned'}">
+                            {{ user.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <button *ngIf="user.status.toLowerCase().trim() !== 'banned'" class="ban-btn"
+                            (click)="openActionDialog(user.id, user.username, 'ban')">Ban</button>
+                        <button *ngIf="user.status.toLowerCase().trim() === 'banned'" class="unban-btn"
+                            (click)="openActionDialog(user.id, user.username, 'unban')">Unban</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="popup-container" [style.display]="isDialogOpen ? 'flex' : 'none'">
+            <div class="popup">
+                <h2>Confirm {{ dialogAction === 'ban' ? 'Ban' : 'Unban' }}</h2>
+                <p>Are you sure you want to {{ dialogAction }} this user <b>{{ userToAction }}</b>?</p>
+                <div class="actions">
+                    <button class="cancel-btn" (click)="cancelAction()">Cancel</button>
+                    <button class="confirm-btn" (click)="confirmAction()">
+                        {{ dialogAction === 'ban' ? 'Ban' : 'Unban' }}
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

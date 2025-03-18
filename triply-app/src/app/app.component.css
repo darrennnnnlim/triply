@@ -1,0 +1,30 @@
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #ddd;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Main Content */
+main {
+  padding: 20px;
+}
+
+/* Apply a nicer overall font */
+body {
+  font-family: "Open Sans", sans-serif;
+}

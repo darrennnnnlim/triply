@@ -1,0 +1,73 @@
+<div class="nav-controls">
+  <!-- Conditionally show Login or User Dropdown -->
+  <ng-container *ngIf="!isLoggedIn; else loggedIn">
+    <button
+      class="btn btn-outline-light rounded-pill border-0 me-2"
+      (click)="openLoginModal()"
+    >
+      Login
+    </button>
+  </ng-container>
+  <ng-template #loggedIn>
+    <div class="dropdown me-2">
+      <button
+        class="btn btn-outline-light rounded-pill border-0 dropdown-toggle"
+        type="button"
+        id="userDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <!-- Display user's initials or a profile icon -->
+        {{ userInitials }}
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="userDropdown">
+        <li>
+          <a class="dropdown-item" routerLink="/profile">Profile</a>
+        </li>
+        <li>
+          <a class="dropdown-item" (click)="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+
+  <!-- Hamburger Button remains unchanged -->
+  <button
+    #hamburgerButton
+    class="btn btn-outline-light rounded-pill border-0"
+    (click)="toggleHamburgerMenu()"
+    [ngClass]="{ active: isHamburgerMenuVisible }"
+  >
+    &#9776;
+  </button>
+</div>
+
+<!-- Hamburger Navigation Menu with template ref -->
+<nav *ngIf="isHamburgerMenuVisible" #hamburgerMenu class="hamburger-menu p-3">
+  <ul class="list-unstyled">
+    <li>
+      <a
+        routerLink="/nav1"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Navigation 1</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/nav2"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Navigation 2</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/nav3"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Navigation 3</a
+      >
+    </li>
+  </ul>
+</nav>

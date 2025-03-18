@@ -1,10 +1,45 @@
 triply:
   api-version: v1
+  cors:
+    allowedOrigins: http://localhost:4200
+    allowedMethods: GET,POST,PUT,DELETE,OPTIONS
+    allowedHeaders: Authorization,Content-Type,X-XSRF-TOKEN
+    exposedHeaders: X-XSRF-TOKEN
 
 spring:
   application:
-    name: triply
+    name: Triply
+  datasource:
+    url: jdbc:postgresql://localhost:5433/triply
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        envers:
+          store_data_at_delete: true
+          autoRegisterListeners: true
+
+jwt:
+  issuer: Triply
+  secret-key:
+  refresh-secret-key:
+  access-token:
+    expiry: 600000
+    cookie-expiry: 600
+  refresh-token:
+    expiry: 604800000
+    cookie-expiry: 604800
 
 springdoc:
   api-docs:
     enabled: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug

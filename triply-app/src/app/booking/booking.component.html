@@ -1,0 +1,40 @@
+<div class="container">
+  <h2>Booking Summary</h2>
+
+  <mat-card>
+    <h3>Flight Details</h3>
+    <p><strong>Flight ID:</strong> {{ booking.flightBooking.flightId }}</p>
+    <p><strong>Class:</strong> {{ booking.flightBooking.flightClassId }}</p>
+    <p>
+      <strong>Departure Date:</strong> {{ booking.flightBooking.departureDate }}
+    </p>
+  </mat-card>
+
+  <mat-card>
+    <h3>Hotel Details</h3>
+    <p><strong>Hotel ID:</strong> {{ booking.hotelBooking.hotelId }}</p>
+    <p>
+      <strong>Room Type:</strong> {{ booking.hotelBooking.hotelRoomTypeId }}
+    </p>
+  </mat-card>
+
+  <mat-card *ngIf="booking.flightBookingAddon.length">
+    <h3>Flight Add-ons</h3>
+    <ul>
+      <li *ngFor="let addon of booking.flightBookingAddon">
+        Addon ID: {{ addon.flightAddonId }}, Quantity: {{ addon.quantity }}
+      </li>
+    </ul>
+  </mat-card>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="confirmBooking()"
+    [disabled]="isConfirming"
+  >
+    Confirm Booking
+  </button>
+
+  <p *ngIf="isConfirming">Processing your booking...</p>
+</div>

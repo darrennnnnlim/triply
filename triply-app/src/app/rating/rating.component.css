@@ -1,0 +1,18 @@
+.rating {
+    font-size: 3rem;
+    color: #d3d3d3; 
+  }
+  
+  .star {
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .filled {
+    color: #FCD12A;
+  }
+  
+  .star:hover {
+    color: #FCD12A;
+  }
+  

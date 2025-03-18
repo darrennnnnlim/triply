@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Login</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="username" class="form-label">Username:</label>
+      <input
+        type="text"
+        id="username"
+        formControlName="username"
+        class="form-control"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password:</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="form-control"
+        required
+      />
+    </div>
+    <!-- Optionally display an error message -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary rounded-pill border-0"
+    (click)="activeModal.dismiss('cancel click')"
+  >
+    Cancel
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary rounded-pill border-0"
+    [disabled]="isLoading"
+    (click)="onSubmit()"
+  >
+    Login
+  </button>
+</div>
