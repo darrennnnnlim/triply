@@ -27,11 +27,5 @@ export class BookingService {
       withCredentials: true,
     });
   }
-  postTest(): Observable<any> {
-    return this.http.post(
-      `${this.API_URL}/test`,
-      {},
-      { withCredentials: true }
-    );
-  }
+
 }

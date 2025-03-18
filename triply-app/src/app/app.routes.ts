@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { HistoryComponent } from './history/history.component';
+import { BannedUsersComponent } from './banned-users/banned-users.component';
 
 export const routes: Routes = [
   {
