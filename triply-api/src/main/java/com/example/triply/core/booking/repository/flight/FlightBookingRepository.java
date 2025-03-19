@@ -11,4 +11,10 @@ import java.util.List;
 public interface FlightBookingRepository extends JpaRepository<FlightBooking, Long> {
     @Query("SELECT fb FROM FlightBooking fb WHERE fb.flight.id IN :flightIds")
     List<FlightBooking> findByFlightIdIn(List<Long> flightIds);
+
+    @Query("SELECT fb FROM FlightBooking fb INNER JOIN Booking b ON b.id=fb.booking.id WHERE b.user.id = :userId")
+    List<FlightBooking> findByUserId(Long userId);
+
+    @Query("SELECT fb FROM FlightBooking fb WHERE fb.booking.id = :bookingId")
+    List<FlightBooking> findByBookingId(Long bookingId);
 }
