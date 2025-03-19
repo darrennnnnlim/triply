@@ -7,7 +7,6 @@ import com.example.triply.core.booking.entity.flight.Flight;
 import com.example.triply.core.booking.repository.flight.AirlineRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component

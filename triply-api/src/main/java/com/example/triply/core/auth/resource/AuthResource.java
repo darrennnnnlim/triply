@@ -1,5 +1,6 @@
 package com.example.triply.core.auth.resource;
 
+import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.core.auth.dto.AuthRequest;
 import com.example.triply.core.auth.dto.RefreshRequest;
@@ -78,13 +79,13 @@ public class AuthResource {
                 String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), userOptional.get().getRoles());
                 RefreshToken refreshToken = refreshTokenService.createRefreshToken(userOptional.get());
 
-                Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+                Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, accessToken);
                 accessTokenCookie.setHttpOnly(true);
                 accessTokenCookie.setSecure(true);
                 accessTokenCookie.setPath("/");
                 accessTokenCookie.setMaxAge(accessTokenCookieExpiry);
 
-                Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
+                Cookie refreshTokenCookie = new Cookie(CommonConstants.REFRESH_TOKEN, refreshToken.getToken());
                 refreshTokenCookie.setHttpOnly(true);
                 refreshTokenCookie.setSecure(true);
                 refreshTokenCookie.setPath("/");

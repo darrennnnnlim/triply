@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
