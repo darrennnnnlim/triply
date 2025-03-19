@@ -1,0 +1,102 @@
+/* ✅ Main Container: Ensures consistent layout and spacing */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ✅ Booking Card: Improves visibility and separation */
+.booking-card {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* ✅ Title Styling */
+mat-card-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+/* ✅ Divider Spacing */
+mat-divider {
+  margin: 15px 0;
+}
+
+/* ✅ Tab Group Margin */
+mat-tab-group {
+  margin-bottom: 20px;
+}
+
+/* ✅ No Bookings Message */
+.no-bookings {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: gray;
+}
+
+/* ✅ Ensures proper spacing for Add-ons Section */
+.addon-list {
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+/* ✅ Add-ons Table */
+mat-table {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ✅ Table Headers */
+mat-header-cell {
+  font-weight: bold;
+  background: #f0f0f0;
+  padding: 12px;
+  text-align: left;
+}
+
+/* ✅ Table Cells */
+mat-cell {
+  padding: 12px;
+  font-size: 0.95rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ✅ Ensures spacing and visibility for Add-on Names */
+.addon-content {
+  flex-grow: 1;
+  padding-left: 12px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+}
+
+/* ✅ Proper spacing for Add-on Titles */
+.addon-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+/* ✅ Ensures Price Visibility */
+.addon-price {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 5px;
+  display: block;
+  line-height: 1.4;
+}
+
+/* ✅ Section Titles */
+h4 {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}

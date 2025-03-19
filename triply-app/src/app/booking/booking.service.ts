@@ -28,4 +28,15 @@ export class BookingService {
     });
   }
 
+  getBookings(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_URL}/bookings`, {
+      withCredentials: true,
+    });
+  }
+
+  cancelBooking(bookingId: number): Observable<any> {
+    return this.http.put(`${this.API_URL}/cancel`, bookingId, {
+      withCredentials: true,
+    });
+  }
 }

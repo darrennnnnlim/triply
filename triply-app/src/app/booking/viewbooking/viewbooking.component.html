@@ -1,0 +1,192 @@
+<div class="container">
+  <h2 class="mat-headline">Your Bookings</h2>
+
+  <mat-tab-group (selectedIndexChange)="filterBookings($event)">
+    <mat-tab label="Upcoming Bookings"></mat-tab>
+    <mat-tab label="Past Bookings"></mat-tab>
+    <mat-tab label="Cancelled"></mat-tab>
+  </mat-tab-group>
+
+  <div *ngIf="filteredBookings.length > 0">
+    <ng-template #cancelModal let-modal>
+      <div class="modal-header">
+        <h5 class="modal-title">Cancel Booking</h5>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="modal.dismiss()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to cancel this booking?</p>
+      </div>
+      <div class="modal-footer">
+        <button mat-button color="primary" (click)="modal.dismiss()">No</button>
+        <button mat-button color="warn" (click)="confirmCancel()">
+          Yes, Cancel
+        </button>
+      </div>
+    </ng-template>
+
+    <mat-card *ngFor="let booking of filteredBookings" class="booking-card">
+      <mat-card-header>
+        <mat-card-title>Booking ID: {{ booking.id }}</mat-card-title>
+        <mat-card-subtitle>Status: {{ booking.status }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p><strong>Final Price:</strong> ${{ booking.finalPrice }}</p>
+        <p>
+          <strong>Booking Time:</strong>
+          {{ booking.bookingTime | date : "medium" }}
+        </p>
+
+        <!-- Flight Details -->
+        <mat-divider></mat-divider>
+        <h3>Flight Details</h3>
+        <ng-container *ngIf="booking.flightBooking">
+          <p>
+            <strong>Flight Number:</strong>
+            {{ booking.flightBooking.flight.flightNumber }}
+          </p>
+          <p>
+            <strong>Airline:</strong>
+            {{ booking.flightBooking.flight.airline.name }}
+          </p>
+          <p>
+            <strong>Origin:</strong> {{ booking.flightBooking.flight.origin }}
+          </p>
+          <p>
+            <strong>Destination:</strong>
+            {{ booking.flightBooking.flight.destination }}
+          </p>
+          <p>
+            <strong>Departure:</strong>
+            {{ booking.flightBooking.flight.departureTime | date : "medium" }}
+          </p>
+          <p>
+            <strong>Arrival:</strong>
+            {{ booking.flightBooking.flight.arrivalTime | date : "medium" }}
+          </p>
+
+          <!-- Flight Add-ons -->
+          <h4>Flight Add-ons</h4>
+          <mat-table
+            [dataSource]="booking.flightBookingAddon"
+            class="mat-elevation-z2"
+          >
+            <!-- Add-on Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Add-on </mat-header-cell>
+              <mat-cell *matCellDef="let addon">
+                {{ addon.flightAddon.name }}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+              <mat-cell *matCellDef="let addon"> ${{ addon.price }} </mat-cell>
+            </ng-container>
+
+            <!-- Quantity Column -->
+            <ng-container matColumnDef="quantity">
+              <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+              <mat-cell *matCellDef="let addon">
+                x{{ addon.quantity }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row
+              *matHeaderRowDef="['name', 'price', 'quantity']"
+            ></mat-header-row>
+            <mat-row
+              *matRowDef="let row; columns: ['name', 'price', 'quantity']"
+            ></mat-row>
+          </mat-table>
+        </ng-container>
+
+        <!-- Hotel Details -->
+        <mat-divider></mat-divider>
+        <h3>Hotel Details</h3>
+        <ng-container *ngIf="booking.hotelBooking">
+          <p><strong>Hotel:</strong> {{ booking.hotelBooking.hotel.name }}</p>
+          <p>
+            <strong>Location:</strong> {{ booking.hotelBooking.hotel.location }}
+          </p>
+          <p>
+            <strong>Room Type:</strong>
+            {{ booking.hotelBooking.hotelRoomType.name }}
+          </p>
+          <p>
+            <strong>Check-in:</strong>
+            {{ booking.hotelBooking.checkIn | date : "medium" }}
+          </p>
+          <p>
+            <strong>Check-out:</strong>
+            {{ booking.hotelBooking.checkOut | date : "medium" }}
+          </p>
+
+          <!-- Hotel Add-ons -->
+          <h4>Hotel Add-ons</h4>
+          <mat-table
+            [dataSource]="booking.hotelBookingAddon"
+            class="mat-elevation-z2"
+          >
+            <!-- Add-on Name Column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Add-on </mat-header-cell>
+              <mat-cell *matCellDef="let addon">
+                {{ addon.hotelAddon.name }}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+              <mat-cell *matCellDef="let addon">
+                ${{ addon.totalPrice }}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Quantity Column -->
+            <ng-container matColumnDef="quantity">
+              <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+              <mat-cell *matCellDef="let addon">
+                x{{ addon.quantity }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row
+              *matHeaderRowDef="['name', 'price', 'quantity']"
+            ></mat-header-row>
+            <mat-row
+              *matRowDef="let row; columns: ['name', 'price', 'quantity']"
+            ></mat-row>
+          </mat-table>
+        </ng-container>
+      </mat-card-content>
+
+      <mat-card-actions
+        align="end"
+        *ngIf="activeTabIndex === 0 && booking.status !== 'CANCELLED'"
+      >
+        <button mat-button color="primary">Modify Booking</button>
+        <button
+          mat-button
+          color="warn"
+          (click)="openCancelModal(cancelModal, booking.id)"
+        >
+          Cancel Booking
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <p *ngIf="filteredBookings.length === 0" class="no-bookings">
+    No bookings found.
+  </p>
+</div>
