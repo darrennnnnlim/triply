@@ -7,7 +7,6 @@ import com.example.triply.core.booking.dto.BookingDTO;
 import com.example.triply.core.booking.entity.Booking;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -32,6 +31,8 @@ public class BookingMapper implements BaseMapper<Booking, BookingDTO> {
         dto.setStatus(entity.getStatus());
         dto.setBookingTime(entity.getBookingTime());
 
+        mapAuditFieldsToDto(entity, dto);
+
         return dto;
     }
 
@@ -55,16 +56,8 @@ public class BookingMapper implements BaseMapper<Booking, BookingDTO> {
         entity.setStatus(dto.getStatus());
         entity.setBookingTime(dto.getBookingTime());
 
+        mapAuditFieldsToEntity(dto, entity);
+
         return entity;
-    }
-
-    @Override
-    public List<BookingDTO> toDto(List<Booking> entities) {
-        return null;
-    }
-
-    @Override
-    public List<Booking> toEntity(List<BookingDTO> dto) {
-        return null;
     }
 }
