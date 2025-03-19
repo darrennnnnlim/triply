@@ -10,23 +10,23 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  test(): Observable<any> {
-    return this.http.get(`${this.API_URL}/test`, {
-      withCredentials: true,
-      responseType: 'text',
-    });
-  }
+  // test(): Observable<any> {
+  //   return this.http.get(`${this.API_URL}/test`, {
+  //     withCredentials: true,
+  //     responseType: 'text',
+  //   });
+  // }
 
-  postTest(): Observable<any> {
-    return this.http.post(
-      `${this.API_URL}/test`,
-      {},
-      {
-        withCredentials: true,
-        responseType: 'text',
-      }
-    );
-  }
+  // postTest(): Observable<any> {
+  //   return this.http.post(
+  //     `${this.API_URL}/test`,
+  //     {},
+  //     {
+  //       withCredentials: true,
+  //       responseType: 'text',
+  //     }
+  //   );
+  // }
 
   getUsersWithRoles(): Observable<UserRoleDTO[]> {
     return this.http.get<UserRoleDTO[]>(`${this.API_URL}/users`, {

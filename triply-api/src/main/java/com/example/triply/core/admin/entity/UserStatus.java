@@ -1,5 +1,6 @@
 package com.example.triply.core.admin.entity;
 
+import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Audited
-public class UserStatus {
+public class UserStatus extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,4 +25,5 @@ public class UserStatus {
 
     @OneToMany(mappedBy = "status")
     private Set<User> users;
+
 }
