@@ -30,110 +30,77 @@ export class AdminComponent {
   private readonly API_URL = 'http://localhost:8080/api/v1/admin';
 
   ngOnInit(): void {
-    // Fetch the current user
     this.adminService.getCurrentUser().subscribe({
       next: (username) => {
         this.currentUsername = username;
         // console.log('Current username:', this.currentUsername);
-  
-        // Fetch the list of admins
-        this.adminService.getAdmins().subscribe({
-          next: (admins) => {
-            // console.log('Admins:', admins);
-  
+
+        // Fetch all users with roles
+        this.adminService.getUsersWithRoles().subscribe({
+          next: (data) => {
+            // console.log('Users with roles:', data);
+            this.usersWithRoles = data;
+
             // Check if the current user is an admin
-            this.isAdmin = admins.some(admin => admin.username === this.currentUsername);
+            this.isAdmin = this.usersWithRoles.some(
+              (user) =>
+                user.username === this.currentUsername &&
+                user.roleName === 'ROLE_ADMIN'
+            );
             // console.log('Is admin?', this.isAdmin);
-  
-            if (this.isAdmin) {
-              // If the user is an admin fetch users with roles
-              this.adminService.getUsersWithRoles().subscribe({
-                next: (data) => {
-                  this.usersWithRoles = data;
-                },
-                error: (error) => {
-                  console.error('Error fetching users with roles:', error);
-                }
-              });
-            } else {
-              // If not an admin redirect to an unauthorized page
-              // console.log('Not an admin, redirecting...');
+
+            if (!this.isAdmin) {
               this.router.navigate(['/home']);
             }
           },
           error: (error) => {
-            console.error('Error fetching admins:', error);
-          }
+            console.error('Error fetching users with roles:', error);
+          },
         });
       },
       error: (error) => {
         console.error('Error fetching current user:', error);
-      }
-    });
-  }
-  
-   toggleView() {
-        this.showBannedUsers = !this.showBannedUsers;
-        if (this.showBannedUsers) {
-            this.router.navigate(['admin/banned']);
-        } else {
-            this.router.navigate(['admin']);
-        }
-    }
-  testApi(): void {
-    this.adminService.test().subscribe({
-      next: (res: string) => {
-        console.log('Response:', res); 
-        this.response = res;
-        this.errorMessage = null;
-      },
-      error: (err) => {
-        console.error('Error:', err);
-        this.errorMessage = `Error: ${err.status} - ${err.statusText}`;
       },
     });
   }
 
-  postTestApi(): void {
-    this.adminService.postTest().subscribe({
-      next: (res: string) => {
-        console.log('POST Response:', res);
-        this.response = res;
-        this.errorMessage = null;
-      },
-      error: (err) => {
-        console.error('POST Error:', err);
-        this.errorMessage = `Error: ${err.status} - ${err.statusText}`;
-      },
-    });
+  toggleView() {
+    this.showBannedUsers = !this.showBannedUsers;
+    if (this.showBannedUsers) {
+      this.router.navigate(['admin/banned']);
+    } else {
+      this.router.navigate(['admin']);
+    }
   }
 
   banUser(userId: number): void {
     this.adminService.banUser(userId).subscribe({
       next: () => {
-        console.log(`User with ID ${userId} has been banned.`);
+        // console.log(`User with ID ${userId} has been banned.`);
         this.fetchUsersWithRoles();
       },
       error: (error) => {
         console.error(`Error banning user with ID ${userId}:`, error);
-      }
+      },
     });
   }
-  
 
-  openActionDialog(userId: number, username: string, action: 'ban' | 'unban'): void {
+  openActionDialog(
+    userId: number,
+    username: string,
+    action: 'ban' | 'unban'
+  ): void {
     this.userIdToAction = userId;
     this.userToAction = username;
     this.isDialogOpen = true;
     this.dialogAction = action;
   }
-  
 
   cancelAction() {
     this.isDialogOpen = false;
     this.userIdToAction = null;
   }
-  
+
   confirmAction(): void {
     if (this.userIdToAction !== null) {
       if (this.dialogAction === 'ban') {
@@ -144,10 +111,8 @@ export class AdminComponent {
     }
     this.isDialogOpen = false;
   }
-  
-  
 
-    unbanUser(userId: number): void {
+  unbanUser(userId: number): void {
     this.adminService.unbanUser(userId).subscribe({
       next: () => {
         // console.log(`User with ID ${userId} has been unbanned.`);
@@ -155,10 +120,10 @@ export class AdminComponent {
       },
       error: (error) => {
         console.error(`Error unbanning user with ID ${userId}:`, error);
-      }
+      },
     });
   }
-  
+
   loadUsers() {
     this.adminService.getUsersWithRoles().subscribe({
       next: (data) => {
@@ -166,19 +131,18 @@ export class AdminComponent {
       },
       error: (error) => {
         console.error('Error fetching users with roles:', error);
-      }
+      },
     });
   }
 
-    fetchUsersWithRoles(): void {
+  fetchUsersWithRoles(): void {
     this.adminService.getUsersWithRoles().subscribe({
       next: (users) => {
         this.usersWithRoles = users;
       },
       error: (error) => {
         console.error('Error fetching users:', error);
-      }
+      },
     });
   }
-  
 }

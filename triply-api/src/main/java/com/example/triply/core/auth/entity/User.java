@@ -76,11 +76,11 @@ public class User extends Auditable {
     @Column(nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Lazy fetch for better performance
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")
     private UserStatus status;
 
-    @ManyToMany(fetch = FetchType.EAGER) // EAGER fetch for roles (required for security)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
