@@ -15,4 +15,6 @@ public class FlightBookingAddonDTO extends MutableDTO {
     private Long flightAddonId;
     private BigDecimal price;
     private int quantity;
+
+    private FlightAddonDTO flightAddon;
 }

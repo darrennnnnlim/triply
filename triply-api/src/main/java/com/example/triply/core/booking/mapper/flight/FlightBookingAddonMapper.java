@@ -9,7 +9,6 @@ import com.example.triply.core.booking.repository.flight.FlightAddonRepository;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -36,6 +35,8 @@ public class FlightBookingAddonMapper implements BaseMapper<FlightBookingAddon, 
         dto.setFlightAddonId(entity.getFlightAddon().getId());
         dto.setPrice(entity.getPrice());
         dto.setQuantity(entity.getQuantity());
+
+        mapAuditFieldsToDto(entity, dto);
 
         return dto;
     }
@@ -66,16 +67,8 @@ public class FlightBookingAddonMapper implements BaseMapper<FlightBookingAddon, 
         entity.setPrice(dto.getPrice());
         entity.setQuantity(dto.getQuantity());
 
+        mapAuditFieldsToEntity(dto, entity);
+
         return entity;
-    }
-
-    @Override
-    public List<FlightBookingAddonDTO> toDto(List<FlightBookingAddon> entities) {
-        return List.of();
-    }
-
-    @Override
-    public List<FlightBookingAddon> toEntity(List<FlightBookingAddonDTO> dto) {
-        return dto.stream().map(this::toEntity).toList();
     }
 }

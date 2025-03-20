@@ -10,7 +10,9 @@ export class BookingService {
   constructor(private http: HttpClient) {}
 
   test(): Observable<any> {
-    return this.http.get(`${this.API_URL}/test`, { withCredentials: true });
+    // return this.http.get(`${this.API_URL}/test`, { withCredentials: true });
+    return this.http.get(`${this.API_URL}/test`, { withCredentials: true, responseType: 'text' });
+
   }
   postTest(): Observable<any> {
     return this.http.post(
@@ -22,6 +24,18 @@ export class BookingService {
 
   createBooking(booking: Booking): Observable<Booking> {
     return this.http.post<Booking>(`${this.API_URL}/createBooking`, booking, {
+      withCredentials: true,
+    });
+  }
+
+  getBookings(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_URL}/bookings`, {
+      withCredentials: true,
+    });
+  }
+
+  cancelBooking(bookingId: number): Observable<any> {
+    return this.http.put(`${this.API_URL}/cancel`, bookingId, {
       withCredentials: true,
     });
   }

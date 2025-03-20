@@ -1,6 +1,7 @@
 package com.example.triply.core.booking.service.template;
 
 import com.example.triply.core.booking.dto.BookingDTO;
+import com.example.triply.core.booking.dto.FlightBookingResponse;
 import com.example.triply.core.booking.dto.flight.FlightBookingAddonDTO;
 import com.example.triply.core.booking.dto.flight.FlightBookingDTO;
 import com.example.triply.core.booking.entity.Booking;
@@ -11,6 +12,8 @@ import com.example.triply.core.booking.mapper.flight.FlightBookingAddonMapper;
 import com.example.triply.core.booking.mapper.flight.FlightBookingMapper;
 import com.example.triply.core.booking.repository.*;
 import com.example.triply.core.booking.repository.flight.*;
+import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
+import com.example.triply.core.booking.repository.flight.FlightRepository;
 import com.example.triply.core.booking.service.BookingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -161,5 +166,32 @@ public class FlightBookingService extends BookingTemplate {
     @Override
     protected void confirmBooking(Booking booking) {
 
+    }
+
+    public List<FlightBookingResponse> getBookingByUserId (Long userId){
+        List<FlightBooking> flightBooking = flightBookingRepository.findByUserId(userId);
+        List<FlightBookingResponse> flightBookingResponse = new ArrayList<>();
+        for (FlightBooking booking : flightBooking) {
+            FlightBookingResponse resp = new FlightBookingResponse();
+            resp.setUserId(userId);
+            resp.setBookingId(booking.getBooking().getId());
+            resp.setDepartureDate(booking.getDepartureDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setFlightId(booking.getFlight().getId());
+            flightBookingResponse.add(resp);
+        }
+        return flightBookingResponse;
+    }
+
+    public List<FlightBookingResponse> getBookingByBookingId (Long bookingId, Long userId){
+        List<FlightBooking> flightBooking = flightBookingRepository.findByBookingId(bookingId);
+        List<FlightBookingResponse> flightBookingResponse = new ArrayList<>();
+        for (FlightBooking booking : flightBooking) {
+            FlightBookingResponse resp = new FlightBookingResponse();
+            resp.setUserId(userId);
+            resp.setDepartureDate(booking.getDepartureDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setFlightId(booking.getFlight().getId());
+            flightBookingResponse.add(resp);
+        }
+        return flightBookingResponse;
     }
 }
