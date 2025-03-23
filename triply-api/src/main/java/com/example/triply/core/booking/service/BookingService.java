@@ -1,9 +1,14 @@
 package com.example.triply.core.booking.service;
 
 import com.example.triply.core.booking.dto.BookingDTO;
-import com.example.triply.core.booking.entity.Booking;
+
+import java.util.List;
 
 public interface BookingService {
 
-    public BookingDTO processBooking(BookingDTO type);
+    BookingDTO processBooking(BookingDTO type);
+
+    List<BookingDTO> getBooking(String username);
+
+    BookingDTO cancelBooking(Long id);
 }
