@@ -6,6 +6,8 @@
             <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Flight/Hotel</th>
+                <th>Ratings</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -13,6 +15,8 @@
             <tr *ngFor="let user of bannedUsers">
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
+                <td></td>
+                <td><span class="star" *ngFor="let r of [].constructor(user.rating); let i = index">★</span></td>
                 <td>
                     <button (click)="unbanUser(user.id)" class="button">Unban</button>
                 </td>

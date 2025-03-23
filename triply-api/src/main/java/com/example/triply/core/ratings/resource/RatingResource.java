@@ -61,4 +61,14 @@ public class RatingResource {
         return ResponseEntity.ok(ratings);
     }
 
+    @PutMapping("/banRating/{userId}")
+    public ResponseEntity<String> softDelete(@PathVariable Long userId, @RequestParam(required = false) Long flightId, @RequestParam(required = false) Long hotelId) {
+        try {
+            ratingService.softDelete(userId, flightId, hotelId);
+            return ResponseEntity.ok("Soft delete successful.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
 }

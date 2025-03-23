@@ -10,8 +10,8 @@ import { PopupComponent } from '../popup/popup.component';
 })
 export class BannedUsersComponent {
   bannedUsers = [
-    {id: 1, name: "Hello", email: "test@mail.com"},
-    {id: 2, name: "kelvin", email: "kelvin@mail.com"}
+    {id: 1, name: "Hello", email: "test@mail.com", rating: 0},
+    {id: 2, name: "kelvin", email: "kelvin@mail.com", rating:1}
   ]
   isPopup = false;
   popupMsg = "";
