@@ -1,5 +1,6 @@
 package com.example.triply.core.auth.resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.core.auth.dto.AuthRequest;
 import com.example.triply.core.auth.dto.RefreshRequest;
@@ -49,9 +50,12 @@ public class AuthResource {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final com.example.triply.common.service.EmailService emailService;
 
-    public AuthResource(JwtService jwtService, @Lazy AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, UserStatusRepository userStatusRepository, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    @Autowired
+    public AuthResource(JwtService jwtService, @Lazy AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, UserStatusRepository userStatusRepository, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService, JwtAuthenticationFilter jwtAuthenticationFilter, com.example.triply.common.service.EmailService emailService) {
         this.jwtService = jwtService;
+        this.emailService = emailService;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -130,6 +134,7 @@ public class AuthResource {
             newUser.setStatus(activeStatus);
 
             userRepository.save(newUser);
+            emailService.sendRegistrationEmail(registerRequest.getUsername(), "Welcome to Triply!", "Thank you for registering with Triply!");
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
