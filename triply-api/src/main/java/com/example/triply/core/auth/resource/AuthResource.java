@@ -1,5 +1,6 @@
 package com.example.triply.core.auth.resource;
 
+import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.core.auth.dto.AuthRequest;
 import com.example.triply.core.auth.dto.RefreshRequest;
@@ -78,13 +79,13 @@ public class AuthResource {
                 String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), userOptional.get().getRoles());
                 RefreshToken refreshToken = refreshTokenService.createRefreshToken(userOptional.get());
 
-                Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+                Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, accessToken);
                 accessTokenCookie.setHttpOnly(true);
                 accessTokenCookie.setSecure(true);
                 accessTokenCookie.setPath("/");
                 accessTokenCookie.setMaxAge(accessTokenCookieExpiry);
 
-                Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.getToken());
+                Cookie refreshTokenCookie = new Cookie(CommonConstants.REFRESH_TOKEN, refreshToken.getToken());
                 refreshTokenCookie.setHttpOnly(true);
                 refreshTokenCookie.setSecure(true);
                 refreshTokenCookie.setPath("/");
@@ -159,14 +160,14 @@ public class AuthResource {
             User user = validToken.get().getUser();
             String newAccessToken = jwtService.generateAccessToken(user.getUsername(), user.getRoles());
 
-            Cookie accessTokenCookie = new Cookie("accessToken", newAccessToken);
+            Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, newAccessToken);
             accessTokenCookie.setHttpOnly(true);
             accessTokenCookie.setSecure(true);
             accessTokenCookie.setPath("/");
             accessTokenCookie.setMaxAge(accessTokenCookieExpiry);
             response.addCookie(accessTokenCookie);
 
-            return ResponseEntity.ok().body(Map.of("accessToken", newAccessToken));
+            return ResponseEntity.ok().body(Map.of(CommonConstants.ACCESS_TOKEN, newAccessToken));
         } catch (JwtException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid refresh token");
         }
@@ -178,13 +179,13 @@ public class AuthResource {
         String refreshTokenStr = refreshRequest.getRefreshToken();
         refreshTokenService.getValidRefreshToken(refreshTokenStr).ifPresent(refreshTokenService::revokeToken);
 
-        Cookie accessTokenCookie = new Cookie("accessToken", "");
+        Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, "");
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setSecure(true);
         accessTokenCookie.setPath("/");
         accessTokenCookie.setMaxAge(0);
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", "");
+        Cookie refreshTokenCookie = new Cookie(CommonConstants.REFRESH_TOKEN, "");
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
         refreshTokenCookie.setPath("/");
@@ -230,7 +231,7 @@ public class AuthResource {
             User user = validToken.get().getUser();
             String newAccessToken = jwtService.generateAccessToken(user.getUsername(), user.getRoles());
 
-            Cookie accessTokenCookie = new Cookie("accessToken", newAccessToken);
+            Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, newAccessToken);
             accessTokenCookie.setHttpOnly(true);
             accessTokenCookie.setSecure(true);
             accessTokenCookie.setPath("/");
