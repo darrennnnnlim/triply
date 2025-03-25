@@ -1,5 +1,6 @@
 package com.example.triply.common.filter;
 
+import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.JwtService;
@@ -58,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public String extractAccessTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, "accessToken"));
+            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, CommonConstants.ACCESS_TOKEN));
 
             return accessTokenCookie.map(Cookie::getValue).orElse(null);
         }
@@ -68,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public String extractRefreshTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, "refreshToken"));
+            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, CommonConstants.REFRESH_TOKEN));
 
             return accessTokenCookie.map(Cookie::getValue).orElse(null);
         }
