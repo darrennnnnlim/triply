@@ -5,12 +5,9 @@ import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.booking.entity.Booking;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

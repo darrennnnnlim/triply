@@ -3,11 +3,9 @@ package com.example.triply.core.booking.entity.hotel;
 import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.math.BigDecimal;
 
 @Entity
 @Getter

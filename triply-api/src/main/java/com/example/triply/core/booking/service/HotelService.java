@@ -16,12 +16,23 @@ public class HotelService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    public HotelResponse geHotelById(Long hotelId){
-        Optional<Hotel> hotel = hotelRepository.findById(hotelId);
-        HotelResponse hotelResponse = new HotelResponse();
-        hotelResponse.setName(hotel.get().getName());
-        hotelResponse.setLocation(hotel.get().getLocation());
-        return hotelResponse;
+    public HotelResponse geHotelById(Long hotelId) {
 
+        Optional<Hotel> hotel = hotelRepository.findById(hotelId);
+
+
+        if (hotel.isPresent()) {
+            HotelResponse hotelResponse = new HotelResponse();
+
+            hotelResponse.setId(hotel.get().getId());
+            hotelResponse.setName(hotel.get().getName());
+            hotelResponse.setLocation(hotel.get().getLocation());
+            hotelResponse.setDescription(hotel.get().getDescription());
+
+            return hotelResponse;
+        } else {
+            throw new RuntimeException("Hotel not found for id: " + hotelId);
+        }
     }
+
 }

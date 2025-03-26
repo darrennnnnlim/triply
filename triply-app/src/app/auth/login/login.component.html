@@ -1,5 +1,7 @@
 <div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">Login</h4>
+  <h4 class="modal-title" id="modal-basic-title">
+    {{ isLoginMode ? "Login" : "Register" }}
+  </h4>
   <button
     type="button"
     class="btn-close"
@@ -7,6 +9,7 @@
     (click)="activeModal.dismiss('Cross click')"
   ></button>
 </div>
+
 <div class="modal-body">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="mb-3">
@@ -19,6 +22,7 @@
         required
       />
     </div>
+
     <div class="mb-3">
       <label for="password" class="form-label">Password:</label>
       <input
@@ -29,26 +33,45 @@
         required
       />
     </div>
-    <!-- Optionally display an error message -->
+
+    <div *ngIf="!isLoginMode" class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm Password:</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        formControlName="confirmPassword"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <!-- Optional error message -->
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
   </form>
 </div>
-<div class="modal-footer">
-  <button
-    type="button"
-    class="btn btn-secondary rounded-pill border-0"
-    (click)="activeModal.dismiss('cancel click')"
-  >
-    Cancel
+
+<div class="modal-footer d-flex justify-content-between">
+  <button type="button" class="btn btn-link p-0" (click)="switchMode()">
+    {{ isLoginMode ? "Create an account" : "Back to login" }}
   </button>
-  <button
-    type="submit"
-    class="btn btn-primary rounded-pill border-0"
-    [disabled]="isLoading"
-    (click)="onSubmit()"
-  >
-    Login
-  </button>
+
+  <div>
+    <button
+      type="button"
+      class="btn btn-secondary rounded-pill border-0"
+      (click)="activeModal.dismiss('cancel click')"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary rounded-pill border-0"
+      [disabled]="isLoading"
+      (click)="onSubmit()"
+    >
+      {{ isLoginMode ? "Login" : "Register" }}
+    </button>
+  </div>
 </div>
