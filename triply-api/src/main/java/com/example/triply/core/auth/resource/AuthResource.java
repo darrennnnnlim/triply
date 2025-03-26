@@ -47,7 +47,6 @@ public class AuthResource {
         }
     }
 
-
     @PostMapping("/refresh")
     public ResponseEntity<TokenDTO> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -59,7 +58,6 @@ public class AuthResource {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorDTO);
         }
     }
-
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestBody RefreshRequest refreshRequest, HttpServletResponse response) {
