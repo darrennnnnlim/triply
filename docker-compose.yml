@@ -20,6 +20,8 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+    depends_on:
+      - database
     ports:
       - "8082:8080" # Publish port 8080 for the backend
 
@@ -33,6 +35,11 @@ services:
       POSTGRES_DB: triply_db
     volumes:
       - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U triply_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   triply-network:

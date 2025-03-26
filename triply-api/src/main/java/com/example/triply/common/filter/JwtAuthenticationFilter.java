@@ -1,5 +1,6 @@
 package com.example.triply.common.filter;
 
+import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.JwtService;
@@ -9,7 +10,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public String extractAccessTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, "accessToken"));
+            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, CommonConstants.ACCESS_TOKEN));
 
             return accessTokenCookie.map(Cookie::getValue).orElse(null);
         }
@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public String extractRefreshTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, "refreshToken"));
+            Optional<Cookie> accessTokenCookie = Optional.ofNullable(findCookieByName(cookies, CommonConstants.REFRESH_TOKEN));
 
             return accessTokenCookie.map(Cookie::getValue).orElse(null);
         }
