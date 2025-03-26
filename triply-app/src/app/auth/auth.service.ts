@@ -79,14 +79,14 @@ export class AuthService {
 
   checkSession(): Observable<void> {
     return this.http
-      .get<{ isLoggedIn: boolean; username?: string }>(
+      .get<{ loggedIn: boolean; username?: string }>(
         `${this.API_URL}/check-session`,
         { withCredentials: true }
       )
       .pipe(
         tap((response) => {
           this.authState.next({
-            isLoggedIn: response.isLoggedIn,
+            isLoggedIn: response.loggedIn,
             username: response.username,
           });
         }),
