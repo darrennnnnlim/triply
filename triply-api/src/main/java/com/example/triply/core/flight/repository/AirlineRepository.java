@@ -1,6 +1,6 @@
-package com.example.triply.core.booking.repository.flight;
+package com.example.triply.core.flight.repository;
 
-import com.example.triply.core.booking.entity.flight.Airline;
+import com.example.triply.core.flight.model.entity.Airline;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

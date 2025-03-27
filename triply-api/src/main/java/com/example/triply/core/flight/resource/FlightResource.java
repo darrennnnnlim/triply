@@ -1,8 +1,8 @@
-package com.example.triply.core.booking.resource;
+package com.example.triply.core.flight.resource;
 
 
 import com.example.triply.core.booking.dto.FlightResponse;
-import com.example.triply.core.booking.service.FlightService;
+import com.example.triply.core.flight.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

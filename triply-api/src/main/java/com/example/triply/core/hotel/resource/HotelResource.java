@@ -1,9 +1,9 @@
-package com.example.triply.core.booking.resource;
+package com.example.triply.core.hotel.resource;
 
 
 
 import com.example.triply.core.booking.dto.HotelResponse;
-import com.example.triply.core.booking.service.HotelService;
+import com.example.triply.core.hotel.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -19,7 +19,10 @@ import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.flight.model.entity.FlightAddonPrice;
 import com.example.triply.core.flight.model.entity.FlightClass;
 import com.example.triply.core.flight.model.entity.FlightPrice;
-import com.example.triply.core.flight.repository.flight.*;
+import com.example.triply.core.flight.repository.FlightAddonPriceRepository;
+import com.example.triply.core.flight.repository.FlightClassRepository;
+import com.example.triply.core.flight.repository.FlightPriceRepository;
+import com.example.triply.core.flight.repository.FlightRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

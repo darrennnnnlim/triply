@@ -1,23 +1,22 @@
-package com.example.triply.core.booking.mapper.flight;
+package com.example.triply.core.hotel.mapper;
 
 import com.example.triply.common.mapper.BaseMapper;
-import com.example.triply.core.booking.dto.flight.AirlineDTO;
-import com.example.triply.core.booking.entity.flight.Airline;
+import com.example.triply.core.hotel.model.dto.HotelAddonBasicDTO;
+import com.example.triply.core.hotel.model.entity.HotelAddon;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AirlineMapper implements BaseMapper<Airline, AirlineDTO> {
+public class HotelAddonBasicMapper implements BaseMapper<HotelAddon, HotelAddonBasicDTO> {
+
     @Override
-    public AirlineDTO toDto(Airline entity) {
+    public HotelAddonBasicDTO toDto(HotelAddon entity) {
         if (entity == null) {
             return null;
         }
 
-        AirlineDTO dto = new AirlineDTO();
-
+        HotelAddonBasicDTO dto = new HotelAddonBasicDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
-        dto.setCode(entity.getCode());
 
         mapAuditFieldsToDto(entity, dto);
 
@@ -25,16 +24,14 @@ public class AirlineMapper implements BaseMapper<Airline, AirlineDTO> {
     }
 
     @Override
-    public Airline toEntity(AirlineDTO dto) {
+    public HotelAddon toEntity(HotelAddonBasicDTO dto) {
         if (dto == null) {
             return null;
         }
 
-        Airline entity = new Airline();
-
+        HotelAddon entity = new HotelAddon();
         entity.setId(dto.getId());
         entity.setName(dto.getName());
-        entity.setCode(dto.getCode());
 
         mapAuditFieldsToEntity(dto, entity);
 

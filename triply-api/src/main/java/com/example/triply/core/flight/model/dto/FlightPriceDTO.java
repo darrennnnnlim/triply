@@ -1,5 +1,6 @@
 package com.example.triply.core.flight.model.dto;
 
+import com.example.triply.common.dto.MutableDTO;
 import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.flight.model.entity.FlightClass;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class FlightPriceDTO {
+public class FlightPriceDTO extends MutableDTO {
     private Long id;
     private Flight flight;
     private FlightClass flightClass;

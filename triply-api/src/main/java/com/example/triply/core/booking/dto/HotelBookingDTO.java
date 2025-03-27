@@ -1,8 +1,8 @@
 package com.example.triply.core.booking.dto;
 
 import com.example.triply.common.dto.MutableDTO;
-import com.example.triply.core.booking.dto.hotel.HotelDTO;
-import com.example.triply.core.booking.dto.hotel.HotelRoomTypeBasicDTO;
+import com.example.triply.core.hotel.model.dto.HotelDTO;
+import com.example.triply.core.hotel.model.dto.HotelRoomTypeBasicDTO;
 import lombok.Getter;
 import lombok.Setter;
 

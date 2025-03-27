@@ -1,33 +1,34 @@
-package com.example.triply.core.booking.mapper.hotel;
+package com.example.triply.core.hotel.mapper;
 
 import com.example.triply.common.mapper.BaseMapper;
-import com.example.triply.core.booking.dto.hotel.HotelRoomTypeDTO;
-import com.example.triply.core.booking.entity.hotel.Hotel;
-import com.example.triply.core.booking.entity.hotel.HotelRoomType;
-import com.example.triply.core.booking.repository.hotel.HotelRepository;
+import com.example.triply.core.hotel.model.dto.HotelRoomTypeBasicDTO;
+import com.example.triply.core.hotel.model.entity.Hotel;
+import com.example.triply.core.hotel.model.entity.HotelRoomType;
+import com.example.triply.core.hotel.repository.HotelRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
-public class HotelRoomTypeMapper implements BaseMapper<HotelRoomType, HotelRoomTypeDTO> {
+public class HotelRoomTypeBasicMapper implements BaseMapper<HotelRoomType, HotelRoomTypeBasicDTO> {
+
     private final HotelRepository hotelRepository;
 
-    public HotelRoomTypeMapper(HotelRepository hotelRepository) {
+    public HotelRoomTypeBasicMapper(HotelRepository hotelRepository) {
         this.hotelRepository = hotelRepository;
     }
 
     @Override
-    public HotelRoomTypeDTO toDto(HotelRoomType entity) {
+    public HotelRoomTypeBasicDTO toDto(HotelRoomType entity) {
         if (entity == null) {
             return null;
         }
 
-        HotelRoomTypeDTO dto = new HotelRoomTypeDTO();
+        HotelRoomTypeBasicDTO dto = new HotelRoomTypeBasicDTO();
+
         dto.setId(entity.getId());
         dto.setHotelId(entity.getHotel().getId());
         dto.setName(entity.getName());
-        dto.setBasePrice(entity.getBasePrice());
         dto.setCapacity(entity.getCapacity());
 
         mapAuditFieldsToDto(entity, dto);
@@ -36,12 +37,13 @@ public class HotelRoomTypeMapper implements BaseMapper<HotelRoomType, HotelRoomT
     }
 
     @Override
-    public HotelRoomType toEntity(HotelRoomTypeDTO dto) {
+    public HotelRoomType toEntity(HotelRoomTypeBasicDTO dto) {
         if (dto == null) {
             return null;
         }
 
         HotelRoomType entity = new HotelRoomType();
+
         entity.setId(dto.getId());
 
         Optional<Hotel> hotelOptional = hotelRepository.findById(dto.getHotelId());
@@ -52,7 +54,6 @@ public class HotelRoomTypeMapper implements BaseMapper<HotelRoomType, HotelRoomT
         }
 
         entity.setName(dto.getName());
-        entity.setBasePrice(dto.getBasePrice());
         entity.setCapacity(dto.getCapacity());
 
         mapAuditFieldsToEntity(dto, entity);

@@ -1,4 +1,4 @@
-package com.example.triply.core.flight.repository.flight;
+package com.example.triply.core.flight.repository;
 
 import com.example.triply.core.flight.model.entity.FlightClass;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,9 +1,9 @@
-package com.example.triply.core.booking.service;
+package com.example.triply.core.flight.service;
 
 
 import com.example.triply.core.booking.dto.FlightResponse;
-import com.example.triply.core.booking.entity.flight.Flight;
-import com.example.triply.core.booking.repository.flight.FlightRepository;
+import com.example.triply.core.flight.model.entity.Flight;
+import com.example.triply.core.flight.repository.FlightRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
