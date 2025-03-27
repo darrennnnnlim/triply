@@ -3,6 +3,8 @@ package com.example.triply.core.booking.entity.hotel;
 import com.example.triply.common.audit.Auditable;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.booking.entity.Booking;
+import com.example.triply.core.hotel.model.entity.Hotel;
+import com.example.triply.core.hotel.model.entity.HotelRoomType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

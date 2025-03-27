@@ -1,6 +1,6 @@
-package com.example.triply.core.booking.repository.hotel;
+package com.example.triply.core.hotel.repository;
 
-import com.example.triply.core.booking.entity.hotel.HotelRoomPrice;
+import com.example.triply.core.hotel.model.entity.HotelRoomPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

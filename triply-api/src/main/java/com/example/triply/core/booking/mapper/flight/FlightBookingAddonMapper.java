@@ -2,10 +2,10 @@ package com.example.triply.core.booking.mapper.flight;
 
 import com.example.triply.common.mapper.BaseMapper;
 import com.example.triply.core.booking.dto.flight.FlightBookingAddonDTO;
-import com.example.triply.core.booking.entity.flight.FlightAddon;
+import com.example.triply.core.flight.model.entity.FlightAddon;
 import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.flight.FlightBookingAddon;
-import com.example.triply.core.booking.repository.flight.FlightAddonRepository;
+import com.example.triply.core.flight.repository.flight.FlightAddonRepository;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
 import org.springframework.stereotype.Component;
 

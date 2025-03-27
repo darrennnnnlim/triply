@@ -1,4 +1,4 @@
-package com.example.triply.core.booking.entity.hotel;
+package com.example.triply.core.hotel.model.entity;
 
 import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @Entity
 @Getter
 @Setter
-@Table(name = "hotel_addon")
+@Table(name = "Hotel_Room_Type")
 @Audited
-public class HotelAddon extends Auditable {
+public class HotelRoomType extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,9 @@ public class HotelAddon extends Auditable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Column(name = "base_price", nullable = false)
+    private BigDecimal basePrice;
+
+    @Column(name = "capacity", nullable = false)
+    private int capacity;
 }

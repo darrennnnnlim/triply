@@ -1,4 +1,4 @@
-package com.example.triply.core.booking.entity.hotel;
+package com.example.triply.core.hotel.model.entity;
 
 import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;

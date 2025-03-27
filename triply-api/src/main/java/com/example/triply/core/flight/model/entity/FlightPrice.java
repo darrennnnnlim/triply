@@ -1,4 +1,4 @@
-package com.example.triply.core.booking.entity.flight;
+package com.example.triply.core.flight.model.entity;
 
 import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
@@ -17,6 +17,18 @@ import java.time.LocalDateTime;
 @Table(name = "Flight_Price")
 @Audited
 public class FlightPrice extends Auditable {
+
+    public FlightPrice() {}
+
+    public FlightPrice(FlightPrice other) {
+        this.id = other.getId();
+        this.flight = other.getFlight();
+        this.flightClass = other.getFlightClass();
+        this.departureDate = other.getDepartureDate();
+        this.basePrice = other.getBasePrice();
+        this.discount = other.getDiscount();
+        this.surgeMultiplier = other.getSurgeMultiplier();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +49,7 @@ public class FlightPrice extends Auditable {
     private BigDecimal basePrice;
 
     @Column(name = "discount", nullable = false, precision = 5, scale = 2)
-    @DecimalMin(value = "1.00", inclusive = true)
+    @DecimalMin(value = "0.00", inclusive = true)
     @DecimalMax(value = "100.00", inclusive = true)
     private BigDecimal discount = BigDecimal.valueOf(1.00);
 

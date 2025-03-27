@@ -1,4 +1,4 @@
-package com.example.triply.core.booking.entity.hotel;
+package com.example.triply.core.flight.model.entity;
 
 import com.example.triply.common.audit.Auditable;
 import jakarta.persistence.*;
@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-
 @Entity
 @Getter
 @Setter
-@Table(name = "Hotel")
+@Table(name = "Airline")
 @Audited
-public class Hotel extends Auditable {
+public class Airline extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +20,6 @@ public class Hotel extends Auditable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "location", nullable = false)
-    private String location;
-
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "code", nullable = false)
+    private String code;
 }
