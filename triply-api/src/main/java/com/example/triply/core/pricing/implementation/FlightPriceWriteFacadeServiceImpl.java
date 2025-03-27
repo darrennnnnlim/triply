@@ -3,7 +3,7 @@ package com.example.triply.core.pricing.implementation;
 import com.example.triply.core.flight.mapper.FlightPriceMapper;
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.flight.model.entity.FlightPrice;
-import com.example.triply.core.flight.repository.flight.FlightPriceRepository;
+import com.example.triply.core.flight.repository.FlightPriceRepository;
 import com.example.triply.core.pricing.notification.FlightPriceListener;
 import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl;
 import org.springframework.stereotype.Service;
