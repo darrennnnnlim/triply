@@ -5,12 +5,12 @@ import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.booking.dto.HotelBookingDTO;
 import com.example.triply.core.booking.entity.Booking;
-import com.example.triply.core.booking.entity.hotel.Hotel;
+import com.example.triply.core.hotel.model.entity.Hotel;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
-import com.example.triply.core.booking.entity.hotel.HotelRoomType;
+import com.example.triply.core.hotel.model.entity.HotelRoomType;
 import com.example.triply.core.booking.repository.BookingRepository;
-import com.example.triply.core.booking.repository.hotel.HotelRepository;
-import com.example.triply.core.booking.repository.hotel.HotelRoomTypeRepository;
+import com.example.triply.core.hotel.repository.HotelRepository;
+import com.example.triply.core.hotel.repository.HotelRoomTypeRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
