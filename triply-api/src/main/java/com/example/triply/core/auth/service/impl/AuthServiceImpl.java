@@ -101,6 +101,10 @@ public class AuthServiceImpl implements AuthService {
             throw new UsernameAlreadyExistException();
         }
 
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new UsernameAlreadyExistException("Email already exists");
+        }
+
         Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
             Role newRole = new Role();
             newRole.setName("ROLE_USER");
@@ -112,6 +116,7 @@ public class AuthServiceImpl implements AuthService {
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(encodedPassword);
+        newUser.setEmail(registerRequest.getEmail());
         newUser.setRoles(Set.of(role));
 
         UserStatus activeStatus = userStatusRepository.findByStatus("ACTIVE")
