@@ -22,6 +22,17 @@
         required
       />
     </div>
+    
+    <div *ngIf="!isLoginMode" class="mb-3">
+      <label for="email" class="form-label">Email:</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="form-control"
+        required
+      />
+    </div>
 
     <div class="mb-3">
       <label for="password" class="form-label">Password:</label>

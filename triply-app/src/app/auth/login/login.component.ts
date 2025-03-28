@@ -25,6 +25,7 @@ export class LoginComponent {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]], // Add email control
       role: ['USER', Validators.required],
       confirmPassword: [''], // will only be required in register mode
     });
@@ -35,12 +36,17 @@ export class LoginComponent {
     this.errorMessage = '';
     if (this.isLoginMode) {
       this.loginForm.get('confirmPassword')?.clearValidators();
+      this.loginForm.get('email')?.clearValidators(); // Clear email validator in login mode
     } else {
       this.loginForm
         .get('confirmPassword')
         ?.setValidators([Validators.required]);
+      this.loginForm
+        .get('email')
+        ?.setValidators([Validators.required, Validators.email]); // Set email validator in register mode
     }
     this.loginForm.get('confirmPassword')?.updateValueAndValidity();
+    this.loginForm.get('email')?.updateValueAndValidity();
   }
 
   onSubmit(): void {
@@ -49,7 +55,7 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const { username, password, role, confirmPassword } = this.loginForm.value;
+    const { username, password, email, role, confirmPassword } = this.loginForm.value; // Include email
 
     if (!this.isLoginMode && password !== confirmPassword) {
       this.errorMessage = 'Passwords do not match';
@@ -71,7 +77,7 @@ export class LoginComponent {
         },
       });
     } else {
-      this.authService.register({ username, password }).subscribe({
+      this.authService.register({ username, password, email }).subscribe({ // Include email
         next: () => {
           this.activeModal.close('Registration successful');
           this.router.navigate(['/']);
@@ -79,7 +85,7 @@ export class LoginComponent {
         },
         error: (err) => {
           console.log(err);
-          this.errorMessage = err.error?.message || 'Registration failed';
+          this.errorMessage = err || 'Registration failed'; // Display error message from AuthService
           this.isLoading = false;
         },
       });
