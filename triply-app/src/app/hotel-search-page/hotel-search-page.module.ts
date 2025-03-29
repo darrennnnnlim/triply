@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 // import { FormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { FlightSearchPageComponent } from './flight-search-page.component';
+import { HotelSearchPageComponent } from './hotel-search-page.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
-import { FlightSearchPageService } from './flight-search-page.service';
+import { HotelSearchPageService } from './hotel-search-page.service';
 
 @NgModule({
-  declarations: [FlightSearchPageComponent],
+  declarations: [HotelSearchPageComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule.forChild([{ path: '', component: FlightSearchPageComponent }]),
+    RouterModule.forChild([{ path: '', component: HotelSearchPageComponent }]),
   ],
   providers: [
     provideHttpClient(
@@ -24,8 +24,8 @@ import { FlightSearchPageService } from './flight-search-page.service';
       useClass: AuthInterceptor,
       multi: true,
     },
-    FlightSearchPageService
+    HotelSearchPageService
   ],
-  exports: [FlightSearchPageComponent],
+  exports: [HotelSearchPageComponent],
 })
-export class FlightSearchPageModule {}
+export class HotelSearchPageModule {}

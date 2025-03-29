@@ -21,15 +21,15 @@
   </form>
 
   <div class="flight-offer-cards-container">
-    <a *ngFor="let flightOffer of filteredFlightOffers" class="flight-offer-card" (click)="onFlightOfferClick(flightOffer)" [routerLink]="['/flight-offer']">
+    <a *ngFor="let flightOffer of filteredFlightOffers" class="flight-offer-card" (click)="onFlightOfferClick(flightOffer)">
       <div class="flight-details">
         <h2>{{ flightOffer.origin }} to {{ flightOffer.destination }}</h2>
-        <p>Departure: {{ flightOffer.departureDate }}</p>
-        <p>Arrival: {{ flightOffer.arrivalDate }}</p>
-        <p>Carrier Code: {{ flightOffer.carrierCode }}</p>
+        <p>Departure: {{ flightOffer.departureDate | date:'MMMM d, yyyy, h:mm a'}}</p>
+        <p>Arrival: {{ flightOffer.arrivalDate | date:'MMMM d, yyyy, h:mm a'}}</p>
+        <p>Flight: {{ flightOffer.flightNumber }}</p>
       </div>
       <div class="flight-price">
-        <p class="price">$ {{ flightOffer.price }}</p>
+        <p class="price">$ {{ flightOffer.basePrice }}</p>
       </div>
     </a>
   </div>
