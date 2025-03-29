@@ -46,6 +46,11 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./flight-offer/flight-offer.module').then((m) => m.FlightOfferModule),
   },
+  {
+    path: 'hotel-search',
+    loadChildren: () =>
+          import('./hotel-search-page/hotel-search-page.module').then((m) => m.HotelSearchPageModule),
+  },
   { path: 'history', component: HistoryComponent },
   { path: 'banned', component: BannedUsersComponent },
   {
