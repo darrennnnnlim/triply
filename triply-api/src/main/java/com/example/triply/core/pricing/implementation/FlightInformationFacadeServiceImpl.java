@@ -1,8 +1,49 @@
+package com.example.triply.core.pricing.implementation;
+
+import com.example.triply.core.search.flight.model.dto.FlightSearchRequestDTO;
+import com.example.triply.core.flight.model.entity.Airline;
+import com.example.triply.core.flight.model.entity.Flight;
+import com.example.triply.core.flight.model.entity.FlightClass;
+import com.example.triply.core.flight.model.entity.FlightPrice;
+import com.example.triply.core.flight.repository.AirlineRepository;
+import com.example.triply.core.flight.repository.FlightClassRepository;
+import com.example.triply.core.flight.repository.FlightPriceRepository;
+import com.example.triply.core.flight.repository.FlightRepository;
+import com.example.triply.core.pricing.model.dto.FlightOfferDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Service
 public class FlightInformationFacadeServiceImpl {
 
-	public List<FlightSearchDTO> getFlightPricesByCriteria(CriteriaDTO criteriaDTO) {
-		//TODO:  Map origin/dest name to IATA airport code
-	 	List<Flight> filteredFlights =  FlightRepository.findByOriginAndDestinationAndDepartureTimeAndArrivalTime(originIATA, destIATA, departureTime, arrivalTime);
+	public static final Logger LOGGER = LoggerFactory.getLogger(FlightInformationFacadeServiceImpl.class);
+
+	private final FlightRepository flightRepository;
+	private final FlightPriceRepository flightPriceRepository;
+	private final FlightClassRepository flightClassRepository;
+	private final AirlineRepository airlineRepository;
+
+    public FlightInformationFacadeServiceImpl(FlightRepository flightRepository, FlightPriceRepository flightPriceRepository, FlightClassRepository flightClassRepository, AirlineRepository airlineRepository) {
+        this.flightRepository = flightRepository;
+        this.flightPriceRepository = flightPriceRepository;
+        this.flightClassRepository = flightClassRepository;
+        this.airlineRepository = airlineRepository;
+    }
+
+    public List<FlightOfferDTO> getFlightPrices(FlightSearchRequestDTO flightSearchRequestDTO) {
+		String originIATA = flightSearchRequestDTO.getOrigin();
+		String destIATA = flightSearchRequestDTO.getDestination();
+		LocalDateTime departureTime = flightSearchRequestDTO.getDepartureDate();
+		LocalDateTime arrivalTime = flightSearchRequestDTO.getDepartureDate();
+		BigDecimal maxPrice = flightSearchRequestDTO.getMaxPrice();
+
+	 	List<Flight> filteredFlights =  flightRepository.findByOriginAndDestinationAndDepartureTimeAndArrivalTime(originIATA, destIATA, departureTime, arrivalTime);
 	 	List<Long> flightIds = new ArrayList<>();
 	 	Map<Long, Flight> flightIdToFlightMap = new HashMap<>();
 	 	List<Long> airlineIds = new ArrayList<>();
@@ -10,69 +51,49 @@ public class FlightInformationFacadeServiceImpl {
 	 	for (Flight flight : filteredFlights) {
 	 		flightIds.add(flight.getId());
 	 		flightIdToFlightMap.put(flight.getId(), flight);
-	 		airlineIds.add(flight.getAirlineId());
+	 		airlineIds.add(flight.getAirline().getId());
 	 	}
-	 	
-	 	//TODO: Edit search method to ensure only day matches for departuredate search in repo method
-	 	List<FlightPrice> flightPrices = FlightPriceRepository.findAllInFlightIdAndByDepartureDate(flightIds, departureTime.getDate());
 
-	 	Set<Long> flightClassIds = flightPrices.stream().collect(Collectors.groupingBy(FlightPrice::getFlightClassId));
-	 	List<FlightClass> relevantFlightClasses = FlightClassRepository.findAllInId(flightClassIds);
+	 	List<FlightPrice> flightPrices = flightPriceRepository.findAllByFlightIdAndByDepartureDateIn(flightIds, departureTime);
+
+	 	Set<Long> flightClassIds = flightPrices.stream().map(fp -> fp.getFlightClass().getId()).collect(Collectors.toSet());
+	 	List<FlightClass> relevantFlightClasses = flightClassRepository.findAllByIdIn(flightClassIds.stream().toList());
 	 	Map<Long, FlightClass> flightClassIdToFlightClassMap = relevantFlightClasses.stream().collect(Collectors.toMap(FlightClass::getId, fc -> fc));
 
-	 	List<Airline> airlines = AirlineRepository.findAllIn(airlineIds);
+		List<Airline> airlines = airlineRepository.findAllByIdIn(airlineIds);
 	 	Map<Long, Airline> airlineIdToAirlineMap = airlines.stream().collect(Collectors.toMap(Airline::getId, a -> a));
 
-	 	// Construct FlightSearchDTO
-	 	List<FlightSearchDTO> flightSearchDTOs = new ArrayList<>();
+	 	// Construct FlightOffferDTO
+	 	List<FlightOfferDTO> flightOfferDTOs = new ArrayList<>();
 
 	 	for (FlightPrice thisFlightPrice : flightPrices) {
-	 		FlightSearchDTO fsDTO = new FlightSearchDTO();
-	 		fsDTO.setFlightNumber(thisFlightPrice)
+			 FlightOfferDTO foDTO = new FlightOfferDTO();
 
-	 		//TODO: Set everything for Flight
-	 		Flight thisFlight = flightIdToFlightMap.get(thisFlightPrice.getFlightId());
+			 //Set FlightOffferDTO fields
+			 Flight thisFlight = flightIdToFlightMap.get(thisFlightPrice.getFlight().getId());
 
-	 		//Set FlightClass Name + Id
-	 		fsDTO.setFlightClassId(thisFlightPrice.getFlightClassId());
-	 		fsDTO.setFlightClassName(flightClassIdToFlightClassMap.get(thisFlightPrice.getFlightClassId()));
+			 foDTO.setOrigin(thisFlight.getOrigin());
+			 foDTO.setDestination(thisFlight.getDestination());
+			 foDTO.setDepartureDate(thisFlight.getDepartureTime());
+			 foDTO.setArrivalDate(thisFlight.getArrivalTime());
+			 foDTO.setFlightPriceId(thisFlightPrice.getId());
+			 foDTO.setBasePrice(thisFlightPrice.getBasePrice());
+			 foDTO.setFlightNumber(thisFlight.getFlightNumber());
 
-	 		//Set Airline Name + Id
-	 		fsDTO.setAirlineId(thisFlight.getAirlineId);
-	 		fsDTO.setAirlineName(airlineIdToAirlineMap.get(thisFlight.getAirlineId).getName());
-	 		
-	 		flightSearchDTOs.add(fsDTO);
+			 //Set FlightClass Name + Id
+			 foDTO.setFlightClassId(thisFlightPrice.getFlightClass().getId());
+			 foDTO.setFlightClassName(flightClassIdToFlightClassMap.get(thisFlightPrice.getFlightClass().getId()).getClassName());
+
+			 //Set Airline Name + Id
+			 foDTO.setAirlineId(thisFlight.getAirline().getId());
+			 foDTO.setAirlineName(airlineIdToAirlineMap.get(thisFlight.getAirline().getId()).getName());
+
+			 flightOfferDTOs.add(foDTO);
 	 	}
 
-	 	return flightSearchDTOs;
+	 	return flightOfferDTOs;
 	}
 }
 
 
-public interface FlightRepository {
-	List<Flight> findByOriginAndDestinationAndDepartureTimeAndArrivalTime(String originIATA, String destIATA, LocalDateTime departureTime, LocalDateTime arrivalTime);
-}
-
-public interface FlightPriceRepository {
-
-	//TODO: Same day matching, but not necessarily same time
-	List<FlightPrice> findAllInFlightIdAndByDepartureDate(List<Long> flightIds, LocalDateTime DepartureDate);
-}
-
-public interface FlightClassRepository {
-	List<FlightClass> findAllInId(flightClassIds);
-}
-
-
-public interface FlightClassRepository {
-	List<Airline> findAllIn(airlineIds);
-}
-
-public class HelperRepoMethod {
-	
-	// Potential cool helper method
-	public Map<Long, T> genericMapGenerateFromList(List<T> list) {
-		return list.stream().collect(Collectors.toMap(T::getId, item -> item));
-	}
-}
 

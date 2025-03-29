@@ -16,6 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BookingModule } from './booking/booking.module';
 import { HeaderModule } from './header/header.module';
 import { ViewBookingModule } from './booking/viewbooking/viewbooking.module';
+import { MakeBookingModule } from './booking/makebooking/makebooking.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { ViewBookingModule } from './booking/viewbooking/viewbooking.module';
     BookingModule,
     HeaderModule,
     ViewBookingModule,
+    MakeBookingModule
   ],
   providers: [
     provideHttpClient(

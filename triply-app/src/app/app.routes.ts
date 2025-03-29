@@ -13,6 +13,13 @@ export const routes: Routes = [
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
   {
+    path: 'makebooking',
+    loadChildren: () =>
+      import('./booking/makebooking/makebooking.module').then(
+        (m) => m.MakeBookingModule
+      ),
+  },
+  {
     path: 'booking',
     loadChildren: () =>
       import('./booking/booking.module').then((m) => m.BookingModule),
@@ -30,7 +37,7 @@ export const routes: Routes = [
       import('./admin/admin.module').then((m) => m.AdminModule),
   },
   {
-      path: 'search',
+      path: 'flight-search',
       loadChildren: () =>
             import('./flight-search-page/flight-search-page.module').then((m) => m.FlightSearchPageModule),
   },
