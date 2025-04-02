@@ -1,49 +1,41 @@
 package com.example.triply.core.auth.entity;
 
+import com.example.triply.core.admin.entity.UserStatus;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.when;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserTest {
 
     @Test
-    public void testNoArgsConstructor() {
-        User user = new User();
-        // Verify that the no-argument constructor initializes all fields to null
-        assertNull(user.getId());
-        assertNull(user.getUsername());
-        assertNull(user.getPassword());
-        assertNull(user.getRole());
-    }
-
-    @Test
-    public void testUserConstructorWithUsername() {
-        String username = "john_doe";
-        User user = new User(username);
-        // Verify that the constructor sets the username while other fields remain null
-        assertEquals(username, user.getUsername());
-        assertNull(user.getPassword());
-        assertNull(user.getRole());
-    }
-
-    @Test
-    public void testSettersAndGetters() {
+    void testNoArgsConstructorAndSetters() {
         User user = new User();
         user.setId(1L);
-        user.setUsername("alice");
+        user.setUsername("testuser");
         user.setPassword("secret");
 
-        // Using Mockito to create a mock Role instance.
-        Role role = Mockito.mock(Role.class);
-        when(role.getName()).thenReturn("USER");
-        user.setRole(role);
+        UserStatus status = new UserStatus();
+        user.setStatus(status);
 
-        // Verify that getters return the values set via setters.
+        Role role1 = new Role();
+        Role role2 = new Role();
+        Set<Role> roles = new HashSet<>();
+        roles.add(role1);
+        roles.add(role2);
+        user.setRoles(roles);
+
         assertEquals(1L, user.getId());
-        assertEquals("alice", user.getUsername());
+        assertEquals("testuser", user.getUsername());
         assertEquals("secret", user.getPassword());
-        assertNotNull(user.getRole());
-        assertEquals("USER", user.getRole().getName());
+        assertEquals(status, user.getStatus());
+        assertEquals(2, user.getRoles().size());
+    }
+
+    @Test
+    void testUsernameConstructor() {
+        User user = new User("john_doe");
+        assertEquals("john_doe", user.getUsername());
     }
 }
