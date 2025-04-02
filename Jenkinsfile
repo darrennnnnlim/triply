@@ -27,7 +27,7 @@ pipeline {
                 dir(env.FRONTEND_DIR) {
                     sh '''
                         npm install
-                        npm run build
+                        npm run build -- --configuration=production
                     '''
                 }
             }

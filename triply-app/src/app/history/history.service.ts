@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Rating } from './history.model';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({ providedIn: 'root' })
 export class HistoryService {
-  private readonly API_URL = 'http://localhost:8080/api/v1/booking';
-  private readonly RATINGS_URL = 'http://localhost:8080/api/v1/ratings';
+  private readonly API_URL = environment.apiUrl + '/booking';
+  private readonly RATINGS_URL = environment.apiUrl + '/ratings';
 
   constructor(private http: HttpClient) {}
 
@@ -20,11 +21,11 @@ export class HistoryService {
   }
 
   getFlightDetails(flightId: number): Observable<any> {
-    return this.http.get(`http://localhost:8080/api/v1/flight/${flightId}`);
+    return this.http.get(environment.apiUrl + `/flight/${flightId}`);
   }
 
   getHotelDetails(hotelId: number): Observable<any> {
-    return this.http.get(`http://localhost:8080/api/v1/hotel/${hotelId}`);
+    return this.http.get(environment.apiUrl + `/hotel/${hotelId}`);
   }
 
   getFlightRatings(userId: number): Observable<any> {

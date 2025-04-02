@@ -1,0 +1,46 @@
+triply:
+  api-version: v1
+  cors:
+    allowedOrigins: https://triply.darrennnnnlim.com
+    allowedMethods: GET,POST,PUT,DELETE,OPTIONS
+    allowedHeaders: Authorization,Content-Type,X-XSRF-TOKEN
+    exposedHeaders: X-XSRF-TOKEN
+
+spring:
+  application:
+    name: Triply
+  datasource:
+    url: jdbc:postgresql://localhost:5432/triply
+    username: triply_user
+    password: triply_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        envers:
+          store_data_at_delete: true
+          autoRegisterListeners: true
+
+jwt:
+  issuer: Triply
+  secret-key: Y4rDYh/8Q9UOnYYSeEErorUepFhVGxI7v0k+K8f/Thk=
+  refresh-secret-key: BIHkmGwx7ePWl2rCe0quZfSSbTxDnaph/ft9McenZk8=
+  access-token:
+    expiry: 600000
+    cookie-expiry: 600
+  refresh-token:
+    expiry: 604800000
+    cookie-expiry: 604800
+
+springdoc:
+  api-docs:
+    enabled: false  # disable API docs in prod unless you need it
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info  # change to error/info in prod to reduce log noise
