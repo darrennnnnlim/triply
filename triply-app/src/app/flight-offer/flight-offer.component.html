@@ -1,2 +1,5 @@
 <p>flight-offer works!</p>
-<p>{{flightOffer.origin}}</p>
+<p>{{selectedFlightOffer?.origin}}</p>
+<p>{{selectedFlightOffer?.destination}}</p>
+<p>{{selectedFlightOffer?.basePrice}}</p>
+<a (click)="makeBooking()">Go To Booking</a>

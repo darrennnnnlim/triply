@@ -1,6 +1,7 @@
 package com.example.triply.core.booking.entity.hotel;
 
 import com.example.triply.common.audit.Auditable;
+import com.example.triply.core.hotel.model.entity.HotelAddon;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

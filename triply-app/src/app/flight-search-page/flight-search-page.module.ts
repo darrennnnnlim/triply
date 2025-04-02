@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FlightSearchPageComponent } from './flight-search-page.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
+import { FlightSearchPageService } from './flight-search-page.service';
 
 @NgModule({
   declarations: [FlightSearchPageComponent],
@@ -23,6 +24,7 @@ import { AuthInterceptor } from '../interceptors/auth.interceptor';
       useClass: AuthInterceptor,
       multi: true,
     },
+    FlightSearchPageService
   ],
   exports: [FlightSearchPageComponent],
 })

@@ -1,0 +1,278 @@
+
+-- Insert data for Flight table. Insert by Airlines, 15 flights (+ their return flights). Nth airline has same flights as N-1th airline, except with their N-1th flight changed.
+-- Last 6 pairs flights for each airline are separated by 2 hours, same origin/dest, for testing purposes.
+
+-- Insert data for Flight for Singapore Airline
+INSERT INTO Flight (airline_id, flight_number, origin, destination, departure_time, arrival_time, created_dt, created_by, updated_dt, updated_by) VALUES
+(1, 'SQ101', 'JFK', 'LAX', '2025-08-01 08:00:00', '2025-08-01 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ102', 'LAX', 'JFK', '2025-08-03 08:00:00', '2025-08-03 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ103', 'ORD', 'MIA', '2025-08-01 09:30:00', '2025-08-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ104', 'MIA', 'ORD', '2025-08-03 09:30:00', '2025-08-03 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ105', 'SFO', 'BOS', '2025-08-01 14:00:00', '2025-08-01 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ106', 'BOS', 'SFO', '2025-08-03 14:00:00', '2025-08-03 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ107', 'SIN', 'NRT', '2025-08-01 10:00:00', '2025-08-01 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ108', 'NRT', 'SIN', '2025-08-03 10:00:00', '2025-08-03 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ109', 'LAX', 'ORD', '2025-08-01 07:30:00', '2025-08-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ110', 'ORD', 'LAX', '2025-08-03 07:30:00', '2025-08-03 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ111', 'MIA', 'JFK', '2025-08-01 12:00:00', '2025-08-01 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ112', 'JFK', 'MIA', '2025-08-03 12:00:00', '2025-08-03 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ113', 'BOS', 'SIN', '2025-08-01 16:00:00', '2025-08-01 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ114', 'SIN', 'BOS', '2025-08-03 16:00:00', '2025-08-03 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ115', 'SIN', 'LAX', '2025-08-01 09:00:00', '2025-08-01 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ116', 'LAX', 'SIN', '2025-08-03 09:00:00', '2025-08-03 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(1, 'SQ117', 'SIN', 'ICN', '2025-08-01 08:45:00', '2025-08-01 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ118', 'ICN', 'SIN', '2025-08-03 08:45:00', '2025-08-03 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(1, 'SQ119', 'SIN', 'HND', '2025-08-01 08:15:00', '2025-08-01 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ120', 'HND', 'SIN', '2025-08-03 08:15:00', '2025-08-03 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(1, 'SQ121', 'SIN', 'HND', '2025-08-01 10:15:00', '2025-08-01 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ122', 'HND', 'SIN', '2025-08-03 10:15:00', '2025-08-03 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(1, 'SQ123', 'SIN', 'HND', '2025-08-01 12:15:00', '2025-08-01 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ124', 'HND', 'SIN', '2025-08-03 12:15:00', '2025-08-03 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(1, 'SQ125', 'SIN', 'HND', '2025-08-01 14:15:00', '2025-08-01 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ126', 'HND', 'SIN', '2025-08-03 14:15:00', '2025-08-03 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(1, 'SQ127', 'SIN', 'HND', '2025-08-01 16:15:00', '2025-08-01 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ128', 'HND', 'SIN', '2025-08-03 16:15:00', '2025-08-03 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(1, 'SQ129', 'SIN', 'HND', '2025-08-01 18:15:00', '2025-08-01 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 'SQ130', 'HND', 'SIN', '2025-08-03 18:15:00', '2025-08-03 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+
+-- Insert data for Flight for Emirates Airline
+INSERT INTO Flight (airline_id, flight_number, origin, destination, departure_time, arrival_time, created_dt, created_by, updated_dt, updated_by) VALUES
+(2, 'EK201', 'DXB', 'LAX', '2025-08-01 08:00:00', '2025-08-01 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK202', 'LAX', 'DXB', '2025-08-03 08:00:00', '2025-08-03 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK203', 'ORD', 'MIA', '2025-08-01 09:30:00', '2025-08-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK204', 'MIA', 'ORD', '2025-08-03 09:30:00', '2025-08-03 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK205', 'SFO', 'BOS', '2025-08-01 14:00:00', '2025-08-01 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK206', 'BOS', 'SFO', '2025-08-03 14:00:00', '2025-08-03 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK207', 'SIN', 'NRT', '2025-08-01 10:00:00', '2025-08-01 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK208', 'NRT', 'SIN', '2025-08-03 10:00:00', '2025-08-03 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK209', 'LAX', 'ORD', '2025-08-01 07:30:00', '2025-08-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK210', 'ORD', 'LAX', '2025-08-03 07:30:00', '2025-08-03 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK211', 'MIA', 'JFK', '2025-08-01 12:00:00', '2025-08-01 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK212', 'JFK', 'MIA', '2025-08-03 12:00:00', '2025-08-03 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK213', 'BOS', 'SIN', '2025-08-01 16:00:00', '2025-08-01 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK214', 'SIN', 'BOS', '2025-08-03 16:00:00', '2025-08-03 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK215', 'SIN', 'LAX', '2025-08-01 09:00:00', '2025-08-01 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK216', 'LAX', 'SIN', '2025-08-03 09:00:00', '2025-08-03 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(2, 'EK217', 'SIN', 'ICN', '2025-08-01 08:45:00', '2025-08-01 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK218', 'ICN', 'SIN', '2025-08-03 08:45:00', '2025-08-03 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(2, 'EK219', 'SIN', 'HND', '2025-08-01 08:15:00', '2025-08-01 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK220', 'HND', 'SIN', '2025-08-03 08:15:00', '2025-08-03 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(2, 'EK221', 'SIN', 'HND', '2025-08-01 10:15:00', '2025-08-01 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK222', 'HND', 'SIN', '2025-08-03 10:15:00', '2025-08-03 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(2, 'EK223', 'SIN', 'HND', '2025-08-01 12:15:00', '2025-08-01 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK224', 'HND', 'SIN', '2025-08-03 12:15:00', '2025-08-03 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(2, 'EK225', 'SIN', 'HND', '2025-08-01 14:15:00', '2025-08-01 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK226', 'HND', 'SIN', '2025-08-03 14:15:00', '2025-08-03 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(2, 'EK227', 'SIN', 'HND', '2025-08-01 16:15:00', '2025-08-01 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK228', 'HND', 'SIN', '2025-08-03 16:15:00', '2025-08-03 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(2, 'EK229', 'SIN', 'HND', '2025-08-01 18:15:00', '2025-08-01 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'EK230', 'HND', 'SIN', '2025-08-03 18:15:00', '2025-08-03 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+
+-- Insert data for Flight for Qatar Airline
+INSERT INTO Flight (airline_id, flight_number, origin, destination, departure_time, arrival_time, created_dt, created_by, updated_dt, updated_by) VALUES
+(3, 'QR301', 'DXB', 'LAX', '2025-08-01 08:00:00', '2025-08-01 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR302', 'LAX', 'DXB', '2025-08-03 08:00:00', '2025-08-03 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR303', 'SIN', 'MXP', '2025-08-01 09:30:00', '2025-08-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR304', 'MXP', 'SIN', '2025-08-03 09:30:00', '2025-08-03 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR305', 'SFO', 'BOS', '2025-08-01 14:00:00', '2025-08-01 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR306', 'BOS', 'SFO', '2025-08-03 14:00:00', '2025-08-03 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR307', 'SIN', 'NRT', '2025-08-01 10:00:00', '2025-08-01 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR308', 'NRT', 'SIN', '2025-08-03 10:00:00', '2025-08-03 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR309', 'LAX', 'ORD', '2025-08-01 07:30:00', '2025-08-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR310', 'ORD', 'LAX', '2025-08-03 07:30:00', '2025-08-03 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR311', 'MIA', 'JFK', '2025-08-01 12:00:00', '2025-08-01 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR312', 'JFK', 'MIA', '2025-08-03 12:00:00', '2025-08-03 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR313', 'BOS', 'SIN', '2025-08-01 16:00:00', '2025-08-01 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR314', 'SIN', 'BOS', '2025-08-03 16:00:00', '2025-08-03 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR315', 'SIN', 'LAX', '2025-08-01 09:00:00', '2025-08-01 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR316', 'LAX', 'SIN', '2025-08-03 09:00:00', '2025-08-03 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(3, 'QR317', 'SIN', 'ICN', '2025-08-01 08:45:00', '2025-08-01 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR318', 'ICN', 'SIN', '2025-08-03 08:45:00', '2025-08-03 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(3, 'QR319', 'SIN', 'HND', '2025-08-01 08:15:00', '2025-08-01 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR320', 'HND', 'SIN', '2025-08-03 08:15:00', '2025-08-03 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(3, 'QR321', 'SIN', 'HND', '2025-08-01 10:15:00', '2025-08-01 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR322', 'HND', 'SIN', '2025-08-03 10:15:00', '2025-08-03 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(3, 'QR323', 'SIN', 'HND', '2025-08-01 12:15:00', '2025-08-01 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR324', 'HND', 'SIN', '2025-08-03 12:15:00', '2025-08-03 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(3, 'QR325', 'SIN', 'HND', '2025-08-01 14:15:00', '2025-08-01 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR326', 'HND', 'SIN', '2025-08-03 14:15:00', '2025-08-03 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(3, 'QR327', 'SIN', 'HND', '2025-08-01 16:15:00', '2025-08-01 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR328', 'HND', 'SIN', '2025-08-03 16:15:00', '2025-08-03 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(3, 'QR329', 'SIN', 'HND', '2025-08-01 18:15:00', '2025-08-01 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'QR330', 'HND', 'SIN', '2025-08-03 18:15:00', '2025-08-03 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+
+-- Insert data for Flight for Korean Airline
+INSERT INTO Flight (airline_id, flight_number, origin, destination, departure_time, arrival_time, created_dt, created_by, updated_dt, updated_by) VALUES
+(4, 'KE401', 'DXB', 'LAX', '2025-08-01 08:00:00', '2025-08-01 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE402', 'LAX', 'DXB', '2025-08-03 08:00:00', '2025-08-03 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE403', 'SIN', 'MXP', '2025-08-01 09:30:00', '2025-08-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE404', 'MXP', 'SIN', '2025-08-03 09:30:00', '2025-08-03 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE405', 'ICN', 'NRT', '2025-08-01 14:00:00', '2025-08-01 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE406', 'NRT', 'ICN', '2025-08-03 14:00:00', '2025-08-03 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE407', 'SIN', 'NRT', '2025-08-01 10:00:00', '2025-08-01 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE408', 'NRT', 'SIN', '2025-08-03 10:00:00', '2025-08-03 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE409', 'LAX', 'ORD', '2025-08-01 07:30:00', '2025-08-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE410', 'ORD', 'LAX', '2025-08-03 07:30:00', '2025-08-03 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE411', 'MIA', 'JFK', '2025-08-01 12:00:00', '2025-08-01 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE412', 'JFK', 'MIA', '2025-08-03 12:00:00', '2025-08-03 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE413', 'BOS', 'SIN', '2025-08-01 16:00:00', '2025-08-01 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE414', 'SIN', 'BOS', '2025-08-03 16:00:00', '2025-08-03 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE415', 'SIN', 'LAX', '2025-08-01 09:00:00', '2025-08-01 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE416', 'LAX', 'SIN', '2025-08-03 09:00:00', '2025-08-03 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(4, 'KE417', 'SIN', 'ICN', '2025-08-01 08:45:00', '2025-08-01 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE418', 'ICN', 'SIN', '2025-08-03 08:45:00', '2025-08-03 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(4, 'KE419', 'SIN', 'HND', '2025-08-01 08:15:00', '2025-08-01 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE420', 'HND', 'SIN', '2025-08-03 08:15:00', '2025-08-03 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(4, 'KE421', 'SIN', 'HND', '2025-08-01 10:15:00', '2025-08-01 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE422', 'HND', 'SIN', '2025-08-03 10:15:00', '2025-08-03 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(4, 'KE423', 'SIN', 'HND', '2025-08-01 12:15:00', '2025-08-01 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE424', 'HND', 'SIN', '2025-08-03 12:15:00', '2025-08-03 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(4, 'KE425', 'SIN', 'HND', '2025-08-01 14:15:00', '2025-08-01 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE426', 'HND', 'SIN', '2025-08-03 14:15:00', '2025-08-03 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(4, 'KE427', 'SIN', 'HND', '2025-08-01 16:15:00', '2025-08-01 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE428', 'HND', 'SIN', '2025-08-03 16:15:00', '2025-08-03 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(4, 'KE429', 'SIN', 'HND', '2025-08-01 18:15:00', '2025-08-01 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'KE430', 'HND', 'SIN', '2025-08-03 18:15:00', '2025-08-03 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+
+-- Insert data for Flight for Cathay Pacific Airline
+INSERT INTO Flight (airline_id, flight_number, origin, destination, departure_time, arrival_time, created_dt, created_by, updated_dt, updated_by) VALUES
+(5, 'CX501', 'DXB', 'LAX', '2025-08-01 08:00:00', '2025-08-01 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX502', 'LAX', 'DXB', '2025-08-03 08:00:00', '2025-08-03 11:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX503', 'SIN', 'MXP', '2025-08-01 09:30:00', '2025-08-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX504', 'MXP', 'SIN', '2025-08-03 09:30:00', '2025-08-03 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX505', 'ICN', 'NRT', '2025-08-01 14:00:00', '2025-08-01 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX506', 'NRT', 'ICN', '2025-08-03 14:00:00', '2025-08-03 18:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX507', 'SIN', 'BKK', '2025-08-01 10:00:00', '2025-08-01 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX508', 'BKK', 'SIN', '2025-08-03 10:00:00', '2025-08-03 13:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX509', 'LAX', 'ORD', '2025-08-01 07:30:00', '2025-08-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX510', 'ORD', 'LAX', '2025-08-03 07:30:00', '2025-08-03 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX511', 'MIA', 'JFK', '2025-08-01 12:00:00', '2025-08-01 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX512', 'JFK', 'MIA', '2025-08-03 12:00:00', '2025-08-03 15:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX513', 'BOS', 'SIN', '2025-08-01 16:00:00', '2025-08-01 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX514', 'SIN', 'BOS', '2025-08-03 16:00:00', '2025-08-03 20:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX515', 'SIN', 'LAX', '2025-08-01 09:00:00', '2025-08-01 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX516', 'LAX', 'SIN', '2025-08-03 09:00:00', '2025-08-03 12:30:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+
+(5, 'CX517', 'SIN', 'ICN', '2025-08-01 08:45:00', '2025-08-01 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX518', 'ICN', 'SIN', '2025-08-03 08:45:00', '2025-08-03 12:15:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(5, 'CX519', 'SIN', 'HND', '2025-08-01 08:15:00', '2025-08-01 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX520', 'HND', 'SIN', '2025-08-03 08:15:00', '2025-08-03 11:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(5, 'CX521', 'SIN', 'HND', '2025-08-01 10:15:00', '2025-08-01 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX522', 'HND', 'SIN', '2025-08-03 10:15:00', '2025-08-03 13:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(5, 'CX523', 'SIN', 'HND', '2025-08-01 12:15:00', '2025-08-01 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX524', 'HND', 'SIN', '2025-08-03 12:15:00', '2025-08-03 15:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(5, 'CX525', 'SIN', 'HND', '2025-08-01 14:15:00', '2025-08-01 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX526', 'HND', 'SIN', '2025-08-03 14:15:00', '2025-08-03 17:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(5, 'CX527', 'SIN', 'HND', '2025-08-01 16:15:00', '2025-08-01 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX528', 'HND', 'SIN', '2025-08-03 16:15:00', '2025-08-03 19:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+
+(5, 'CX529', 'SIN', 'HND', '2025-08-01 18:15:00', '2025-08-01 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'CX530', 'HND', 'SIN', '2025-08-03 18:15:00', '2025-08-03 21:45:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');

@@ -14,7 +14,7 @@ interface SearchDTO {
 export class FlightSearchPageService {
 //   private readonly API_URL = 'http://localhost:8080/api/v1/flightsearch';
 
-  private readonly API_URL = 'https://localhost:8080/api/v1/flightsearch'
+  private readonly API_URL = 'http://localhost:8080/api/v1/flightsearch'
 
   constructor(private http: HttpClient) {}
 
@@ -23,6 +23,8 @@ export class FlightSearchPageService {
   }
 
   searchFlights(searchRequest: SearchDTO): Observable<any> {
-    return this.http.post<any>(this.API_URL, searchRequest);
+    return this.http.post<any>(this.API_URL, searchRequest, {
+      withCredentials: true 
+    });
   }
 }
