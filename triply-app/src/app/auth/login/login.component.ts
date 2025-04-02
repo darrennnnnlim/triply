@@ -26,7 +26,6 @@ export class LoginComponent {
       username: ['', Validators.required],
       password: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]], // Add email control
-      role: ['USER', Validators.required],
       confirmPassword: [''], // will only be required in register mode
     });
   }
@@ -55,7 +54,7 @@ export class LoginComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const { username, password, email, role, confirmPassword } = this.loginForm.value; // Include email
+    const { username, password, email, confirmPassword } = this.loginForm.value; // Include email
 
     if (!this.isLoginMode && password !== confirmPassword) {
       this.errorMessage = 'Passwords do not match';
@@ -64,7 +63,7 @@ export class LoginComponent {
     }
 
     if (this.isLoginMode) {
-      this.authService.login({ username, password, role }).subscribe({
+      this.authService.login({ username, password }).subscribe({
         next: () => {
           this.activeModal.close('Login successful');
           this.router.navigate(['/']);

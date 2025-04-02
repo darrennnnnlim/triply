@@ -31,12 +31,24 @@ export class AuthService {
   login(credentials: {
     username: string;
     password: string;
-    role?: string;
   }): Observable<void> {
+    console.log('Sending login request to:', `${this.API_URL}/login`);
+    console.log('With credentials:', credentials);
     return this.http
       .post<LoginResponse>(`${this.API_URL}/login`, credentials, {
-        withCredentials: true,
-      })
+        // Temporarily disabled withCredentials for testing
+        // withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }).pipe(
+        tap(response => console.log('Login response:', response)),
+        catchError(error => {
+          console.error('Login error:', error);
+          return throwError(() => error);
+        })
+      )
       .pipe(
         tap((response) => {
           this.authState.next({
