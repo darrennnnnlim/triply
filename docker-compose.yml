@@ -32,7 +32,7 @@ services:
     environment:
       POSTGRES_USER: triply_user
       POSTGRES_PASSWORD: triply_password
-      POSTGRES_DB: triply_db
+      POSTGRES_DB: triply
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
