@@ -8,15 +8,16 @@ triply:
 
 spring:
   application:
-    name: Triply
+    name: TriplyTest
   datasource:
-    url: jdbc:postgresql://localhost:5432/triply
-    username: postgres
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         envers:
@@ -27,9 +28,9 @@ spring:
 #      mode: always
 
 jwt:
-  issuer: Triply
-  secret-key:
-  refresh-secret-key:
+  issuer: TriplyTest
+  secret-key: test-access-key
+  refresh-secret-key: test-refresh-key
   access-token:
     expiry: 600000
     cookie-expiry: 600
@@ -39,10 +40,10 @@ jwt:
 
 springdoc:
   api-docs:
-    enabled: true
+    enabled: false
 
 logging:
   level:
     org:
       springframework:
-        security: debug
+        security: info
