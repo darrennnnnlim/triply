@@ -5,15 +5,15 @@ import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.booking.dto.flight.FlightBookingDTO;
 import com.example.triply.core.booking.entity.Booking;
-import com.example.triply.core.booking.entity.flight.Flight;
+import com.example.triply.core.flight.mapper.FlightMapper;
+import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.booking.entity.flight.FlightBooking;
-import com.example.triply.core.booking.entity.flight.FlightClass;
+import com.example.triply.core.flight.model.entity.FlightClass;
 import com.example.triply.core.booking.repository.BookingRepository;
-import com.example.triply.core.booking.repository.flight.FlightClassRepository;
-import com.example.triply.core.booking.repository.flight.FlightRepository;
+import com.example.triply.core.flight.repository.FlightClassRepository;
+import com.example.triply.core.flight.repository.FlightRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -26,12 +26,14 @@ public class FlightBookingMapper implements BaseMapper<FlightBooking, FlightBook
     private final BookingRepository bookingRepository;
 
     private final UserRepository userRepository;
+    private final FlightMapper flightMapper;
 
-    public FlightBookingMapper(FlightRepository flightRepository, FlightClassRepository flightClassRepository, BookingRepository bookingRepository, UserRepository userRepository) {
+    public FlightBookingMapper(FlightRepository flightRepository, FlightClassRepository flightClassRepository, BookingRepository bookingRepository, UserRepository userRepository, FlightMapper flightMapper) {
         this.flightRepository = flightRepository;
         this.flightClassRepository = flightClassRepository;
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
+        this.flightMapper = flightMapper;
     }
 
     @Override
@@ -47,6 +49,15 @@ public class FlightBookingMapper implements BaseMapper<FlightBooking, FlightBook
         dto.setBookingId(entity.getBooking().getId());
         dto.setUserId(entity.getUser().getId());
         dto.setDepartureDate(entity.getDepartureDate());
+
+        Optional<Flight> flightOptional = flightRepository.findById(dto.getFlightId());
+        if (flightOptional.isPresent()) {
+            dto.setFlight(flightMapper.toDto(flightOptional.get()));
+        } else {
+            dto.setFlight(null);
+        }
+
+        mapAuditFieldsToDto(entity, dto);
 
         return dto;
     }
@@ -90,17 +101,9 @@ public class FlightBookingMapper implements BaseMapper<FlightBooking, FlightBook
 
         entity.setDepartureDate(dto.getDepartureDate());
 
+        mapAuditFieldsToEntity(dto, entity);
+
         return entity;
 
-    }
-
-    @Override
-    public List<FlightBookingDTO> toDto(List<FlightBooking> entities) {
-        return List.of();
-    }
-
-    @Override
-    public List<FlightBooking> toEntity(List<FlightBookingDTO> dto) {
-        return List.of();
     }
 }

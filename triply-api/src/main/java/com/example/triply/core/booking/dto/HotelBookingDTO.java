@@ -1,6 +1,8 @@
 package com.example.triply.core.booking.dto;
 
 import com.example.triply.common.dto.MutableDTO;
+import com.example.triply.core.hotel.model.dto.HotelDTO;
+import com.example.triply.core.hotel.model.dto.HotelRoomTypeBasicDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +18,7 @@ public class HotelBookingDTO extends MutableDTO {
     private Long userId;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
+
+    private HotelDTO hotel;
+    private HotelRoomTypeBasicDTO hotelRoomType;
 }

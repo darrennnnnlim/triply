@@ -17,7 +17,7 @@ export class BannedUsersComponent {
   popupMsg = "";
   unbanUser (id: number){
     this.bannedUsers = this.bannedUsers.filter(user => user.id !== id);
-    console.log("user with ID: " + id + " has been unbanned");
+    // console.log("user with ID: " + id + " has been unbanned");
     this.isPopup = !this.isPopup;
     this.popupMsg = "user with ID: " + id + " has been unbanned";
   }

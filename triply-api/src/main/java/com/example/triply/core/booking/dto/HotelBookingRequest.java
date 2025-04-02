@@ -1,8 +1,5 @@
 package com.example.triply.core.booking.dto;
 
-import com.example.triply.core.booking.entity.Booking;
-import com.example.triply.core.booking.entity.hotel.Hotel;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

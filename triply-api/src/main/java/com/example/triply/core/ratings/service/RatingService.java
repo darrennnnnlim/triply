@@ -31,45 +31,68 @@ public class RatingService {
 
     public RatingResponse saveRating(RatingRequest ratingRequest) {
 
+
         User user = userRepository.findById(ratingRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+
         FlightBooking flightBooking = null;
         HotelBooking hotelBooking = null;
-        if (Objects.equals(ratingRequest.getType(), "Flight")){
-           flightBooking = flightBookingRepository.findById(ratingRequest.getFlightId())
+
+        if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
+            flightBooking = flightBookingRepository.findById(ratingRequest.getFlightId())
                     .orElseThrow(() -> new RuntimeException("Flight Booking not found"));
-        }
-        else {
+        } else {
             hotelBooking = hotelBookingRepository.findById(ratingRequest.getHotelId())
                     .orElseThrow(() -> new RuntimeException("Hotel Booking not found"));
         }
 
 
-        Ratings ratings = new Ratings();
-        ratings.setRating(ratingRequest.getRating());
-        ratings.setUser(user);
-        ratings.setFlightBooking(flightBooking);
-        ratings.setHotelBooking(hotelBooking);
+        Ratings existingRating = null;
+        if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
+            existingRating = ratingRepository.findByUserAndFlightBooking(user, flightBooking);
+        } else {
+            existingRating = ratingRepository.findByUserAndHotelBooking(user, hotelBooking);
+        }
+
+        Ratings ratings;
+        if (existingRating != null) {
+            // Update Rating
+            ratings = existingRating;
+            ratings.setRating(ratingRequest.getRating());
+        } else {
+//            Submit Rating
+            ratings = new Ratings();
+            ratings.setRating(ratingRequest.getRating());
+            ratings.setUser(user);
+            ratings.setFlightBooking(flightBooking);
+            ratings.setHotelBooking(hotelBooking);
+        }
 
         Ratings savedRating = ratingRepository.save(ratings);
 
         RatingResponse ratingResponse = new RatingResponse();
-        ratingResponse.setId(savedRating.getId());
-        ratingResponse.setRating(savedRating.getRating());
-        ratingResponse.setUserId(savedRating.getUser().getId());
-        if (Objects.equals(ratingRequest.getType(), "Flight")) {
-            ratingResponse.setFlightId(savedRating.getFlightBooking().getId());
+        ratingResponse.setId(ratings.getId());
+        ratingResponse.setRating(ratings.getRating());
+        ratingResponse.setUserId(ratings.getUser().getId());
+
+
+        if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
+            ratingResponse.setFlightId(ratings.getFlightBooking().getId());
             ratingResponse.setHotelId(null);
-        }
-        else{
+        } else {
             ratingResponse.setFlightId(null);
-            ratingResponse.setHotelId(savedRating.getHotelBooking().getId());
+            ratingResponse.setHotelId(ratings.getHotelBooking().getId());
         }
+
+
+
+
+
+        ratingResponse.setId(savedRating.getId());
 
         return ratingResponse;
     }
-
 
     public List<RatingResponse> getAllRatings() {
         List<Ratings> ratings = ratingRepository.findAll();

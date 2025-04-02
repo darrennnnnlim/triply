@@ -15,6 +15,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BookingModule } from './booking/booking.module';
 import { HeaderModule } from './header/header.module';
+import { ViewBookingModule } from './booking/viewbooking/viewbooking.module';
+import { MakeBookingModule } from './booking/makebooking/makebooking.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +28,8 @@ import { HeaderModule } from './header/header.module';
     RouterModule.forRoot(routes),
     BookingModule,
     HeaderModule,
+    ViewBookingModule,
+    MakeBookingModule
   ],
   providers: [
     provideHttpClient(

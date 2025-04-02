@@ -3,13 +3,13 @@ package com.example.triply.core.booking.entity.flight;
 import com.example.triply.common.audit.Auditable;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.booking.entity.Booking;
+import com.example.triply.core.flight.model.entity.Flight;
+import com.example.triply.core.flight.model.entity.FlightClass;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity

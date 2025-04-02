@@ -46,7 +46,7 @@ public class HotelResponse {
         return description;
     }
 
-    public void setAvailability(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 

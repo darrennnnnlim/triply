@@ -1,6 +1,7 @@
 package com.example.triply.core.booking.dto.flight;
 
 import com.example.triply.common.dto.MutableDTO;
+import com.example.triply.core.flight.model.dto.FlightAddonDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +16,6 @@ public class FlightBookingAddonDTO extends MutableDTO {
     private Long flightAddonId;
     private BigDecimal price;
     private int quantity;
+
+    private FlightAddonDTO flightAddon;
 }

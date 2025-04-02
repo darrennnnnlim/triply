@@ -1,13 +1,23 @@
 package com.example.triply.core.search.flight.resource;
 
 // FlightSearchController.java
-import org.springframework.web.bind.annotation.*;
+import com.example.triply.core.pricing.implementation.FlightInformationFacadeServiceImpl;
+import com.example.triply.core.pricing.model.dto.FlightOfferDTO;
+import com.example.triply.core.search.flight.model.dto.FlightSearchRequestDTO;
 import org.springframework.http.ResponseEntity;
-import com.example.triply.core.search.flight.*;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/${triply.api-version}/flightsearch")
 public class FlightSearchResource {
+
+    private final FlightInformationFacadeServiceImpl flightInformationFacadeService;
+
+    public FlightSearchResource(FlightInformationFacadeServiceImpl flightInformationFacadeService) {
+        this.flightInformationFacadeService = flightInformationFacadeService;
+    }
 
     @GetMapping("/test")
     public ResponseEntity<String> testConnection() {
@@ -15,13 +25,14 @@ public class FlightSearchResource {
     }
 
     @PostMapping
-    public ResponseEntity<String> searchFlights(@RequestBody FlightSearchDTO searchRequest) {
+    public ResponseEntity<List<FlightOfferDTO>> searchFlights(@RequestBody FlightSearchRequestDTO flightSearchRequest) {
         // Dummy response to simulate search logic
-        String responseMessage = "Searching flights from " + searchRequest.getOrigin() 
-                                 + " to " + searchRequest.getDestination()
-                                 + " between " + searchRequest.getDepartureDate()
-                                 + " and " + searchRequest.getArrivalDate()
-                                 + " under price " + searchRequest.getMaxPrice();
-        return ResponseEntity.ok(responseMessage);   
+        String responseMessage = "Searching flights from " + flightSearchRequest.getOrigin()
+                                 + " to " + flightSearchRequest.getDestination()
+                                 + " between " + flightSearchRequest.getDepartureDate()
+                                 + " and " + flightSearchRequest.getArrivalDate()
+                                 + " under price " + flightSearchRequest.getMaxPrice();
+        return ResponseEntity.ok(flightInformationFacadeService.getFlightPrices(flightSearchRequest));
+//        return ResponseEntity.ok(responseMessage);
     }
 }
