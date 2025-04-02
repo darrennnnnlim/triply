@@ -10,7 +10,7 @@ spring:
   application:
     name: Triply
   datasource:
-    url: jdbc:postgresql://localhost:5432/triply
+    url: jdbc:postgresql://database:5432/triply
     username: triply_user
     password: triply_password
     driver-class-name: org.postgresql.Driver
