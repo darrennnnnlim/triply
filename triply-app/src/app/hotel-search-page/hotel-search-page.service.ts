@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HotelSearchDTO } from './hotel-search.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class HotelSearchPageService {
 
-  private readonly API_URL = 'http://localhost:8080/api/v1/hotelsearch'
+  private readonly API_URL = environment.apiUrl + '/hotelsearch'
 
   constructor(private http: HttpClient) {}
 

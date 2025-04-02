@@ -3,10 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserRoleDTO } from './user.dto';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
-  private readonly API_URL = 'http://localhost:8080/api/v1/admin';
+  private readonly API_URL = environment.apiUrl + '/admin';
 
   constructor(private http: HttpClient) {}
 

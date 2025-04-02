@@ -10,12 +10,13 @@ import {
   throwError,
 } from 'rxjs';
 import { LoginResponse, User } from './auth.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8080/api/v1/auth';
+  private readonly API_URL = environment.apiUrl + '/auth';
   private userSubject: BehaviorSubject<User | null> =
     new BehaviorSubject<User | null>(null);
   private authState = new BehaviorSubject<{
