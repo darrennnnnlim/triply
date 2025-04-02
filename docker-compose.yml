@@ -24,6 +24,8 @@ services:
       - database
     ports:
       - "8082:8080" # Publish port 8080 for the backend
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
 
   database:
     image: postgres:16
