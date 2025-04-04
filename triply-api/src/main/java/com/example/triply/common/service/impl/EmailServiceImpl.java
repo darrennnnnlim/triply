@@ -14,12 +14,13 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendRegistrationEmail(String toEmail, String username) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("triplymain@gmail.com");
         message.setTo(toEmail);
         message.setSubject("Welcome to Triply");
         message.setText(String.format(
             "Hello %s,\n\nThank you for registering with Triply!\n\n" +
             "We're excited to have you on board.\n\n" +
-            "Best regards,\nThe Triply Team", 
+            "Best regards,\nThe Triply Team",
             username
         ));
         mailSender.send(message);
