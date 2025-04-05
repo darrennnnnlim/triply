@@ -202,7 +202,11 @@ public class RatingService {
             throw new RuntimeException("Ratings not found for the provided criteria");
         }
 
-        ratings.setDelete("T");
+        if ("F".equals(ratings.getDelete())) {
+            ratings.setDelete("T");
+        } else {
+            ratings.setDelete("F");
+        }
         ratingRepository.save(ratings);
     }
 }

@@ -10,18 +10,22 @@ spring:
   application:
     name: Triply
   datasource:
-    url: jdbc:postgresql://localhost:5432/triply
+    url: jdbc:postgresql://localhost:5433/triply
     username: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+#      ddl-auto: create
     properties:
       hibernate:
         envers:
           store_data_at_delete: true
           autoRegisterListeners: true
+#  sql:
+#    init:
+#      mode: always
 
 jwt:
   issuer: Triply
