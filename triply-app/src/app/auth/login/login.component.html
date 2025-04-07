@@ -60,29 +60,28 @@
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
     </div>
+
+    <div class="modal-footer d-flex justify-content-between">
+      <button type="button" class="btn btn-link p-0" (click)="switchMode()">
+        {{ isLoginMode ? "Create an account" : "Back to login" }}
+      </button>
+
+      <div>
+        <button
+          type="button"
+          class="btn btn-secondary rounded-pill border-0"
+          (click)="activeModal.dismiss('cancel click')"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary rounded-pill border-0"
+          [disabled]="isLoading"
+        >
+          {{ isLoginMode ? "Login" : "Register" }}
+        </button>
+      </div>
+    </div>
   </form>
-</div>
-
-<div class="modal-footer d-flex justify-content-between">
-  <button type="button" class="btn btn-link p-0" (click)="switchMode()">
-    {{ isLoginMode ? "Create an account" : "Back to login" }}
-  </button>
-
-  <div>
-    <button
-      type="button"
-      class="btn btn-secondary rounded-pill border-0"
-      (click)="activeModal.dismiss('cancel click')"
-    >
-      Cancel
-    </button>
-    <button
-      type="submit"
-      class="btn btn-primary rounded-pill border-0"
-      [disabled]="isLoading"
-      (click)="onSubmit()"
-    >
-      {{ isLoginMode ? "Login" : "Register" }}
-    </button>
-  </div>
 </div>
