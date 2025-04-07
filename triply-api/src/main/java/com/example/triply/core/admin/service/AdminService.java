@@ -1,6 +1,7 @@
 package com.example.triply.core.admin.service;
 
 import com.example.triply.core.admin.dto.UserRoleDTO;
+import com.example.triply.common.service.EmailService;
 import com.example.triply.core.admin.repository.UserStatusRepository;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
@@ -16,10 +17,14 @@ public class AdminService {
 
     private final UserStatusRepository userStatusRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
-    public AdminService(UserStatusRepository userStatusRepository, UserRepository userRepository) {
+    public AdminService(UserStatusRepository userStatusRepository,
+                       UserRepository userRepository,
+                       EmailService emailService) {
         this.userStatusRepository = userStatusRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     public List<UserRoleDTO> getUsersWithRoles() {
@@ -36,6 +41,14 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is already banned");
         }
 
+        try {
+            emailService.sendBanNotification(user.getEmail(), user.getUsername(),
+                "Violation of community guidelines");
+            System.out.println("Sent ban notification to " + user.getEmail());
+        } catch (Exception e) {
+            System.err.println("Failed to send ban notification: " + e.getMessage());
+        }
+
         userRepository.banUser(userId);
     }
 
@@ -49,6 +62,14 @@ public class AdminService {
         }
 
         userRepository.unbanUser(userId);
+
+        try {
+            emailService.sendBanNotification(user.getEmail(), user.getUsername(),
+                "Your account has been reinstated");
+            System.out.println("Sent unban notification to " + user.getEmail());
+        } catch (Exception e) {
+            System.err.println("Failed to send unban notification: " + e.getMessage());
+        }
     }
 
 

@@ -25,4 +25,22 @@ public class EmailServiceImpl implements EmailService {
         ));
         mailSender.send(message);
     }
+    @Override
+    public void sendBanNotification(String toEmail, String username, String reason) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("triplymain@gmail.com");
+        message.setTo(toEmail);
+        message.setSubject("Your Triply Account Status");
+        message.setText(String.format(
+            "Hello %s,\n\n" +
+            "Your Triply account has been %s.\n" +
+            "Reason: %s\n\n" +
+            "If you believe this was done in error, please contact support.\n\n" +
+            "Best regards,\nThe Triply Team",
+            username,
+            reason != null && !reason.isEmpty() ? "banned" : "suspended",
+            reason != null && !reason.isEmpty() ? reason : "No reason provided"
+        ));
+        mailSender.send(message);
+    }
 }
