@@ -1,5 +1,8 @@
 package com.example.triply.core.booking.service.template;
 
+import com.example.triply.core.booking.event.BookingConfirmedEvent;
+import org.springframework.context.ApplicationEventPublisher;
+
 import com.example.triply.core.booking.dto.BookingDTO;
 import com.example.triply.core.booking.dto.FlightBookingResponse;
 import com.example.triply.core.booking.dto.flight.FlightBookingAddonDTO;
@@ -33,26 +36,28 @@ public class FlightBookingService extends BookingTemplate {
     public static final Logger LOGGER = LoggerFactory.getLogger(FlightBookingService.class);
 
     private final FlightRepository flightRepository;
-
     private final FlightClassRepository flightClassRepository;
-
     private final FlightAddonPriceRepository flightAddonPriceRepository;
-
     private final FlightPriceRepository flightPriceRepository;
-
     private final BookingMapper bookingMapper;
-
     private final FlightBookingMapper flightBookingMapper;
-
     private final FlightBookingRepository flightBookingRepository;
-
     private final FlightBookingAddonRepository flightBookingAddonRepository;
-
     private final FlightBookingAddonMapper flightBookingAddonMapper;
-
     private final BookingRepository bookingRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public FlightBookingService(FlightRepository flightRepository, FlightClassRepository flightClassRepository, FlightAddonPriceRepository flightAddonPriceRepository, FlightPriceRepository flightPriceRepository, BookingMapper bookingMapper, FlightBookingMapper flightBookingMapper, FlightBookingRepository flightBookingRepository, FlightBookingAddonRepository flightBookingAddonRepository, FlightBookingAddonMapper flightBookingAddonMapper, BookingRepository bookingRepository) {
+    public FlightBookingService(FlightRepository flightRepository,
+                              FlightClassRepository flightClassRepository,
+                              FlightAddonPriceRepository flightAddonPriceRepository,
+                              FlightPriceRepository flightPriceRepository,
+                              BookingMapper bookingMapper,
+                              FlightBookingMapper flightBookingMapper,
+                              FlightBookingRepository flightBookingRepository,
+                              FlightBookingAddonRepository flightBookingAddonRepository,
+                              FlightBookingAddonMapper flightBookingAddonMapper,
+                              BookingRepository bookingRepository,
+                              ApplicationEventPublisher eventPublisher) {
         this.flightRepository = flightRepository;
         this.flightClassRepository = flightClassRepository;
         this.flightAddonPriceRepository = flightAddonPriceRepository;
@@ -63,6 +68,7 @@ public class FlightBookingService extends BookingTemplate {
         this.flightBookingAddonRepository = flightBookingAddonRepository;
         this.flightBookingAddonMapper = flightBookingAddonMapper;
         this.bookingRepository = bookingRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -165,7 +171,14 @@ public class FlightBookingService extends BookingTemplate {
 
     @Override
     protected void confirmBooking(Booking booking) {
-
+        if (booking != null && booking.getId() != null && booking.getStatus().equals(BookingStatusEnum.PENDING.name())) {
+            LOGGER.info("Publishing BookingConfirmedEvent for booking ID: {}", booking.getId());
+            BookingConfirmedEvent event = new BookingConfirmedEvent(booking);
+            eventPublisher.publishEvent(event);
+        } else {
+            LOGGER.warn("Skipping event publication for booking ID: {} due to null data or non-PENDING status.",
+                booking != null ? booking.getId() : "null");
+        }
     }
 
     public List<FlightBookingResponse> getBookingByUserId (Long userId){

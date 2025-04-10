@@ -1,5 +1,8 @@
 package com.example.triply.core.booking.service.template;
 
+import com.example.triply.core.booking.event.BookingConfirmedEvent;
+import org.springframework.context.ApplicationEventPublisher;
+
 import com.example.triply.core.booking.dto.BookingDTO;
 import com.example.triply.core.booking.dto.HotelBookingAddonDTO;
 import com.example.triply.core.booking.dto.HotelBookingDTO;
@@ -33,24 +36,28 @@ public class HotelBookingService extends BookingTemplate {
     public static final Logger LOGGER = LoggerFactory.getLogger(HotelBookingService.class);
 
     private final HotelRepository hotelRepository;
-
     private final HotelRoomTypeRepository hotelRoomTypeRepository;
-
     private final HotelAddonRepository hotelAddonRepository;
-
     private final HotelRoomPriceRepository hotelRoomPriceRepository;
-
     private final BookingMapper bookingMapper;
-
     private final HotelBookingMapper hotelBookingMapper;
     private final HotelBookingRepository hotelBookingRepository;
-
     private final HotelBookingAddonMapper hotelBookingAddonMapper;
     private final HotelBookingAddonRepository hotelBookingAddonRepository;
-
     private final BookingRepository bookingRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public HotelBookingService(HotelRepository hotelRepository, HotelRoomTypeRepository hotelRoomTypeRepository, HotelAddonRepository hotelAddonRepository, HotelRoomPriceRepository hotelRoomPriceRepository, BookingMapper bookingMapper, HotelBookingMapper hotelBookingMapper, HotelBookingRepository hotelBookingRepository, HotelBookingAddonMapper hotelBookingAddonMapper, HotelBookingAddonRepository hotelBookingAddonRepository, BookingRepository bookingRepository) {
+    public HotelBookingService(HotelRepository hotelRepository,
+                             HotelRoomTypeRepository hotelRoomTypeRepository,
+                             HotelAddonRepository hotelAddonRepository,
+                             HotelRoomPriceRepository hotelRoomPriceRepository,
+                             BookingMapper bookingMapper,
+                             HotelBookingMapper hotelBookingMapper,
+                             HotelBookingRepository hotelBookingRepository,
+                             HotelBookingAddonMapper hotelBookingAddonMapper,
+                             HotelBookingAddonRepository hotelBookingAddonRepository,
+                             BookingRepository bookingRepository,
+                             ApplicationEventPublisher eventPublisher) {
         this.hotelRepository = hotelRepository;
         this.hotelRoomTypeRepository = hotelRoomTypeRepository;
         this.hotelAddonRepository = hotelAddonRepository;
@@ -61,6 +68,7 @@ public class HotelBookingService extends BookingTemplate {
         this.hotelBookingRepository = hotelBookingRepository;
         this.hotelBookingAddonMapper = hotelBookingAddonMapper;
         this.hotelBookingAddonRepository = hotelBookingAddonRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -177,7 +185,14 @@ public class HotelBookingService extends BookingTemplate {
 
     @Override
     protected void confirmBooking(Booking booking) {
-
+        if (booking != null && booking.getId() != null && booking.getStatus().equals(BookingStatusEnum.PENDING.name())) {
+            LOGGER.info("Publishing BookingConfirmedEvent for booking ID: {}", booking.getId());
+            BookingConfirmedEvent event = new BookingConfirmedEvent(booking);
+            eventPublisher.publishEvent(event);
+        } else {
+            LOGGER.warn("Skipping event publication for booking ID: {} due to null data or non-PENDING status.",
+                booking != null ? booking.getId() : "null");
+        }
     }
 
     public List<HotelBookingResponse> getBookingByUserId (Long userId){
