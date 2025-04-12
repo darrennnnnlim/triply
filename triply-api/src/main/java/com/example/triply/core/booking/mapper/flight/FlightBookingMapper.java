@@ -5,12 +5,13 @@ import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.booking.dto.flight.FlightBookingDTO;
 import com.example.triply.core.booking.entity.Booking;
-import com.example.triply.core.booking.entity.flight.Flight;
+import com.example.triply.core.flight.mapper.FlightMapper;
+import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.booking.entity.flight.FlightBooking;
-import com.example.triply.core.booking.entity.flight.FlightClass;
+import com.example.triply.core.flight.model.entity.FlightClass;
 import com.example.triply.core.booking.repository.BookingRepository;
-import com.example.triply.core.booking.repository.flight.FlightClassRepository;
-import com.example.triply.core.booking.repository.flight.FlightRepository;
+import com.example.triply.core.flight.repository.FlightClassRepository;
+import com.example.triply.core.flight.repository.FlightRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

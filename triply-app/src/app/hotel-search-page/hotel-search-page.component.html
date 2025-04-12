@@ -1,0 +1,30 @@
+<div class="hotel-search-container">
+  <h1>Hotel Search</h1>
+
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+    <label>Location:</label>
+    <input type="text" formControlName="location" />
+
+    <label>Check In Date:</label>
+    <input type="text" formControlName="checkInDate" />
+
+    <label>Check Out Date:</label>
+    <input type="text" formControlName="checkOutDate" />
+
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="hotel-offer-cards-container">
+    <a *ngFor="let hotelOffer of hotelOffers" class="hotel-offer-card" (click)="onHotelOfferClick(hotelOffer)">
+      <div class="hotel-details">
+        <h2>{{hotelOffer?.hotel?.name}}</h2>
+        <p>Location: {{ hotelOffer?.hotel?.location}}</p>
+        <p>Check In Date: {{ hotelOffer?.checkInDate | date:'MMMM d, yyyy'}}</p>
+        <p>Check Out Date: {{ hotelOffer?.checkOutDate | date:'MMMM d, yyyy'}}</p>
+      </div>
+      <div class="hotel-price">
+        <p class="price">$ {{ hotelOffer?.pricing?.totalPrice }}</p>
+      </div>
+    </a>
+  </div>
+</div>

@@ -1,4 +1,8 @@
 <p>flight-offer works!</p>
+<p>{{selectedFlightOffer?.origin}}</p>
+<p>{{selectedFlightOffer?.destination}}</p>
+<p>{{selectedFlightOffer?.basePrice}}</p>
+<a (click)="makeBooking()">Go To Booking</a>
 
 
 <div *ngIf="ratings.length > 0" class="element">
