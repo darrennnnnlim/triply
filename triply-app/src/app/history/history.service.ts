@@ -27,13 +27,13 @@ export class HistoryService {
     return this.http.get(`http://localhost:8080/api/v1/hotel/${hotelId}`);
   }
 
-  getFlightRatings(userId: number): Observable<any> {
+  getRatings(userId: number): Observable<any> {
     return this.http.get(`${this.RATINGS_URL}/user/${userId}`);
   }
 
-  getHotelRatings(userId: number): Observable<any> {
-    return this.http.get(`${this.RATINGS_URL}/hotel/${userId}`);
-  }
+  // getHotelRatings(userId: number): Observable<any> {
+  //   return this.http.get(`${this.RATINGS_URL}/user/${userId}`);
+  // }
 
   postRating(rating: Rating): Observable<Rating> {
     return this.http.post<Rating>(`${this.RATINGS_URL}/submitRating`, rating, {
