@@ -13,5 +13,6 @@ export class PopupComponent {
 
   close(): void{
     this.isVisible = false
+    window.location.reload();
   }
 }

@@ -32,7 +32,7 @@ export class HistoryComponent implements OnInit {
   loadBookingData(userId: number): void {
     
     this.historyService.getFlightBookings(userId).subscribe(flightBookings => {
-      this.historyService.getFlightRatings(userId).subscribe(flightRatings => {
+      this.historyService.getRatings(userId).subscribe(flightRatings => {
         const flightRatingsMap = flightRatings.reduce((acc: any, rating: any) => {
           acc[rating.flightId] = rating.rating;
           return acc;
@@ -63,7 +63,7 @@ export class HistoryComponent implements OnInit {
     });
 
     this.historyService.getHotelBookings(userId).subscribe(hotelBookings => {
-      this.historyService.getHotelRatings(userId).subscribe(hotelRatings => {
+      this.historyService.getRatings(userId).subscribe(hotelRatings => {
         const hotelRatingsMap = hotelRatings.reduce((acc: any, rating: any) => {
           acc[rating.hotelId] = rating.rating;
           return acc;
