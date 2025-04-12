@@ -2,9 +2,7 @@ package com.example.triply.core.ratings.resource;
 
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
-import com.example.triply.core.ratings.entity.Ratings;
 import com.example.triply.core.ratings.service.RatingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,21 +12,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/${triply.api-version}/ratings")
 public class RatingResource {
-    @Autowired
-    private RatingService ratingService;
 
-    @PostMapping("/test")
-    public ResponseEntity<?> postTest() {
-        return ResponseEntity.status(HttpStatus.OK).body("Success");
-    }
+    private final RatingService ratingService;
 
-    @GetMapping("/test")
-    public ResponseEntity<?> getTest() {
-        return ResponseEntity.status(HttpStatus.OK).body("Success");
+    public RatingResource(RatingService ratingService) {
+        this.ratingService = ratingService;
     }
 
     @GetMapping("/allRatings")
-    public ResponseEntity<?> getAllRatings() {
+    public ResponseEntity<Object> getAllRatings() {
         List<RatingResponse> ratings = ratingService.getAllRatings();
         if (ratings.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No ratings found");

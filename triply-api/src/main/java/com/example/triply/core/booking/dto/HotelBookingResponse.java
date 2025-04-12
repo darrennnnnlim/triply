@@ -3,7 +3,6 @@ package com.example.triply.core.booking.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.LocalDate;
 
 @Data
 public class HotelBookingResponse {
@@ -39,19 +38,19 @@ public class HotelBookingResponse {
         this.hotelId = hotelId;
     }
 
-    public String getCheckInDate() {
+    public String getCheckIn() {
         return checkIn;
     }
 
-    public void setCheckInDate(String checkInDate) {
+    public void setCheckIn(String checkIn) {
         this.checkIn = checkIn;
     }
 
-    public String getCheckOutDate() {
+    public String getCheckOut() {
         return checkOut;
     }
 
-    public void setCheckOutDate(String checkOutDate) {
+    public void setCheckOut(String checkOut) {
         this.checkOut = checkOut;
     }
 

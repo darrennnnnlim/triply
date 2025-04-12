@@ -196,8 +196,8 @@ public class HotelBookingService extends BookingTemplate {
             HotelBookingResponse resp = new HotelBookingResponse();
             resp.setUserId(userId);
             resp.setHotelId(booking.getHotel().getId());
-            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckIn(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOut(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             resp.setRoomType(booking.getHotelRoomType().getName());
             hotelBookingResponses.add(resp);
         }
@@ -211,8 +211,8 @@ public class HotelBookingService extends BookingTemplate {
             HotelBookingResponse resp = new HotelBookingResponse();
             resp.setUserId(userId);
             resp.setHotelId(booking.getHotel().getId());
-            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckIn(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOut(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             resp.setRoomType(booking.getHotelRoomType().getName());
             hotelBookingResponses.add(resp);
         }
