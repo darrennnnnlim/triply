@@ -18,8 +18,8 @@ export class FlightOfferComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private flightOfferDataService: FlightOfferDataService,, // Assumed service to fetch flight data
-    private router: Router
+    private flightOfferDataService: FlightOfferDataService, // Assumed service to fetch flight data
+    private router: Router,
     private ratingService: RatingService
   ) {}
 
