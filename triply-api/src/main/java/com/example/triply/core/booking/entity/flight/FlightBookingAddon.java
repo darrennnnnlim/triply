@@ -1,6 +1,7 @@
 package com.example.triply.core.booking.entity.flight;
 
 import com.example.triply.common.audit.Auditable;
+import com.example.triply.core.flight.model.entity.FlightAddon;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;

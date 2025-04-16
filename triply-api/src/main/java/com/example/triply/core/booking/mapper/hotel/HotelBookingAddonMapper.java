@@ -2,10 +2,10 @@ package com.example.triply.core.booking.mapper.hotel;
 
 import com.example.triply.common.mapper.BaseMapper;
 import com.example.triply.core.booking.dto.HotelBookingAddonDTO;
-import com.example.triply.core.booking.entity.hotel.HotelAddon;
+import com.example.triply.core.hotel.model.entity.HotelAddon;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import com.example.triply.core.booking.entity.hotel.HotelBookingAddon;
-import com.example.triply.core.booking.repository.hotel.HotelAddonRepository;
+import com.example.triply.core.hotel.repository.HotelAddonRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,7 @@
 package com.example.triply.core.booking.dto.flight;
 
 import com.example.triply.common.dto.MutableDTO;
+import com.example.triply.core.flight.model.dto.FlightDTO;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -4,6 +4,7 @@ import { UserRoleDTO } from './user.dto';
 import { EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-admin',
@@ -27,7 +28,7 @@ export class AdminComponent {
   dialogAction: 'ban' | 'unban' = 'ban';
 
   constructor(private adminService: AdminService, private router: Router) {}
-  private readonly API_URL = 'http://localhost:8080/api/v1/admin';
+  private readonly API_URL = environment.apiUrl + '/admin';
 
   ngOnInit(): void {
     this.adminService.getCurrentUser().subscribe({

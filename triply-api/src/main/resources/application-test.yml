@@ -1,0 +1,49 @@
+triply:
+  api-version: v1
+  cors:
+    allowedOrigins: http://localhost:4200
+    allowedMethods: GET,POST,PUT,DELETE,OPTIONS
+    allowedHeaders: Authorization,Content-Type,X-XSRF-TOKEN
+    exposedHeaders: X-XSRF-TOKEN
+
+spring:
+  application:
+    name: TriplyTest
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        envers:
+          store_data_at_delete: true
+          autoRegisterListeners: true
+#  sql:
+#    init:
+#      mode: always
+
+jwt:
+  issuer: TriplyTest
+  secret-key: test-access-key
+  refresh-secret-key: test-refresh-key
+  access-token:
+    expiry: 600000
+    cookie-expiry: 600
+  refresh-token:
+    expiry: 604800000
+    cookie-expiry: 604800
+
+springdoc:
+  api-docs:
+    enabled: false
+
+logging:
+  level:
+    org:
+      springframework:
+        security: info

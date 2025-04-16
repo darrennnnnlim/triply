@@ -9,13 +9,22 @@ import com.example.triply.core.booking.dto.HotelBookingDTO;
 import com.example.triply.core.booking.dto.HotelBookingResponse;
 import com.example.triply.core.booking.entity.Booking;
 import com.example.triply.core.booking.entity.BookingStatusEnum;
-import com.example.triply.core.booking.entity.hotel.*;
+import com.example.triply.core.booking.entity.hotel.HotelBooking;
+import com.example.triply.core.booking.entity.hotel.HotelBookingAddon;
 import com.example.triply.core.booking.mapper.BookingMapper;
 import com.example.triply.core.booking.mapper.hotel.HotelBookingAddonMapper;
 import com.example.triply.core.booking.mapper.hotel.HotelBookingMapper;
 import com.example.triply.core.booking.repository.BookingRepository;
-import com.example.triply.core.booking.repository.hotel.*;
-import com.example.triply.core.booking.service.BookingService;
+import com.example.triply.core.booking.repository.hotel.HotelBookingAddonRepository;
+import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
+import com.example.triply.core.hotel.repository.HotelAddonRepository;
+import com.example.triply.core.hotel.repository.HotelRepository;
+import com.example.triply.core.hotel.repository.HotelRoomPriceRepository;
+import com.example.triply.core.hotel.repository.HotelRoomTypeRepository;
+import com.example.triply.core.hotel.model.entity.Hotel;
+import com.example.triply.core.hotel.model.entity.HotelAddon;
+import com.example.triply.core.hotel.model.entity.HotelRoomPrice;
+import com.example.triply.core.hotel.model.entity.HotelRoomType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -202,8 +211,8 @@ public class HotelBookingService extends BookingTemplate {
             HotelBookingResponse resp = new HotelBookingResponse();
             resp.setUserId(userId);
             resp.setHotelId(booking.getHotel().getId());
-            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckIn(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOut(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             resp.setRoomType(booking.getHotelRoomType().getName());
             hotelBookingResponses.add(resp);
         }
@@ -217,8 +226,8 @@ public class HotelBookingService extends BookingTemplate {
             HotelBookingResponse resp = new HotelBookingResponse();
             resp.setUserId(userId);
             resp.setHotelId(booking.getHotel().getId());
-            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckIn(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOut(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             resp.setRoomType(booking.getHotelRoomType().getName());
             hotelBookingResponses.add(resp);
         }

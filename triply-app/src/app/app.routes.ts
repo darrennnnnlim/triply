@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { HistoryComponent } from './history/history.component';
-import { BannedUsersComponent } from './banned-users/banned-users.component';
+import { BannedRatingsComponent } from './banned-ratings/banned-ratings.component';
 
 export const routes: Routes = [
   {
@@ -11,6 +11,13 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+  },
+  {
+    path: 'makebooking',
+    loadChildren: () =>
+      import('./booking/makebooking/makebooking.module').then(
+        (m) => m.MakeBookingModule
+      ),
   },
   {
     path: 'booking',
@@ -30,7 +37,7 @@ export const routes: Routes = [
       import('./admin/admin.module').then((m) => m.AdminModule),
   },
   {
-      path: 'search',
+      path: 'flight-search',
       loadChildren: () =>
             import('./flight-search-page/flight-search-page.module').then((m) => m.FlightSearchPageModule),
   },
@@ -39,8 +46,13 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./flight-offer/flight-offer.module').then((m) => m.FlightOfferModule),
   },
+  {
+    path: 'hotel-search',
+    loadChildren: () =>
+          import('./hotel-search-page/hotel-search-page.module').then((m) => m.HotelSearchPageModule),
+  },
   { path: 'history', component: HistoryComponent },
-  { path: 'banned', component: BannedUsersComponent },
+  { path: 'banned', component: BannedRatingsComponent },
   {
     path: '**',
     redirectTo: '',
