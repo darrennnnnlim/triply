@@ -1,6 +1,6 @@
 package com.example.triply.core.auth.service.impl;
 
-import com.example.triply.common.service.EmailService;
+// import com.example.triply.common.service.EmailService; // Removed this import
 
 import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.common.exception.TokenException;
@@ -13,6 +13,7 @@ import com.example.triply.core.auth.dto.*;
 import com.example.triply.core.auth.entity.RefreshToken;
 import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
+import com.example.triply.core.auth.event.UserRegisteredEvent; // Keep this import
 import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.AuthService;
@@ -24,6 +25,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher; // Keep this import
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,9 +52,10 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final EmailService emailService;
+    // private final EmailService emailService; // Removed this field
+    private final ApplicationEventPublisher applicationEventPublisher; // Added this field
 
-    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserStatusRepository userStatusRepository, @Lazy AuthenticationManager authenticationManager, JwtService jwtService, RefreshTokenService refreshTokenService, JwtAuthenticationFilter jwtAuthenticationFilter, EmailService emailService) {
+    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserStatusRepository userStatusRepository, @Lazy AuthenticationManager authenticationManager, JwtService jwtService, RefreshTokenService refreshTokenService, JwtAuthenticationFilter jwtAuthenticationFilter, /* EmailService emailService, */ ApplicationEventPublisher applicationEventPublisher) { // Removed EmailService, Added publisher
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -61,7 +64,8 @@ public class AuthServiceImpl implements AuthService {
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.emailService = emailService;
+        // this.emailService = emailService; // Removed assignment
+        this.applicationEventPublisher = applicationEventPublisher; // Added assignment
     }
 
     @Override
@@ -129,12 +133,8 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(newUser);
 
-        try {
-            emailService.sendRegistrationEmail(newUser.getEmail(), newUser.getUsername());
-        } catch (Exception e) {
-            // Log error but don't fail registration
-            System.err.println("Failed to send registration email: " + e.getMessage());
-        }
+        // Publish user registered event
+        applicationEventPublisher.publishEvent(new UserRegisteredEvent(this, newUser.getEmail(), newUser.getUsername())); // Keep this line
 
         AuthDTO authDTO = new AuthDTO();
         authDTO.setUsername(registerRequest.getUsername());
