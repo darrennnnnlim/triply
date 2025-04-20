@@ -1,6 +1,6 @@
-package com.example.triply.core.pricing.resource;
+package com.example.triply.core.pricing.flight.resource;
 
-import com.example.triply.core.pricing.implementation.FlightPriceWriteFacadeServiceImpl;
+import com.example.triply.core.pricing.flight.implementation.FlightPriceWriteFacadeServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class FlightPriceWriteFacadeResource {
         this.flightPriceWriteFacadeService = flightPriceWriteFacadeService;
     }
 
-    @GetMapping("updateExisting")
+    @PostMapping("updateExisting")
     ResponseEntity<BigDecimal> updateExistingFlightPrice(@RequestParam("flightId") Long flightId,
                                                                 @RequestParam("flightClassId") Long flightClassId,
                                                                 @RequestParam("newBasePrice") BigDecimal newBasePrice) {

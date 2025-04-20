@@ -1,4 +1,4 @@
-package com.example.triply.core.pricing.implementation;
+package com.example.triply.core.pricing.flight.implementation;
 
 import com.example.triply.core.search.flight.model.dto.FlightSearchRequestDTO;
 import com.example.triply.core.flight.model.entity.Airline;
@@ -9,7 +9,7 @@ import com.example.triply.core.flight.repository.AirlineRepository;
 import com.example.triply.core.flight.repository.FlightClassRepository;
 import com.example.triply.core.flight.repository.FlightPriceRepository;
 import com.example.triply.core.flight.repository.FlightRepository;
-import com.example.triply.core.pricing.model.dto.FlightOfferDTO;
+import com.example.triply.core.pricing.flight.model.dto.FlightOfferDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package com.example.triply.core.search.flight.resource;
 
 // FlightSearchController.java
-import com.example.triply.core.pricing.implementation.FlightInformationFacadeServiceImpl;
-import com.example.triply.core.pricing.model.dto.FlightOfferDTO;
+import com.example.triply.core.pricing.flight.implementation.FlightInformationFacadeServiceImpl;
+import com.example.triply.core.pricing.flight.model.dto.FlightOfferDTO;
 import com.example.triply.core.search.flight.model.dto.FlightSearchRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
