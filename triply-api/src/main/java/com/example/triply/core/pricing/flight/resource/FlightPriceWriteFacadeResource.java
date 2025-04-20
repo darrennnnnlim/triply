@@ -18,7 +18,7 @@ public class FlightPriceWriteFacadeResource {
         this.flightPriceWriteFacadeService = flightPriceWriteFacadeService;
     }
 
-    @GetMapping("updateExisting")
+    @PostMapping("updateExisting")
     ResponseEntity<BigDecimal> updateExistingFlightPrice(@RequestParam("flightId") Long flightId,
                                                                 @RequestParam("flightClassId") Long flightClassId,
                                                                 @RequestParam("newBasePrice") BigDecimal newBasePrice) {
