@@ -1,12 +1,17 @@
-package com.example.triply.core.pricing.implementation;
+package com.example.triply.core.pricing.flight.implementation;
 
 import com.example.triply.core.flight.mapper.FlightPriceMapper;
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.flight.model.entity.FlightPrice;
 import com.example.triply.core.flight.repository.FlightPriceRepository;
+<<<<<<< HEAD:triply-api/src/main/java/com/example/triply/core/pricing/implementation/FlightPriceWriteFacadeServiceImpl.java
 import com.example.triply.core.flight.publisher.FlightPriceWritePublisher; // Changed import
 import com.example.triply.core.pricing.notification.FlightPriceListener;
 // import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl; // Removed old import
+=======
+import com.example.triply.core.pricing.flight.notification.FlightPriceListener;
+import com.example.triply.core.pricing.flight.notification.FlightPriceWritePublisherImpl;
+>>>>>>> origin/dev:triply-api/src/main/java/com/example/triply/core/pricing/flight/implementation/FlightPriceWriteFacadeServiceImpl.java
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

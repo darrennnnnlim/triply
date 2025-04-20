@@ -15,41 +15,41 @@ export class HotelSearchPageComponent {
   searchForm: FormGroup;
 
   /* BEGIN: Mock data */
-  hotelOffers: HotelOffer[] = [
-    { 
-      hotel: {
-        location: 'Singapore',
-        name: 'Hilton'
-      },
-      checkInDate: '2025-08-01', 
-      checkOutDate: '2025-08-03', 
-      pricing: {
-        totalPrice: 500
-      }
-    },
-    { 
-      hotel: {
-        location: 'Singapore',
-        name: 'Mariott'
-      },
-      checkInDate: '2025-08-01', 
-      checkOutDate: '2025-08-03',  
-      pricing: {
-        totalPrice: 100
-      }
-    },
-    { 
-      hotel: {
-        location: 'Singapore',
-        name: 'MBS'
-      },
-      checkInDate: '2025-08-01', 
-      checkOutDate: '2025-08-03',  
-      pricing: {
-        totalPrice: 1000
-      }
-    }
-  ];
+  // hotelOffers: HotelOffer[] = [
+  //   { 
+  //     hotel: {
+  //       location: 'Singapore',
+  //       name: 'Hilton'
+  //     },
+  //     checkInDate: '2025-08-01', 
+  //     checkOutDate: '2025-08-03', 
+  //     pricing: {
+  //       totalPrice: 500
+  //     }
+  //   },
+  //   { 
+  //     hotel: {
+  //       location: 'Singapore',
+  //       name: 'Mariott'
+  //     },
+  //     checkInDate: '2025-08-01', 
+  //     checkOutDate: '2025-08-03',  
+  //     pricing: {
+  //       totalPrice: 100
+  //     }
+  //   },
+  //   { 
+  //     hotel: {
+  //       location: 'Singapore',
+  //       name: 'MBS'
+  //     },
+  //     checkInDate: '2025-08-01', 
+  //     checkOutDate: '2025-08-03',  
+  //     pricing: {
+  //       totalPrice: 1000
+  //     }
+  //   }
+  // ];
   /* END: Mock data */
   filteredHotelOffers: HotelOffer[] = [];
 
@@ -61,7 +61,8 @@ export class HotelSearchPageComponent {
     this.searchForm = this.fb.group({
       location: [''],
       checkInDate: [''],
-      checkOutDate: ['']
+      checkOutDate: [''],
+      maxPrice: ['']
     });
   }
 
@@ -70,6 +71,7 @@ export class HotelSearchPageComponent {
       location: this.searchForm.value.location,
       checkInDate: this.searchForm.value.checkInDate,
       checkOutDate: this.searchForm.value.checkOutDate,
+      maxPrice: this.searchForm.value.maxPrice
     };
     console.log(searchRequest)
     this.hotelSearchPageService.searchHotels(searchRequest).subscribe(response => {

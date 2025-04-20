@@ -15,6 +15,16 @@ import java.math.BigDecimal;
 @Audited
 public class HotelRoomType extends Auditable {
 
+    public HotelRoomType() {}
+
+    public HotelRoomType(HotelRoomType other) {
+        this.id = other.id;
+        this.hotel = other.hotel;
+        this.name = other.name;
+        this.basePrice = other.basePrice;
+        this.capacity = other.capacity;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
