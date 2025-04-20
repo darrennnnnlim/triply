@@ -19,9 +19,9 @@ public class HotelRoomWriteFacadeResource {
     }
 
     @PostMapping("updateExisting")
-    ResponseEntity<BigDecimal> updateExistingHotelPrice(@RequestParam("hotelId") Long hotelId,
+    ResponseEntity<BigDecimal> updateExistingHotelPrice(@RequestParam("hotelRoomTypeId") Long hotelRoomTypeId,
                                                                 @RequestParam("newBasePrice") BigDecimal newBasePrice) {
-        hotelRoomPriceWriteFacadeService.updateExistingHotelRoomType(hotelId, newBasePrice);
+        hotelRoomPriceWriteFacadeService.updateExistingHotelRoomType(hotelRoomTypeId, newBasePrice);
         return new ResponseEntity<>(newBasePrice, HttpStatus.OK);
     }
 

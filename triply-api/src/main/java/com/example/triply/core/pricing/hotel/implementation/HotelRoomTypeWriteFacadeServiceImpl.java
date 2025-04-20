@@ -30,14 +30,14 @@ public class HotelRoomTypeWriteFacadeServiceImpl {
     }
 
     @Transactional
-    public List<HotelRoomTypeDTO> updateExistingHotelRoomType(Long hotelId, BigDecimal newBasePrice) {
+    public List<HotelRoomTypeDTO> updateExistingHotelRoomType(Long hotelRoomTypeId, BigDecimal newBasePrice) {
         //TODO: (Bryan) Swap repository calls to service calls
-        List<HotelRoomType> hotelRoomTypePrices = hotelRoomTypePriceRepository.findAllByHotelId(hotelId);
+        Optional<HotelRoomType> hotelRoomTypeOptional = hotelRoomTypePriceRepository.findById(hotelRoomTypeId);
         List<HotelRoomTypeDTO> oldHotelRoomTypes = new ArrayList<>();
         List<HotelRoomTypeDTO> newHotelRoomTypes = new ArrayList<>();
 
-        if (!hotelRoomTypePrices.isEmpty()) {
-            HotelRoomType oldHotelRoomType = hotelRoomTypePrices.get(0);
+        if (hotelRoomTypeOptional.isPresent()) {
+            HotelRoomType oldHotelRoomType = hotelRoomTypeOptional.get();
             oldHotelRoomTypes.add(hotelRoomTypePriceMapper.toDto(oldHotelRoomType));
 
             HotelRoomType newHotelRoomType = new HotelRoomType(oldHotelRoomType);
