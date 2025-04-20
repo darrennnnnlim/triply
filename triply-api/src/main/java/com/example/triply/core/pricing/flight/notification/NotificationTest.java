@@ -1,4 +1,4 @@
-package com.example.triply.core.pricing.notification;
+package com.example.triply.core.pricing.flight.notification;
 
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import org.slf4j.Logger;
