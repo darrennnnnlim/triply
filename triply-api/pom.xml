@@ -32,6 +32,7 @@
 		<sonar.projectKey>darrennnnnlim_triply</sonar.projectKey>
 		<sonar.organization>triply</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version> <!-- Added MapStruct version -->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -153,6 +154,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- MapStruct -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -169,6 +177,12 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 							<version>1.18.36</version>
+						</path>
+						<!-- Added MapStruct Processor -->
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${org.mapstruct.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

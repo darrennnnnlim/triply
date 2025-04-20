@@ -4,8 +4,9 @@ import com.example.triply.core.flight.mapper.FlightPriceMapper;
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.flight.model.entity.FlightPrice;
 import com.example.triply.core.flight.repository.FlightPriceRepository;
+import com.example.triply.core.flight.publisher.FlightPriceWritePublisher; // Changed import
 import com.example.triply.core.pricing.notification.FlightPriceListener;
-import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl;
+// import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl; // Removed old import
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +22,9 @@ public class FlightPriceWriteFacadeServiceImpl {
 
     private final FlightPriceRepository flightPriceRepository;
     private final FlightPriceMapper flightPriceMapper;
-    private final FlightPriceWritePublisherImpl publisher;
+    private final FlightPriceWritePublisher publisher; // Changed type to interface
 
-    public FlightPriceWriteFacadeServiceImpl(FlightPriceRepository flightPriceRepository, FlightPriceMapper flightPriceMapper, FlightPriceWritePublisherImpl publisher) {
+    public FlightPriceWriteFacadeServiceImpl(FlightPriceRepository flightPriceRepository, FlightPriceMapper flightPriceMapper, FlightPriceWritePublisher publisher) { // Changed type to interface
         this.flightPriceRepository = flightPriceRepository;
         this.flightPriceMapper = flightPriceMapper;
         this.publisher = publisher;
@@ -75,12 +76,7 @@ public class FlightPriceWriteFacadeServiceImpl {
         publisher.publish(oldFlightPrices, newFlightPrices);
         return newFlightPrices;
     }
-        public void addPriceListener(FlightPriceListener listener) {
-        publisher.addListener(listener);
-    }
-
-    public void removePriceListener(FlightPriceListener listener) {
-        publisher.removeListener(listener);
-    }
+    // Removed addPriceListener and removePriceListener as they are not defined in the FlightPriceWritePublisher interface
+    // Listener registration is handled automatically by Spring's event mechanism (@EventListener)
 
 }
