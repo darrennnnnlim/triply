@@ -4,9 +4,9 @@ import com.example.triply.core.flight.mapper.FlightPriceMapper;
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.flight.model.entity.FlightPrice;
 import com.example.triply.core.flight.repository.FlightPriceRepository;
-import com.example.triply.core.flight.publisher.FlightPriceWritePublisher; // Changed import
+import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl; // Use concrete class from custom package
 import com.example.triply.core.pricing.notification.FlightPriceListener;
-// import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl; // Removed old import
+// Removed import of FlightPriceWritePublisher interface
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +22,9 @@ public class FlightPriceWriteFacadeServiceImpl {
 
     private final FlightPriceRepository flightPriceRepository;
     private final FlightPriceMapper flightPriceMapper;
-    private final FlightPriceWritePublisher publisher; // Changed type to interface
+    private final FlightPriceWritePublisherImpl publisher; // Use concrete class type
 
-    public FlightPriceWriteFacadeServiceImpl(FlightPriceRepository flightPriceRepository, FlightPriceMapper flightPriceMapper, FlightPriceWritePublisher publisher) { // Changed type to interface
+    public FlightPriceWriteFacadeServiceImpl(FlightPriceRepository flightPriceRepository, FlightPriceMapper flightPriceMapper, FlightPriceWritePublisherImpl publisher) { // Use concrete class type
         this.flightPriceRepository = flightPriceRepository;
         this.flightPriceMapper = flightPriceMapper;
         this.publisher = publisher;

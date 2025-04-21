@@ -3,12 +3,12 @@ package com.example.triply.core.pricing.notification;
 import com.example.triply.common.service.EmailService;
 import com.example.triply.core.auth.entity.User;
 // import com.example.triply.core.auth.repository.UserRepository; // Removed
-import com.example.triply.core.flight.event.FlightPriceWriteEvent; // Added missing import
+import com.example.triply.core.pricing.notification.FlightPriceWriteEvent; // Use custom event
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.pricethreshold.service.PriceThresholdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener; // Added import
+// import org.springframework.context.event.EventListener; // Removed Spring event listener import
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -22,21 +22,21 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class FlightPriceEmailNotificationListener { // Removed "implements FlightPriceListener"
+public class FlightPriceEmailNotificationListener implements FlightPriceListener { // Implement custom listener interface
 
     private final EmailService emailService;
     // private final UserRepository userRepository; // Removed
     private final PriceThresholdService priceThresholdService; // Added
 
-    // Removed @Override
-    @EventListener // Added annotation to listen for Spring application events
+    @Override // Add Override annotation
+    // @EventListener // Removed Spring event listener annotation
     @Async // Ensure email sending doesn't block the main thread
     public void onPriceUpdate(FlightPriceWriteEvent event) {
         log.info("Listener received FlightPriceWriteEvent. Processing notifications...");
-        log.debug("Event details: Old prices count={}, New prices count={}", event.getOldPrices().size(), event.getNewPrices().size());
+        log.debug("Event details: Old prices count={}, New prices count={}", event.getOldFlightPrices().size(), event.getNewFlightPrices().size());
 
-        List<FlightPriceDTO> oldPrices = event.getOldPrices(); // Use correct getter
-        List<FlightPriceDTO> newPrices = event.getNewPrices(); // Use correct getter
+        List<FlightPriceDTO> oldPrices = event.getOldFlightPrices(); // Use correct getter from custom event
+        List<FlightPriceDTO> newPrices = event.getNewFlightPrices(); // Use correct getter from custom event
 
         if (newPrices == null || newPrices.isEmpty()) {
             log.warn("No new prices found in the event. Skipping processing.");
@@ -62,8 +62,8 @@ public class FlightPriceEmailNotificationListener { // Removed "implements Fligh
                 // Notify if the price has decreased
                 if (newEffectivePrice != null && oldEffectivePrice != null && newEffectivePrice.compareTo(oldEffectivePrice) < 0) {
                     log.info("Price decreased for flight {} class {} on {}: {} -> {}",
-                            newPrice.getFlight() != null ? newPrice.getFlight().getFlightNumber() : "N/A",
-                            newPrice.getFlightClass() != null ? newPrice.getFlightClass().getClassName() : "N/A",
+                            newPrice.getFlightNumber() != null ? newPrice.getFlightNumber() : "N/A", // Use DTO field
+                            newPrice.getFlightClassName() != null ? newPrice.getFlightClassName() : "N/A", // Use DTO field
                             newPrice.getDepartureDate(),
                             oldEffectivePrice, newEffectivePrice);
 
@@ -84,16 +84,16 @@ public class FlightPriceEmailNotificationListener { // Removed "implements Fligh
                         for (User user : usersToNotify) {
                             if (user != null && user.getEmail() != null && !user.getEmail().isEmpty()) {
                                 try {
-                                    String subject = String.format("✈️ Price Drop Alert! Flight %s", newPrice.getFlight().getFlightNumber());
+                                    String subject = String.format("✈️ Price Drop Alert! Flight %s", newPrice.getFlightNumber() != null ? newPrice.getFlightNumber() : "N/A"); // Use DTO field
                                     // Consider fetching the user's specific threshold to include in the email
                                     String bodyTemplate = "Hi %s,\n\nThe price for flight %s (%s -> %s) on %s (%s class) has dropped from %.2f to %.2f!\n\nBook now to grab this deal!\n\nThanks,\nThe Triply Team";
                                     String body = String.format(bodyTemplate,
                                             user.getUsername(), // Use username instead of firstName
-                                            newPrice.getFlight().getFlightNumber(),
-                                            newPrice.getFlight().getOrigin(),
-                                            newPrice.getFlight().getDestination(),
+                                            newPrice.getFlightNumber() != null ? newPrice.getFlightNumber() : "N/A", // Use DTO field
+                                            newPrice.getOrigin() != null ? newPrice.getOrigin() : "N/A", // Use DTO field
+                                            newPrice.getDestination() != null ? newPrice.getDestination() : "N/A", // Use DTO field
                                             newPrice.getDepartureDate() != null ? newPrice.getDepartureDate().toLocalDate() : "N/A",
-                                            newPrice.getFlightClass() != null ? newPrice.getFlightClass().getClassName() : "N/A",
+                                            newPrice.getFlightClassName() != null ? newPrice.getFlightClassName() : "N/A", // Use DTO field
                                             oldEffectivePrice,
                                             newEffectivePrice);
 

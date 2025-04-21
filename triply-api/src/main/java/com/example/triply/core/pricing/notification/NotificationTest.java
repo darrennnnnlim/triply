@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
-// @Service // Removed annotation to prevent bean conflict
+@Service // Uncomment annotation to register as bean
 public class NotificationTest implements FlightPriceListener{
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationTest.class);

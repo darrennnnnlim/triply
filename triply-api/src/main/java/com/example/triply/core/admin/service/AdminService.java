@@ -15,8 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.math.BigDecimal; // Added import
 import com.example.triply.core.flight.repository.FlightPriceRepository; // Added import
-import com.example.triply.core.flight.publisher.FlightPriceWritePublisher; // Changed to interface
-import com.example.triply.core.flight.publisher.impl.FlightPriceWritePublisherImpl; // Corrected import path for impl (though not directly used in field/constructor)
+import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl; // Changed to concrete class from custom package
+// Removed import of FlightPriceWritePublisher interface
 import com.example.triply.core.flight.mapper.FlightPriceMapper; // Added import - adjust if needed
 import com.example.triply.core.flight.model.entity.FlightPrice; // Corrected import path
 import com.example.triply.core.flight.model.dto.FlightPriceDTO; // Corrected import path
@@ -30,7 +30,7 @@ public class AdminService {
     // private final EmailService emailService; // Removed field
     private final ApplicationEventPublisher applicationEventPublisher; // Added field
     private final FlightPriceRepository flightPriceRepository; // Added field
-    private final FlightPriceWritePublisher flightPriceWritePublisher; // Changed to interface type
+    private final FlightPriceWritePublisherImpl flightPriceWritePublisher; // Changed to concrete class type
     private final FlightPriceMapper flightPriceMapper; // Added field
 
     public AdminService(UserStatusRepository userStatusRepository,
@@ -38,14 +38,14 @@ public class AdminService {
                        /* EmailService emailService, */ // Removed constructor param
                        ApplicationEventPublisher applicationEventPublisher, // Corrected constructor param
                        FlightPriceRepository flightPriceRepository, // Added constructor param
-                       FlightPriceWritePublisher flightPriceWritePublisher, // Changed to interface type
+                       FlightPriceWritePublisherImpl flightPriceWritePublisher, // Use concrete class type
                        FlightPriceMapper flightPriceMapper) { // Added constructor param
         this.userStatusRepository = userStatusRepository;
         this.userRepository = userRepository;
         // this.emailService = emailService; // Removed assignment
         this.applicationEventPublisher = applicationEventPublisher; // Added assignment
         this.flightPriceRepository = flightPriceRepository; // Added assignment
-        this.flightPriceWritePublisher = flightPriceWritePublisher; // Assignment remains valid
+        this.flightPriceWritePublisher = flightPriceWritePublisher;
         this.flightPriceMapper = flightPriceMapper; // Added assignment
     }
 

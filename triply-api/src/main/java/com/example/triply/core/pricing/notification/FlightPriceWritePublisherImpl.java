@@ -2,6 +2,7 @@ package com.example.triply.core.pricing.notification;
 
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier; // Import Qualifier
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -9,27 +10,26 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.util.ArrayList;
 import java.util.List;
 
-// @Service // Removed annotation to resolve bean conflict with core.flight.publisher.impl
+@Service
 public class FlightPriceWritePublisherImpl {
     private final List<FlightPriceListener> listeners;
-    // private final NotificationTest notificationTest; // Keep or remove depending on if it's still needed
-    private final FlightPriceListener emailNotificationListener; // Inject listener via interface
+    private final NotificationTest notificationTest;
+    private final FlightPriceListener emailNotificationListener; // Add email listener field
 
     @Autowired
-    public FlightPriceWritePublisherImpl(
-            // NotificationTest notificationTest, // Keep or remove
-            FlightPriceListener emailNotificationListener // Inject listener via interface
-    ) {
+    public FlightPriceWritePublisherImpl(NotificationTest notificationTest,
+                                         @Qualifier("flightPriceEmailNotificationListener") FlightPriceListener emailNotificationListener // Qualify the listener bean
+                                        ) {
         this.listeners = new ArrayList<>();
-        // this.notificationTest = notificationTest; // Keep or remove
-        this.emailNotificationListener = emailNotificationListener;
+
+        this.notificationTest = notificationTest;
+        this.emailNotificationListener = emailNotificationListener; // Assign injected listener
 
         // Register listeners here
-        // this.addListener(notificationTest); // Keep or remove
-        this.addListener(this.emailNotificationListener); // Register the new listener
+        this.addListener(notificationTest);
+        this.addListener(this.emailNotificationListener); // Register email listener
     }
 
-    // addListener method remains the same
     public void addListener(FlightPriceListener listener) {
         listeners.add(listener);
     }
