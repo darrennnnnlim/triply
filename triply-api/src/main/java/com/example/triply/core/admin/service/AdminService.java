@@ -4,52 +4,96 @@ import com.example.triply.core.admin.dto.UserRoleDTO;
 import com.example.triply.core.admin.repository.UserStatusRepository;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Service
 public class AdminService {
 
+    private static final String STATUS_BANNED = "BANNED";
+    private static final String USER_ALREADY_BANNED = "User is already banned";
+    private static final String USER_NOT_BANNED = "User is not banned";
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String UNKNOWN_ACTION = "Unknown action";
+
     private final UserStatusRepository userStatusRepository;
     private final UserRepository userRepository;
+    private final Map<String, Consumer<User>> userActions = new HashMap<>();
 
     public AdminService(UserStatusRepository userStatusRepository, UserRepository userRepository) {
         this.userStatusRepository = userStatusRepository;
         this.userRepository = userRepository;
     }
 
+    @PostConstruct
+    private void initUserActions() {
+        userActions.put("ban", user -> {
+            if (user.getStatus() != null && STATUS_BANNED.equals(user.getStatus().getStatus())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_ALREADY_BANNED);
+            }
+            userRepository.banUser(user.getId());
+        });
+        userActions.put("unban", user -> {
+            if (user.getStatus() == null || !STATUS_BANNED.equals(user.getStatus().getStatus())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_BANNED);
+            }
+            userRepository.unbanUser(user.getId());
+        });
+    }
+
+    @Transactional
+    public void performUserAction(Long userId, String action) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+        Consumer<User> userAction = userActions.get(action);
+        if (userAction == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UNKNOWN_ACTION);
+        }
+        userAction.accept(user);
+    }
+
     public List<UserRoleDTO> getUsersWithRoles() {
-        List<UserRoleDTO> users = userStatusRepository.getUsersWithRoles();
-        return users;
+        return userStatusRepository.getUsersWithRoles();
     }
 
     @Transactional
     public void banUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
-        if (user.getStatus() != null && "BANNED".equals(user.getStatus().getStatus())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is already banned");
+        if (user.getStatus() != null && STATUS_BANNED.equals(user.getStatus().getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_ALREADY_BANNED);
         }
-
         userRepository.banUser(userId);
     }
 
     @Transactional
     public void unbanUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
-        if (user.getStatus() == null || !"BANNED".equals(user.getStatus().getStatus())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not banned");
+        if (user.getStatus() == null || !STATUS_BANNED.equals(user.getStatus().getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_BANNED);
         }
-
         userRepository.unbanUser(userId);
     }
 
+    public List<UserRoleDTO> searchUsersByUsername(String username) {
+        if (username == null || username.isEmpty()) {
+            return userStatusRepository.getUsersWithRoles();
+        }
+        return userStatusRepository.searchUsersByUsername(username);
+    }
 
+    public List<UserRoleDTO> searchBannedUsersByUsername(String username) {
+        return userStatusRepository.searchBannedUsersByUsername(username);
+    }
 }

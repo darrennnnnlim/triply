@@ -23,6 +23,12 @@ public class AdminResource {
         this.adminService = adminService;
     }
 
+    @PostMapping("/{action}/{userId}")
+    public ResponseEntity<String> performAction(@PathVariable String action, @PathVariable Long userId) {
+        adminService.performUserAction(userId, action);
+        return ResponseEntity.ok("Action performed: " + action);
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<UserRoleDTO>> getUsersWithRoles() {
         List<UserRoleDTO> usersWithRoles = adminService.getUsersWithRoles();
@@ -36,10 +42,15 @@ public class AdminResource {
     }
 
     @GetMapping("/isBanned")
-    public ResponseEntity<List<UserRoleDTO>> getBannedUsers() {
+    public ResponseEntity<List<UserRoleDTO>> getBannedUsers(@RequestParam(required = false) String username) {
+        if (username != null && !username.isEmpty()) {
+            List<UserRoleDTO> users = adminService.searchBannedUsersByUsername(username);
+            return ResponseEntity.ok(users);
+        }
         List<UserRoleDTO> bannedUsers = userRepository.getBannedUsers();
         return ResponseEntity.ok(bannedUsers);
     }
+
 
     @PostMapping("/ban/{userId}")
     public ResponseEntity<String> banUser(@PathVariable Long userId) {
@@ -65,7 +76,6 @@ public class AdminResource {
         }
     }
 
-
     @GetMapping("/currentuser")
     public ResponseEntity<String> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -86,14 +96,9 @@ public class AdminResource {
         return ResponseEntity.ok(username);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("Test successful");
+    @GetMapping("/users/search")
+    public ResponseEntity<List<UserRoleDTO>> searchUsers(@RequestParam String username) {
+        List<UserRoleDTO> users = adminService.searchUsersByUsername(username);
+        return ResponseEntity.ok(users);
     }
-
-    @PostMapping("/test")
-    public ResponseEntity<String> postTest() {
-        return ResponseEntity.ok("Post test successful");
-    }
-
 }

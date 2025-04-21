@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { HistoryComponent } from './history/history.component';
+import { BannedUsersComponent } from './banned-users/banned-users.component';
+import { ProfileComponent } from './profile/profile.component';
 import { BannedRatingsComponent } from './banned-ratings/banned-ratings.component';
 
 export const routes: Routes = [
@@ -11,6 +13,10 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
   },
   {
     path: 'makebooking',
