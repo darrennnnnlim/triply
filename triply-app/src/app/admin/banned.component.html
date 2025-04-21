@@ -1,24 +1,43 @@
 <div>
-    <h2>Banned Users</h2>
+  <div class="top-container">
+    <div class="top-left-container">
+      <input
+        type="text"
+        [(ngModel)]="searchUsername"
+        placeholder="Search by username"
+      />
+      <button class="search-btn" (click)="searchUsers()">Search</button>
+      <button class="clear-btn" (click)="clearSearch()">Clear</button>
+    </div>
+    <div class="top-right-container">
+      <button class="view-banned-btn" (click)="toggleView()">
+        View All Users
+      </button>
+    </div>
+  </div>
 
-    <table *ngIf="bannedUsers.length > 0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Role</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let user of bannedUsers">
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.roleName }}</td>
-                <td><span class="banned">{{ user.status }}</span></td>
-            </tr>
-        </tbody>
-    </table>
+  <h2>Banned Users</h2>
 
-    <p *ngIf="bannedUsers.length === 0">No banned users found.</p>
+  <table *ngIf="bannedUsers.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of bannedUsers">
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.roleName }}</td>
+        <td>
+          <span class="banned">{{ user.status }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="bannedUsers.length === 0">No banned users found.</p>
 </div>

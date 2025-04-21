@@ -26,43 +26,95 @@ export class AdminComponent {
   userToAction = '';
   userIdToAction: number | null = null;
   dialogAction: 'ban' | 'unban' = 'ban';
+  searchUsername: string = '';
 
   constructor(private adminService: AdminService, private router: Router) {}
   private readonly API_URL = environment.apiUrl + '/admin';
-
   ngOnInit(): void {
     this.adminService.getCurrentUser().subscribe({
       next: (username) => {
         this.currentUsername = username;
-        // console.log('Current username:', this.currentUsername);
-
         // Fetch all users with roles
         this.adminService.getUsersWithRoles().subscribe({
           next: (data) => {
-            // console.log('Users with roles:', data);
             this.usersWithRoles = data;
-
             // Check if the current user is an admin
             this.isAdmin = this.usersWithRoles.some(
               (user) =>
                 user.username === this.currentUsername &&
                 user.roleName === 'ROLE_ADMIN'
             );
-            // console.log('Is admin?', this.isAdmin);
-
             if (!this.isAdmin) {
               this.router.navigate(['/home']);
             }
           },
           error: (error) => {
             console.error('Error fetching users with roles:', error);
+            this.router.navigate(['/home']); // Optional: handle error
           },
         });
       },
       error: (error) => {
         console.error('Error fetching current user:', error);
+        this.router.navigate(['/login']); // 🚨 Redirect if not logged in!
       },
     });
+  }
+  
+  // ngOnInit(): void {
+  //   this.adminService.getCurrentUser().subscribe({
+  //     next: (username) => {
+  //       this.currentUsername = username;
+  //       // console.log('Current username:', this.currentUsername);
+
+  //       // Fetch all users with roles
+  //       this.adminService.getUsersWithRoles().subscribe({
+  //         next: (data) => {
+  //           // console.log('Users with roles:', data);
+  //           this.usersWithRoles = data;
+
+  //           // Check if the current user is an admin
+  //           this.isAdmin = this.usersWithRoles.some(
+  //             (user) =>
+  //               user.username === this.currentUsername &&
+  //               user.roleName === 'ROLE_ADMIN'
+  //           );
+  //           // console.log('Is admin?', this.isAdmin);
+
+  //           if (!this.isAdmin) {
+  //             this.router.navigate(['/home']);
+  //           }
+  //         },
+  //         error: (error) => {
+  //           console.error('Error fetching users with roles:', error);
+  //         },
+  //       });
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching current user:', error);
+  //     },
+  //   });
+  // }
+
+  searchUsers() {
+    if (this.showBannedUsers) {
+      this.adminService
+        .searchBannedUsersByUsername(this.searchUsername)
+        .subscribe({
+          next: (data) => (this.bannedUsers = data),
+          error: (err) => console.error(err),
+        });
+    } else {
+      this.adminService.searchUsersByUsername(this.searchUsername).subscribe({
+        next: (data) => (this.usersWithRoles = data),
+        error: (err) => console.error(err),
+      });
+    }
+  }
+
+  clearSearch() {
+    this.searchUsername = '';
+    this.loadUsers();
   }
 
   toggleView() {
