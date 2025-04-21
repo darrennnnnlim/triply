@@ -1,0 +1,32 @@
+<div class="button-container">
+    <div>
+      <button class="reset-btn" (click)="showResetPassword = !showResetPassword">
+        Reset Password
+      </button>
+    </div>
+  
+    <div *ngIf="showResetPassword">
+      <form (ngSubmit)="resetPassword()">
+  
+        <div class="input-group">
+          <input type="password" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Current Password" required>
+        </div>
+  
+        <div class="input-group">
+          <input type="password" [(ngModel)]="newPassword" name="newPassword" placeholder="New Password" required>
+        </div>
+  
+        <div class="input-group">
+          <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirm New Password" required>
+        </div>
+  
+        <div>
+          <button class="update-btn" type="submit">Update Password</button>
+        </div>
+      </form>
+  
+      <div *ngIf="resetError" style="color:red;">{{ resetError }}</div>
+      <div *ngIf="resetSuccess" style="color:green;">{{ resetSuccess }}</div>
+    </div>
+  </div>
+  

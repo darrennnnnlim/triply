@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
-
-
 @Entity
 @Table(name = "Ratings")
 @Audited
@@ -31,6 +29,10 @@ public class Ratings extends Auditable {
 
     @Column(nullable = false)
     private int rating;
+
+
+    @Column(nullable = false)
+    private String delete;
 
     @ManyToOne
     @JoinColumn(name = "flight_booking_id", nullable = true)
@@ -82,5 +84,11 @@ public class Ratings extends Auditable {
         this.hotelBooking = hotelBooking;
     }
 
+    public String getDelete() {
+        return delete;
+    }
 
+    public void setDelete(String delete) {
+        this.delete = delete;
+    }
 }

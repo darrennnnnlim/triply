@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HistoryComponent } from './history/history.component';
 import { BannedUsersComponent } from './banned-users/banned-users.component';
 import { ProfileComponent } from './profile/profile.component';
+import { BannedRatingsComponent } from './banned-ratings/banned-ratings.component';
 
 export const routes: Routes = [
   {
@@ -56,8 +57,13 @@ export const routes: Routes = [
     loadChildren: () =>
           import('./hotel-search-page/hotel-search-page.module').then((m) => m.HotelSearchPageModule),
   },
+  {
+    path: 'hotel-offer', // Dynamic route for hotel offer details
+    loadChildren: () =>
+      import('./hotel-offer/hotel-offer.module').then((m) => m.HotelOfferModule),
+  },
   { path: 'history', component: HistoryComponent },
-  { path: 'banned', component: BannedUsersComponent },
+  { path: 'banned', component: BannedRatingsComponent },
   {
     path: '**',
     redirectTo: '',

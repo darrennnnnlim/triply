@@ -16,6 +16,16 @@ import java.time.LocalDateTime;
 @Audited
 public class HotelRoomPrice extends Auditable {
 
+    public HotelRoomPrice() {}
+
+    public HotelRoomPrice(HotelRoomPrice other) {
+        this.id = other.id;
+        this.hotelRoomType = other.hotelRoomType;
+        this.startDate = other.startDate;
+        this.endDate = other.endDate;
+        this.price = other.price;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

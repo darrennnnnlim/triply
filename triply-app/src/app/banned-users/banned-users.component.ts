@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PopupComponent } from '../popup/popup.component';
 
 @Component({
   selector: 'app-banned-users',
-  imports: [CommonModule, PopupComponent],
+  imports: [CommonModule],
   templateUrl: './banned-users.component.html',
   styleUrl: './banned-users.component.css'
 })

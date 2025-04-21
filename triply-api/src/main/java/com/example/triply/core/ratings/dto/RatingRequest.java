@@ -1,13 +1,11 @@
 package com.example.triply.core.ratings.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 
 @Data
 public class RatingRequest {
-
 
     @NotNull
     private Long userId;
@@ -20,6 +18,10 @@ public class RatingRequest {
 
     @Null
     private Long hotelId;
+
+
+    @Null
+    private String delete;
 
 
     private String type;
@@ -63,5 +65,14 @@ public class RatingRequest {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getDelete() {
+        return delete;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
+    }
+
 
 }
