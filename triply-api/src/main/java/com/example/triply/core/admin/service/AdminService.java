@@ -4,10 +4,12 @@ import com.example.triply.core.admin.dto.UserRoleDTO;
 // import com.example.triply.common.service.EmailService; // Removed import
 import com.example.triply.core.admin.repository.UserStatusRepository;
 import com.example.triply.core.auth.entity.User;
-import com.example.triply.core.auth.event.UserBannedEvent; // Added import
+// import com.example.triply.core.auth.event.UserBannedEvent; // Removed Spring event import
+import com.example.triply.core.auth.notification.UserBanWriteEvent; // Added in-house event import
+import com.example.triply.core.auth.notification.UserBanWritePublisher; // Added in-house publisher import
 import com.example.triply.core.auth.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.context.ApplicationEventPublisher; // Added import
+// import org.springframework.context.ApplicationEventPublisher; // Removed Spring publisher import
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,23 +29,22 @@ public class AdminService {
 
     private final UserStatusRepository userStatusRepository;
     private final UserRepository userRepository;
-    // private final EmailService emailService; // Removed field
-    private final ApplicationEventPublisher applicationEventPublisher; // Added field
+    // private final ApplicationEventPublisher applicationEventPublisher; // Removed Spring publisher field
+    private final UserBanWritePublisher userBanWritePublisher; // Added in-house publisher field
     private final FlightPriceRepository flightPriceRepository; // Added field
     private final FlightPriceWritePublisherImpl flightPriceWritePublisher; // Changed to concrete class type
     private final FlightPriceMapper flightPriceMapper; // Added field
 
     public AdminService(UserStatusRepository userStatusRepository,
                        UserRepository userRepository,
-                       /* EmailService emailService, */ // Removed constructor param
-                       ApplicationEventPublisher applicationEventPublisher, // Corrected constructor param
+                       UserBanWritePublisher userBanWritePublisher, // Added in-house publisher
                        FlightPriceRepository flightPriceRepository, // Added constructor param
                        FlightPriceWritePublisherImpl flightPriceWritePublisher, // Use concrete class type
                        FlightPriceMapper flightPriceMapper) { // Added constructor param
         this.userStatusRepository = userStatusRepository;
         this.userRepository = userRepository;
-        // this.emailService = emailService; // Removed assignment
-        this.applicationEventPublisher = applicationEventPublisher; // Added assignment
+        // this.applicationEventPublisher = applicationEventPublisher; // Removed assignment
+        this.userBanWritePublisher = userBanWritePublisher; // Added assignment
         this.flightPriceRepository = flightPriceRepository; // Added assignment
         this.flightPriceWritePublisher = flightPriceWritePublisher;
         this.flightPriceMapper = flightPriceMapper; // Added assignment
@@ -63,9 +64,10 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is already banned");
         }
 
-        // Publish user banned event
+        // Publish user banned event using in-house publisher
         String banReason = "Violation of community guidelines"; // Default reason
-        applicationEventPublisher.publishEvent(new UserBannedEvent(this, user.getEmail(), user.getUsername(), banReason));
+        UserBanWriteEvent event = new UserBanWriteEvent(this, user, banReason);
+        userBanWritePublisher.publish(event);
 
         // Removed direct email sending block
         // try {
@@ -89,6 +91,7 @@ public class AdminService {
 
         userRepository.unbanUser(userId);
 
+        // Consider adding an unban event/notification if needed
         // Removed direct email sending block for unban as well
         // try {
         //     emailService.sendBanNotification(user.getEmail(), user.getUsername(),
