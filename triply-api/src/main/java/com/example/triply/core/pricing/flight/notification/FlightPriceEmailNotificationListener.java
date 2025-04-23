@@ -1,14 +1,11 @@
-package com.example.triply.core.pricing.notification;
+package com.example.triply.core.pricing.flight.notification;
 
 import com.example.triply.common.service.EmailService;
 import com.example.triply.core.auth.entity.User;
-// import com.example.triply.core.auth.repository.UserRepository; // Removed
-import com.example.triply.core.pricing.notification.FlightPriceWriteEvent; // Use custom event
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.pricethreshold.service.PriceThresholdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-// import org.springframework.context.event.EventListener; // Removed Spring event listener import
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +26,6 @@ public class FlightPriceEmailNotificationListener implements FlightPriceListener
     private final PriceThresholdService priceThresholdService; // Added
 
     @Override // Add Override annotation
-    // @EventListener // Removed Spring event listener annotation
     @Async // Ensure email sending doesn't block the main thread
     public void onPriceUpdate(FlightPriceWriteEvent event) {
         log.info("Listener received FlightPriceWriteEvent. Processing notifications...");

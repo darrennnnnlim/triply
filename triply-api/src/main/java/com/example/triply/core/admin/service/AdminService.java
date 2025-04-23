@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.math.BigDecimal; // Added import
 import com.example.triply.core.flight.repository.FlightPriceRepository; // Added import
-import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl; // Changed to concrete class from custom package
+import com.example.triply.core.pricing.flight.notification.FlightPriceWritePublisherImpl; // Corrected package path
 // Removed import of FlightPriceWritePublisher interface
 import com.example.triply.core.flight.mapper.FlightPriceMapper; // Added import - adjust if needed
 import com.example.triply.core.flight.model.entity.FlightPrice; // Corrected import path
