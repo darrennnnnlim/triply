@@ -66,6 +66,7 @@ public class RatingService {
             ratings = new Ratings();
             ratings.setRating(ratingRequest.getRating());
             ratings.setUser(user);
+            ratings.setStatus("Submitted");
             ratings.setFlightBooking(flightBooking);
             ratings.setHotelBooking(hotelBooking);
             ratings.setDelete("F");
