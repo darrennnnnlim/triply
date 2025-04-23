@@ -4,18 +4,31 @@ import com.example.triply.core.auth.dto.*;
 import com.example.triply.core.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.triply.core.auth.service.JwtService;
+import org.springframework.util.StringUtils;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/${triply.api-version}/auth")
 public class AuthResource {
 
     private final AuthService authService;
+    private final JwtService jwtService;
+    private static final String MESSAGE = "message";
+    private static final String NOT_AUTHENTICATED = "Not authenticated";
+    private static final String NEW_PASSWORD_SAME = "New password cannot be the same as current password";
+    private static final String PASSWORD_UPDATED = "Password updated successfully";
+    private static final String PASSWORD_NOT_UPDATED = "Password could not be updated";
 
-    public AuthResource(AuthService authService) {
+    @Autowired
+    public AuthResource(AuthService authService, JwtService jwtService) {
         this.authService = authService;
+        this.jwtService = jwtService;
     }
 
     @GetMapping("/loginTest")
@@ -78,4 +91,27 @@ public class AuthResource {
         }
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestBody ResetPassword request, HttpServletRequest httpRequest) {
+        String username = jwtService.extractUsernameFromRequest(httpRequest);
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(MESSAGE, NOT_AUTHENTICATED));
+        }
+        if (!StringUtils.hasText(request.getCurrentPassword()) || !StringUtils.hasText(request.getNewPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MESSAGE, "Password fields cannot be blank"));
+        }
+        if (request.getCurrentPassword().equals(request.getNewPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MESSAGE, NEW_PASSWORD_SAME));
+        }
+        try {
+            boolean result = authService.resetPassword(username, request.getCurrentPassword(), request.getNewPassword());
+            if (result) {
+                return ResponseEntity.ok().body(Map.of(MESSAGE, PASSWORD_UPDATED));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MESSAGE, PASSWORD_NOT_UPDATED));
+            }
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MESSAGE, ex.getMessage()));
+        }
+    }
 }

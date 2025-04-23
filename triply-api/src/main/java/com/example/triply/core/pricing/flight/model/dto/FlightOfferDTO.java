@@ -1,4 +1,4 @@
-package com.example.triply.core.pricing.model.dto;
+package com.example.triply.core.pricing.flight.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;

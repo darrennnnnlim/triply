@@ -8,12 +8,14 @@ import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.notification.UserBanWriteEvent; // Added in-house event import
 import com.example.triply.core.auth.notification.UserBanWritePublisher; // Added in-house publisher import
 import com.example.triply.core.auth.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 // import org.springframework.context.ApplicationEventPublisher; // Removed Spring publisher import
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.math.BigDecimal; // Added import
 import com.example.triply.core.flight.repository.FlightPriceRepository; // Added import
@@ -23,12 +25,21 @@ import com.example.triply.core.flight.mapper.FlightPriceMapper; // Added import 
 import com.example.triply.core.flight.model.entity.FlightPrice; // Corrected import path
 import com.example.triply.core.flight.model.dto.FlightPriceDTO; // Corrected import path
 // import com.example.triply.common.exception.ResourceNotFoundException; // Removed import - using ResponseStatusException instead
+import java.util.Map;
+import java.util.function.Consumer;
 
 @Service
 public class AdminService {
 
+    private static final String STATUS_BANNED = "BANNED";
+    private static final String USER_ALREADY_BANNED = "User is already banned";
+    private static final String USER_NOT_BANNED = "User is not banned";
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String UNKNOWN_ACTION = "Unknown action";
+
     private final UserStatusRepository userStatusRepository;
     private final UserRepository userRepository;
+    private final Map<String, Consumer<User>> userActions = new HashMap<>();
     // private final ApplicationEventPublisher applicationEventPublisher; // Removed Spring publisher field
     private final UserBanWritePublisher userBanWritePublisher; // Added in-house publisher field
     private final FlightPriceRepository flightPriceRepository; // Added field
@@ -50,18 +61,44 @@ public class AdminService {
         this.flightPriceMapper = flightPriceMapper; // Added assignment
     }
 
+    @PostConstruct
+    private void initUserActions() {
+        userActions.put("ban", user -> {
+            if (user.getStatus() != null && STATUS_BANNED.equals(user.getStatus().getStatus())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_ALREADY_BANNED);
+            }
+            userRepository.banUser(user.getId());
+        });
+        userActions.put("unban", user -> {
+            if (user.getStatus() == null || !STATUS_BANNED.equals(user.getStatus().getStatus())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_BANNED);
+            }
+            userRepository.unbanUser(user.getId());
+        });
+    }
+
+    @Transactional
+    public void performUserAction(Long userId, String action) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+        Consumer<User> userAction = userActions.get(action);
+        if (userAction == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, UNKNOWN_ACTION);
+        }
+        userAction.accept(user);
+    }
+
     public List<UserRoleDTO> getUsersWithRoles() {
-        List<UserRoleDTO> users = userStatusRepository.getUsersWithRoles();
-        return users;
+        return userStatusRepository.getUsersWithRoles();
     }
 
     @Transactional
     public void banUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
-        if (user.getStatus() != null && "BANNED".equals(user.getStatus().getStatus())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is already banned");
+        if (user.getStatus() != null && STATUS_BANNED.equals(user.getStatus().getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_ALREADY_BANNED);
         }
 
         // Publish user banned event using in-house publisher
@@ -76,19 +113,17 @@ public class AdminService {
         // } catch (Exception e) {
         //     System.err.println("Failed to send ban notification: " + e.getMessage());
         // }
-
         userRepository.banUser(userId);
     }
 
     @Transactional
     public void unbanUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
-        if (user.getStatus() == null || !"BANNED".equals(user.getStatus().getStatus())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not banned");
+        if (user.getStatus() == null || !STATUS_BANNED.equals(user.getStatus().getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_BANNED);
         }
-
         userRepository.unbanUser(userId);
 
         // Consider adding an unban event/notification if needed
@@ -126,5 +161,14 @@ public class AdminService {
 
         // Return the new DTO
         return newPriceDTO;
+    }    public List<UserRoleDTO> searchUsersByUsername(String username) {
+        if (username == null || username.isEmpty()) {
+            return userStatusRepository.getUsersWithRoles();
+        }
+        return userStatusRepository.searchUsersByUsername(username);
+    }
+
+    public List<UserRoleDTO> searchBannedUsersByUsername(String username) {
+        return userStatusRepository.searchBannedUsersByUsername(username);
     }
 }

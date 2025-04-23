@@ -1,0 +1,16 @@
+INSERT INTO Hotel (id, name, location, description, created_dt, created_by, updated_dt, updated_by) VALUES
+(1, 'JW Mariottt Hotel', 'SIN', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(2, 'Marina Bay Sands Hotel', 'SIN', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(3, 'Fullerton Hotel Singapore', 'SIN', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(4, 'Swissotel The Stamford Singapore', 'SIN', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(5, 'Mondrian Singapore Duxton', 'SIN', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(6, 'Haneda Excel Hotel Tokyu', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(7, 'The Royal Park Hotel Tokyo Haneda', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(8, 'Hotel Villa Fontaine Grand Haneda Airport', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(9, 'Hotel JAL City Haneda Tokyo', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(10, 'Keikyu Ex Inn Haneda', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(11, 'Kawasaki King Skyfront Tokyu Rei Hotel', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(12, 'hotel MONday Haneda Airport', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(13, 'Minn Haneda Airport', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(14, 'Tokyo Inn Haneda Airport 2', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(15, 'Hotel Metropolitan Haneda', 'HND', '', NOW(), 'SYSTEM', NOW(), 'SYSTEM');

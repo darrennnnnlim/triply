@@ -6,6 +6,8 @@ import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.common.exception.TokenException;
 import com.example.triply.common.exception.UserNotFoundException;
 import com.example.triply.common.exception.UsernameAlreadyExistException;
+import com.example.triply.common.exception.InvalidCurrentPasswordException;
+import com.example.triply.common.exception.SameNewPasswordException;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.core.admin.entity.UserStatus;
 import com.example.triply.core.admin.repository.UserStatusRepository;
@@ -245,5 +247,23 @@ public class AuthServiceImpl implements AuthService {
         response.addCookie(accessTokenCookie);
 
         return newAccessToken;
+    }
+
+    @Override
+    public boolean resetPassword(String username, String currentPassword, String newPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new InvalidCurrentPasswordException();
+        }
+
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new SameNewPasswordException();
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
     }
 }

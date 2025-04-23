@@ -34,6 +34,11 @@ public class Ratings extends Auditable {
     @Column(nullable = false)
     private String delete;
 
+
+
+    @Column(nullable = false)
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "flight_booking_id", nullable = true)
     private FlightBooking flightBooking;
@@ -90,5 +95,13 @@ public class Ratings extends Auditable {
 
     public void setDelete(String delete) {
         this.delete = delete;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

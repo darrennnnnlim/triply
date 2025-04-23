@@ -1,12 +1,11 @@
-package com.example.triply.core.pricing.implementation;
+package com.example.triply.core.pricing.flight.implementation;
 
 import com.example.triply.core.flight.mapper.FlightPriceMapper;
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.flight.model.entity.FlightPrice;
 import com.example.triply.core.flight.repository.FlightPriceRepository;
-import com.example.triply.core.pricing.notification.FlightPriceWritePublisherImpl; // Use concrete class from custom package
-import com.example.triply.core.pricing.notification.FlightPriceListener;
-// Removed import of FlightPriceWritePublisher interface
+import com.example.triply.core.pricing.flight.notification.FlightPriceListener;
+import com.example.triply.core.pricing.flight.notification.FlightPriceWritePublisherImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
