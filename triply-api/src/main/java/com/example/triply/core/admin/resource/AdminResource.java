@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.util.List;
 
 @RestController
@@ -17,6 +18,7 @@ public class AdminResource {
 
     private final UserRepository userRepository;
     private final AdminService adminService;
+    private static final String UNEXPECTED_ERROR_MESSAGE = "An unexpected error occurred";
 
     public AdminResource(UserRepository userRepository, AdminService adminService) {
         this.userRepository = userRepository;
@@ -51,7 +53,6 @@ public class AdminResource {
         return ResponseEntity.ok(bannedUsers);
     }
 
-
     @PostMapping("/ban/{userId}")
     public ResponseEntity<String> banUser(@PathVariable Long userId) {
         try {
@@ -60,7 +61,7 @@ public class AdminResource {
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(UNEXPECTED_ERROR_MESSAGE);
         }
     }
 
@@ -101,4 +102,18 @@ public class AdminResource {
         List<UserRoleDTO> users = adminService.searchUsersByUsername(username);
         return ResponseEntity.ok(users);
     }
+
+    @PostMapping("/promote/{userId}")
+    public ResponseEntity<String> promoteUser(@PathVariable Long userId) {
+        adminService.performUserAction(userId, "promote");
+        return ResponseEntity.ok("User promoted to admin successfully");
+    }
+
+    @PostMapping("/demote/{userId}")
+    public ResponseEntity<String> demoteUser(@PathVariable Long userId) {
+        adminService.performUserAction(userId, "demote");
+        return ResponseEntity.ok("User demoted from admin successfully");
+    }
+
+
 }
