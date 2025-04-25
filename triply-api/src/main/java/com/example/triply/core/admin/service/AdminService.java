@@ -2,9 +2,13 @@ package com.example.triply.core.admin.service;
 
 import com.example.triply.core.admin.dto.UserRoleDTO;
 import com.example.triply.core.admin.repository.UserStatusRepository;
+import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
+import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,14 +27,18 @@ public class AdminService {
     private static final String USER_NOT_BANNED = "User is not banned";
     private static final String USER_NOT_FOUND = "User not found";
     private static final String UNKNOWN_ACTION = "Unknown action";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String ADMIN_NOT_FOUND = "Admin role not found";
 
     private final UserStatusRepository userStatusRepository;
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final Map<String, Consumer<User>> userActions = new HashMap<>();
 
-    public AdminService(UserStatusRepository userStatusRepository, UserRepository userRepository) {
+    public AdminService(UserStatusRepository userStatusRepository, UserRepository userRepository, RoleRepository roleRepository) {
         this.userStatusRepository = userStatusRepository;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @PostConstruct
@@ -47,6 +55,29 @@ public class AdminService {
             }
             userRepository.unbanUser(user.getId());
         });
+
+        userActions.put("promote", user -> {
+            Role adminRole = roleRepository.findByName(ROLE_ADMIN)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ADMIN_NOT_FOUND));
+            if (user.getRole() != null && user.getRole().equals(adminRole)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is already an admin");
+            }
+            user.setRole(adminRole);
+            userRepository.save(user);
+        });
+
+        userActions.put("demote", user -> {
+            Role adminRole = roleRepository.findByName(ROLE_ADMIN)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ADMIN_NOT_FOUND));
+            if (user.getRole() == null || !user.getRole().equals(adminRole)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not an admin");
+            }
+            Role userRole = roleRepository.findByName("ROLE_USER")
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User role not found"));
+            user.setRole(userRole);
+            userRepository.save(user);
+        });
+
     }
 
     @Transactional
@@ -96,4 +127,34 @@ public class AdminService {
     public List<UserRoleDTO> searchBannedUsersByUsername(String username) {
         return userStatusRepository.searchBannedUsersByUsername(username);
     }
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Transactional
+    public void promoteToAdmin(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+
+        Role adminRole = roleRepository.findByName(ROLE_ADMIN)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, ADMIN_NOT_FOUND));
+
+        user.setRole(adminRole);
+        userRepository.save(user);
+        entityManager.flush();
+    }
+
+    @Transactional
+    public void demoteToUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+
+        Role userRole = roleRepository.findByName("ROLE_USER")
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User role not found"));
+
+        user.setRole(userRole);
+        userRepository.save(user);
+        entityManager.flush();
+    }
+
 }

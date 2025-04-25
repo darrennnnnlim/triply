@@ -8,6 +8,7 @@ import lombok.Setter;
 public class CheckSessionDTO {
     private boolean isLoggedIn;
     private String username;
+    private String role;
     private String accessToken;
     private String mesasge;
 }

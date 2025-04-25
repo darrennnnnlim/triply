@@ -71,4 +71,19 @@ export class AdminService {
       withCredentials: true,
     });
   }
+  promoteUser(userId: number): Observable<string> {
+    return this.http.post(
+      `${this.API_URL}/promote/${userId}`,
+      {},
+      { withCredentials: true, responseType: 'text' }
+    );
+  }
+
+  demoteUser(userId: number): Observable<string> {
+    return this.http.post(
+      `${this.API_URL}/demote/${userId}`,
+      {},
+      { withCredentials: true, responseType: 'text' }
+    );
+  }
 }
