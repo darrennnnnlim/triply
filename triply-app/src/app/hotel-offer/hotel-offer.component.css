@@ -1,0 +1,49 @@
+.rating-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .username {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+  }
+  
+  .stars {
+    display: inline-block;
+    font-size: 2rem;  
+  }
+  
+  .star {
+    color: #FFD700;   
+    margin-right: 3px; 
+  }
+  
+  .empty-star {
+    color: #e0e0e0;   
+  }
+  
+  .average-rating {
+    font-size: 20px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  
+  .average-rating .stars {
+    font-size: 28px;  
+    color: #FFD700;   
+  }
+  
+  .average-rating .star,
+  .average-rating .empty-star {
+    margin-right: 5px;  
+  }
+.element {
+    padding-left: 10%;
+    padding-right: 10%;
+}

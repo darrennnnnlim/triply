@@ -1,9 +1,13 @@
 package com.example.triply.core.auth.service.impl;
 
+// import com.example.triply.common.service.EmailService; // Removed this import
+
 import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.common.exception.TokenException;
 import com.example.triply.common.exception.UserNotFoundException;
 import com.example.triply.common.exception.UsernameAlreadyExistException;
+import com.example.triply.common.exception.InvalidCurrentPasswordException;
+import com.example.triply.common.exception.SameNewPasswordException;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.core.admin.entity.UserStatus;
 import com.example.triply.core.admin.repository.UserStatusRepository;
@@ -11,6 +15,9 @@ import com.example.triply.core.auth.dto.*;
 import com.example.triply.core.auth.entity.RefreshToken;
 import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
+// import com.example.triply.core.auth.event.UserRegisteredEvent; // Removed Spring event import
+import com.example.triply.core.auth.notification.UserRegistrationWriteEvent; // Added in-house event import
+import com.example.triply.core.auth.notification.UserRegistrationWritePublisher; // Added in-house publisher import
 import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.AuthService;
@@ -22,6 +29,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+// import org.springframework.context.ApplicationEventPublisher; // Removed Spring publisher import
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,8 +56,10 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    // private final ApplicationEventPublisher applicationEventPublisher; // Removed Spring publisher field
+    private final UserRegistrationWritePublisher userRegistrationWritePublisher; // Added in-house publisher field
 
-    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserStatusRepository userStatusRepository, @Lazy AuthenticationManager authenticationManager, JwtService jwtService, RefreshTokenService refreshTokenService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserStatusRepository userStatusRepository, @Lazy AuthenticationManager authenticationManager, JwtService jwtService, RefreshTokenService refreshTokenService, JwtAuthenticationFilter jwtAuthenticationFilter, UserRegistrationWritePublisher userRegistrationWritePublisher) { // Added in-house publisher
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -58,6 +68,8 @@ public class AuthServiceImpl implements AuthService {
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        // this.applicationEventPublisher = applicationEventPublisher; // Removed assignment
+        this.userRegistrationWritePublisher = userRegistrationWritePublisher; // Added assignment
     }
 
     @Override
@@ -101,6 +113,10 @@ public class AuthServiceImpl implements AuthService {
             throw new UsernameAlreadyExistException();
         }
 
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            throw new UsernameAlreadyExistException("Email already exists");
+        }
+
         Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
             Role newRole = new Role();
             newRole.setName("ROLE_USER");
@@ -112,6 +128,7 @@ public class AuthServiceImpl implements AuthService {
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(encodedPassword);
+        newUser.setEmail(registerRequest.getEmail());
         newUser.setRoles(Set.of(role));
 
         UserStatus activeStatus = userStatusRepository.findByStatus("ACTIVE")
@@ -119,6 +136,10 @@ public class AuthServiceImpl implements AuthService {
         newUser.setStatus(activeStatus);
 
         userRepository.save(newUser);
+
+        // Publish user registered event using in-house publisher
+        UserRegistrationWriteEvent event = new UserRegistrationWriteEvent(this, newUser);
+        userRegistrationWritePublisher.publish(event);
 
         AuthDTO authDTO = new AuthDTO();
         authDTO.setUsername(registerRequest.getUsername());
@@ -226,5 +247,23 @@ public class AuthServiceImpl implements AuthService {
         response.addCookie(accessTokenCookie);
 
         return newAccessToken;
+    }
+
+    @Override
+    public boolean resetPassword(String username, String currentPassword, String newPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new InvalidCurrentPasswordException();
+        }
+
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new SameNewPasswordException();
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
     }
 }

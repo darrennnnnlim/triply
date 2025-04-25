@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class RatingService {
@@ -65,8 +66,10 @@ public class RatingService {
             ratings = new Ratings();
             ratings.setRating(ratingRequest.getRating());
             ratings.setUser(user);
+            ratings.setStatus("Submitted");
             ratings.setFlightBooking(flightBooking);
             ratings.setHotelBooking(hotelBooking);
+            ratings.setDelete("F");
         }
 
         Ratings savedRating = ratingRepository.save(ratings);
@@ -75,6 +78,7 @@ public class RatingService {
         ratingResponse.setId(ratings.getId());
         ratingResponse.setRating(ratings.getRating());
         ratingResponse.setUserId(ratings.getUser().getId());
+        ratingResponse.setDelete(ratings.getDelete());
 
 
         if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
@@ -84,9 +88,6 @@ public class RatingService {
             ratingResponse.setFlightId(null);
             ratingResponse.setHotelId(ratings.getHotelBooking().getId());
         }
-
-
-
 
 
         ratingResponse.setId(savedRating.getId());
@@ -102,11 +103,11 @@ public class RatingService {
             resp.setId(rating.getId());
             resp.setRating(rating.getRating());
             resp.setUserId(rating.getUser().getId());
-            if(rating.getFlightBooking() == null){
+            resp.setDelete(rating.getDelete());
+            if (rating.getFlightBooking() == null) {
                 resp.setFlightId(null);
                 resp.setHotelId(rating.getHotelBooking().getId());
-            }
-            else{
+            } else {
                 resp.setFlightId(rating.getFlightBooking().getId());
                 resp.setHotelId(null);
             }
@@ -123,11 +124,11 @@ public class RatingService {
             resp.setId(rating.getId());
             resp.setRating(rating.getRating());
             resp.setUserId(rating.getUser().getId());
-            if(rating.getFlightBooking() == null){
+            resp.setDelete(rating.getDelete());
+            if (rating.getFlightBooking() == null) {
                 resp.setFlightId(null);
                 resp.setHotelId(rating.getHotelBooking().getId());
-            }
-            else{
+            } else {
                 resp.setFlightId(rating.getFlightBooking().getId());
                 resp.setHotelId(null);
             }
@@ -145,11 +146,11 @@ public class RatingService {
             resp.setId(rating.getId());
             resp.setRating(rating.getRating());
             resp.setUserId(rating.getUser().getId());
-            if(rating.getFlightBooking() == null){
+            resp.setDelete(rating.getDelete());
+            if (rating.getFlightBooking() == null) {
                 resp.setFlightId(null);
                 resp.setHotelId(rating.getHotelBooking().getId());
-            }
-            else{
+            } else {
                 resp.setFlightId(rating.getFlightBooking().getId());
                 resp.setHotelId(null);
             }
@@ -167,16 +168,46 @@ public class RatingService {
             resp.setId(rating.getId());
             resp.setRating(rating.getRating());
             resp.setUserId(rating.getUser().getId());
-            if(rating.getFlightBooking() == null){
+            resp.setDelete(rating.getDelete());
+            if (rating.getFlightBooking() == null) {
                 resp.setFlightId(null);
                 resp.setHotelId(rating.getHotelBooking().getId());
-            }
-            else{
+            } else {
                 resp.setFlightId(rating.getFlightBooking().getId());
                 resp.setHotelId(null);
             }
             ratingResponses.add(resp);
         }
         return ratingResponses;
+    }
+
+    public void softDelete(Long userId, Long flightId, Long hotelId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        Ratings ratings = null;
+
+        if (flightId != null) {
+            FlightBooking flightBooking = flightBookingRepository.findById(flightId)
+                    .orElseThrow(() -> new RuntimeException("FlightBooking not found"));
+
+            ratings = ratingRepository.findByUserAndFlightBooking(user, flightBooking);
+        } else if (hotelId != null) {
+            HotelBooking hotelBooking = hotelBookingRepository.findById(hotelId)
+                    .orElseThrow(() -> new RuntimeException("HotelBooking not found"));
+
+            ratings = ratingRepository.findByUserAndHotelBooking(user, hotelBooking);
+        }
+
+        if (ratings == null) {
+            throw new RuntimeException("Ratings not found for the provided criteria");
+        }
+
+        if ("F".equals(ratings.getDelete())) {
+            ratings.setDelete("T");
+        } else {
+            ratings.setDelete("F");
+        }
+        ratingRepository.save(ratings);
     }
 }

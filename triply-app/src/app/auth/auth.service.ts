@@ -32,12 +32,24 @@ export class AuthService {
   login(credentials: {
     username: string;
     password: string;
-    role?: string;
   }): Observable<void> {
+    console.log('Sending login request to:', `${this.API_URL}/login`);
+    console.log('With credentials:', credentials);
     return this.http
       .post<LoginResponse>(`${this.API_URL}/login`, credentials, {
-        withCredentials: true,
-      })
+        // Temporarily disabled withCredentials for testing
+        // withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }).pipe(
+        tap(response => console.log('Login response:', response)),
+        catchError(error => {
+          console.error('Login error:', error);
+          return throwError(() => error);
+        })
+      )
       .pipe(
         tap((response) => {
           this.authState.next({
@@ -49,11 +61,24 @@ export class AuthService {
       );
   }
 
-  register(credentials: {
+  register(credentials: { // Update register method
     username: string;
     password: string;
+    email: string;
   }): Observable<any> {
-    return this.http.post<any>(`${this.API_URL}/register`, credentials);
+    return this.http.post<any>(`${this.API_URL}/register`, credentials).pipe(
+      catchError((error) => {
+        let errorMessage = 'Registration failed';
+        if (error.error instanceof ErrorEvent) {
+          // client-side error
+          errorMessage = `Error: ${error.error.message}`;
+        } else {
+          // server-side error
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}`;
+        }
+        return throwError(() => errorMessage);
+      })
+    );
   }
 
   refreshToken(): Observable<boolean> {

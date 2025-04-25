@@ -7,6 +7,12 @@
     >
       Login
     </button>
+    <button
+      class="btn btn-outline-light rounded-pill border-0 me-2"
+      (click)="openLoginModal(false)"
+    >
+      Register
+    </button>
   </ng-container>
   <ng-template #loggedIn>
     <div class="dropdown me-2">
@@ -47,10 +53,10 @@
   <ul class="list-unstyled">
     <li>
       <a
-        routerLink="/nav1"
+        routerLink="/history"
         class="text-decoration-none"
         (click)="toggleHamburgerMenu()"
-        >Navigation 1</a
+        >History</a
       >
     </li>
     <li>

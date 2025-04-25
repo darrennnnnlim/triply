@@ -12,14 +12,29 @@ public class FlightPriceMapper implements BaseMapper<FlightPrice, FlightPriceDTO
 
     @Override
     public FlightPriceDTO toDto(FlightPrice entity) {
+        if (entity == null) {
+            return null;
+        }
         FlightPriceDTO flightPriceDTO = new FlightPriceDTO();
-        flightPriceDTO.setFlight(entity.getFlight());
-        flightPriceDTO.setFlightClass(entity.getFlightClass());
         flightPriceDTO.setId(entity.getId());
         flightPriceDTO.setDepartureDate(entity.getDepartureDate());
         flightPriceDTO.setBasePrice(entity.getBasePrice());
         flightPriceDTO.setDiscount(entity.getDiscount());
         flightPriceDTO.setSurgeMultiplier(entity.getSurgeMultiplier());
+
+        // Keep original entities
+        flightPriceDTO.setFlight(entity.getFlight());
+        flightPriceDTO.setFlightClass(entity.getFlightClass());
+
+        // Populate primitive fields from related entities (handle nulls)
+        if (entity.getFlight() != null) {
+            flightPriceDTO.setFlightNumber(entity.getFlight().getFlightNumber());
+            flightPriceDTO.setOrigin(entity.getFlight().getOrigin());
+            flightPriceDTO.setDestination(entity.getFlight().getDestination());
+        }
+        if (entity.getFlightClass() != null) {
+            flightPriceDTO.setFlightClassName(entity.getFlightClass().getClassName());
+        }
 
         return flightPriceDTO;
     }
