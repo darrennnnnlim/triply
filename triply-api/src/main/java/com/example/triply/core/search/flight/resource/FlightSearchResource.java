@@ -26,13 +26,6 @@ public class FlightSearchResource {
 
     @PostMapping
     public ResponseEntity<List<FlightOfferDTO>> searchFlights(@RequestBody FlightSearchRequestDTO flightSearchRequest) {
-        // Dummy response to simulate search logic
-        String responseMessage = "Searching flights from " + flightSearchRequest.getOrigin()
-                                 + " to " + flightSearchRequest.getDestination()
-                                 + " between " + flightSearchRequest.getDepartureDate()
-                                 + " and " + flightSearchRequest.getArrivalDate()
-                                 + " under price " + flightSearchRequest.getMaxPrice();
         return ResponseEntity.ok(flightInformationFacadeService.getFlightPrices(flightSearchRequest));
-//        return ResponseEntity.ok(responseMessage);
     }
 }

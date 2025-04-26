@@ -6,13 +6,16 @@ import { RouterModule } from '@angular/router';
 import { HotelOfferComponent } from './hotel-offer.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [HotelOfferComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: HotelOfferComponent }]),
+    MatCardModule,
+    MatButtonModule
   ],
   providers: [
     provideHttpClient(
