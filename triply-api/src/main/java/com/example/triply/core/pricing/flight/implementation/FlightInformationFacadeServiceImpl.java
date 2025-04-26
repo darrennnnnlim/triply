@@ -1,5 +1,6 @@
 package com.example.triply.core.pricing.flight.implementation;
 
+import com.example.triply.core.pricing.hotel.model.dto.HotelOfferDTO;
 import com.example.triply.core.search.flight.model.dto.FlightSearchRequestDTO;
 import com.example.triply.core.flight.model.entity.Airline;
 import com.example.triply.core.flight.model.entity.Flight;
@@ -94,6 +95,7 @@ public class FlightInformationFacadeServiceImpl {
 				return flightOfferDTO.getBasePrice().compareTo(maxPrice) <= 0;
 			}).collect(Collectors.toList());
 		}
+		flightOfferDTOs.sort(Comparator.comparing(FlightOfferDTO::getBasePrice));
 	 	return flightOfferDTOs;
 	}
 }
