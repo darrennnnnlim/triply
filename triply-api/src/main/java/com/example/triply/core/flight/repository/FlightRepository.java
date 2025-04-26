@@ -23,4 +23,18 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             @Param("destIATA") String destIATA,
             @Param("departureTime") LocalDateTime departureTime,
             @Param("arrivalTime") LocalDateTime arrivalTime);
+
+    @Query("SELECT f FROM Flight f WHERE f.origin = :originIATA AND f.destination = :destIATA " +
+            "AND FUNCTION('DATE', f.departureTime) = FUNCTION('DATE', :departureTime) ")
+    List<Flight> findByOriginAndDestinationAndDepartureTime(
+            @Param("originIATA") String originIATA,
+            @Param("destIATA") String destIATA,
+            @Param("departureTime") LocalDateTime departureTime);
+
+    @Query("SELECT f FROM Flight f WHERE f.origin = :originIATA AND f.destination = :destIATA " +
+            "AND FUNCTION('DATE', f.arrivalTime) = FUNCTION('DATE', :arrivalTime)")
+    List<Flight> findByOriginAndDestinationAndArrivalTime(
+            @Param("originIATA") String originIATA,
+            @Param("destIATA") String destIATA,
+            @Param("arrivalTime") LocalDateTime arrivalTime);
 }

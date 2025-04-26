@@ -62,7 +62,8 @@ export class HotelSearchPageComponent {
       location: [''],
       checkInDate: [''],
       checkOutDate: [''],
-      maxPrice: ['']
+      maxPrice: [''],
+      guests: ['']
     });
   }
 
@@ -71,7 +72,8 @@ export class HotelSearchPageComponent {
       location: this.searchForm.value.location,
       checkInDate: this.searchForm.value.checkInDate,
       checkOutDate: this.searchForm.value.checkOutDate,
-      maxPrice: this.searchForm.value.maxPrice
+      maxPrice: this.searchForm.value.maxPrice,
+      guests: this.searchForm.value.guests
     };
     console.log(searchRequest)
     this.hotelSearchPageService.searchHotels(searchRequest).subscribe(response => {

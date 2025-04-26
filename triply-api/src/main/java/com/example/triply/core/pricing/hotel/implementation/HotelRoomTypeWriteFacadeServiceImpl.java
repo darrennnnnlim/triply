@@ -75,7 +75,8 @@ public class HotelRoomTypeWriteFacadeServiceImpl {
         publisher.publish(oldHotelRoomTypes, newHotelRoomTypes);
         return newHotelRoomTypes;
     }
-        public void addPriceListener(HotelRoomTypeListener listener) {
+
+    public void addPriceListener(HotelRoomTypeListener listener) {
         publisher.addListener(listener);
     }
 

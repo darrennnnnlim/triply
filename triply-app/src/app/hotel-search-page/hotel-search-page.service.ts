@@ -16,6 +16,7 @@ export class HotelSearchPageService {
   }
 
   searchHotels(searchRequest: HotelSearchDTO): Observable<any> {
+    searchRequest.guests = searchRequest.guests ? searchRequest.guests : 1;
     return this.http.post<any>(this.API_URL, searchRequest, {
       withCredentials: true 
     });

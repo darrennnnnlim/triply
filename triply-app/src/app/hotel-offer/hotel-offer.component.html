@@ -1,9 +1,11 @@
-<p>hotel-offer works!</p>
-<p>{{selectedHotelOffer?.location}}</p>
-<p>{{selectedHotelOffer?.hotelName}}</p>
-<p>{{selectedHotelOffer?.totalPrice}}</p>
-<a (click)="makeBooking()">Go To Booking</a>
-
+<div class="hotel-offer-container">
+  <div class="hotel-info">
+    <h2>{{ selectedHotelOffer?.hotelName }}</h2>
+    <p class="location">{{ selectedHotelOffer?.location }}</p>
+    <p class="price">$ {{ selectedHotelOffer?.totalPrice }}</p>
+    <a class="booking-button" (click)="makeBooking()">Go To Booking</a>
+  </div>
+  
 <div *ngIf="ratings.length > 0" class="element">
     <h2>Hotel Ratings: </h2>
     
@@ -28,3 +30,4 @@
   <div *ngIf="ratings.length === 0">
     <p>No ratings available.</p>
   </div>
+</div>
