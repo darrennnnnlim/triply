@@ -1,6 +1,5 @@
 package com.example.triply.core.pricing.flight.implementation;
 
-import com.example.triply.core.pricing.hotel.model.dto.HotelOfferDTO;
 import com.example.triply.core.search.flight.model.dto.FlightSearchRequestDTO;
 import com.example.triply.core.flight.model.entity.Airline;
 import com.example.triply.core.flight.model.entity.Flight;
@@ -40,7 +39,7 @@ public class FlightInformationFacadeServiceImpl {
     public List<FlightOfferDTO> getFlightPrices(FlightSearchRequestDTO flightSearchRequestDTO) {
 		String originIATA = flightSearchRequestDTO.getOrigin();
 		String destIATA = flightSearchRequestDTO.getDestination();
-		LocalDateTime departureTime = flightSearchRequestDTO.getDepartureDate();
+		LocalDateTime departureTime = flightSearchRequestDTO.getDepartureDate().atTime(0,0);
 		BigDecimal maxPrice = flightSearchRequestDTO.getMaxPrice();
 
 	 	List<Flight> filteredFlights = flightRepository.findByOriginAndDestinationAndDepartureTime(originIATA, destIATA, departureTime);

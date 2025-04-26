@@ -4,21 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 public class FlightSearchRequestDTO {
     private String origin;
     private String destination;
-    private LocalDateTime departureDate;
-    private LocalDateTime arrivalDate;
+    private LocalDate departureDate;
+    private LocalDate arrivalDate;
     private BigDecimal maxPrice;
-
-    //Other properties
-//    private String flightNumber;
-//    private Long flightClassId;
-//    private String flightClassName;
-//    private Long airlineId;
-//    private String airlineName;
 }
