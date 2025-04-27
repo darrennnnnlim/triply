@@ -31,7 +31,6 @@ public class HotelRoomTypeWriteFacadeServiceImpl {
 
     @Transactional
     public List<HotelRoomTypeDTO> updateExistingHotelRoomType(Long hotelRoomTypeId, BigDecimal newBasePrice) {
-        //TODO: (Bryan) Swap repository calls to service calls
         Optional<HotelRoomType> hotelRoomTypeOptional = hotelRoomTypePriceRepository.findById(hotelRoomTypeId);
         List<HotelRoomTypeDTO> oldHotelRoomTypes = new ArrayList<>();
         List<HotelRoomTypeDTO> newHotelRoomTypes = new ArrayList<>();
@@ -55,14 +54,6 @@ public class HotelRoomTypeWriteFacadeServiceImpl {
     public List<HotelRoomTypeDTO> insertNewHotelRoomType(Long hotelId,
                                                   BigDecimal newBasePrice, BigDecimal discount,
                                                   BigDecimal surgeMultiplier) {
-        //TODO: Validate hotel and hotel class exists in their repos
-
-
-        //TODO: Validate no existing HotelRoomType for this hotelId and hotelClassId
-
-        //TODO: Infer departureDate from Hotel
-
-        //TODO:  Build new Hotelprice with null id
         HotelRoomType newHotelRoomType = new HotelRoomType();
 
         // Insert new HotelRoomType into Repo
