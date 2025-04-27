@@ -32,6 +32,8 @@ public class HotelRoomTypeWritePublisherImpl {
         listeners.remove(listener);
     }
 
+    public void clearListeners() { this.listeners.clear(); }
+
     public void publish(List<HotelRoomTypeDTO> oldHotelRoomTypes, List<HotelRoomTypeDTO> newHotelRoomTypes) {
         HotelRoomTypeWriteEvent event = new HotelRoomTypeWriteEvent(oldHotelRoomTypes, newHotelRoomTypes);
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
@@ -41,8 +43,6 @@ public class HotelRoomTypeWritePublisherImpl {
                     notifyListeners(event);
                 }
             });
-        } else {
-            notifyListeners(event);
         }
     }
 

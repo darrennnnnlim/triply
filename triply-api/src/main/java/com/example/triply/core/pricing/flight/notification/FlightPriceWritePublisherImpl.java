@@ -32,6 +32,10 @@ public class FlightPriceWritePublisherImpl {
         listeners.remove(listener);
     }
 
+    public void clearListeners() {
+        listeners.clear();
+    }
+
     public void publish(List<FlightPriceDTO> oldFlightPrices, List<FlightPriceDTO> newFlightPrices) {
         FlightPriceWriteEvent event = new FlightPriceWriteEvent(oldFlightPrices, newFlightPrices);
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
@@ -41,8 +45,6 @@ public class FlightPriceWritePublisherImpl {
                     notifyListeners(event);
                 }
             });
-        } else {
-            notifyListeners(event);
         }
     }
 
