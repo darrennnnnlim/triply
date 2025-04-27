@@ -1,6 +1,5 @@
 package com.example.triply.core.pricing.hotel.model.dto;
 
-import com.example.triply.core.hotel.model.entity.Hotel;
 import lombok.Getter;
 import lombok.Setter;
 

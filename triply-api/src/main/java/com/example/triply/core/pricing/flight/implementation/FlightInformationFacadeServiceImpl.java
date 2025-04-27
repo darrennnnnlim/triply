@@ -90,9 +90,8 @@ public class FlightInformationFacadeServiceImpl {
 			 flightOfferDTOs.add(foDTO);
 	 	}
 		if (maxPrice != null) {
-			flightOfferDTOs = flightOfferDTOs.stream().filter(flightOfferDTO -> {
-				return flightOfferDTO.getBasePrice().compareTo(maxPrice) <= 0;
-			}).collect(Collectors.toList());
+			flightOfferDTOs = flightOfferDTOs.stream().filter(flightOfferDTO -> flightOfferDTO.getBasePrice().compareTo(maxPrice) <= 0)
+					.collect(Collectors.toList());
 		}
 		flightOfferDTOs.sort(Comparator.comparing(FlightOfferDTO::getBasePrice));
 	 	return flightOfferDTOs;

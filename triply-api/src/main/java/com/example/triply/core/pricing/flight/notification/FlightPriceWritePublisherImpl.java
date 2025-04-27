@@ -3,7 +3,7 @@ package com.example.triply.core.pricing.flight.notification;
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class FlightPriceWritePublisherImpl {
         this.notificationTest = notificationTest;
 
         // Register listeners here
-        this.addListener(notificationTest);
+        this.addListener(this.notificationTest);
     }
 
     public void addListener(FlightPriceListener listener) {
@@ -39,7 +39,7 @@ public class FlightPriceWritePublisherImpl {
     public void publish(List<FlightPriceDTO> oldFlightPrices, List<FlightPriceDTO> newFlightPrices) {
         FlightPriceWriteEvent event = new FlightPriceWriteEvent(oldFlightPrices, newFlightPrices);
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
                     notifyListeners(event);

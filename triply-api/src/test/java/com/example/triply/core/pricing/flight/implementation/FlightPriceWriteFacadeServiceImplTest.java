@@ -8,9 +8,7 @@ import com.example.triply.core.pricing.flight.notification.FlightPriceListener;
 import com.example.triply.core.pricing.flight.notification.FlightPriceWritePublisherImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.*;
