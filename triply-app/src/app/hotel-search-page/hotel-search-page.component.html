@@ -1,33 +1,54 @@
 <div class="hotel-search-container">
   <h1>Hotel Search</h1>
 
-  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
-    <label>Location:</label>
-    <input type="text" formControlName="location" />
+  <mat-card class="search-card">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="form-fields">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Destination</mat-label>
+          <input matInput id="destination" type="text" formControlName="location">
+        </mat-form-field>
 
-    <label>Check In Date:</label>
-    <input type="text" formControlName="checkInDate" />
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Check-in Date</mat-label>
+          <input matInput id="checkinDate" type="text" formControlName="checkInDate">
+        </mat-form-field>
 
-    <label>Check Out Date:</label>
-    <input type="text" formControlName="checkOutDate" />
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Check-out Date</mat-label>
+          <input matInput id="checkoutDate" type="text" formControlName="checkOutDate">
+        </mat-form-field>
 
-    <label>Max Price</label>
-    <input type="number" formControlName="maxPrice" />
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Guests</mat-label>
+          <input matInput id="guests" type="number" formControlName="guests">
+        </mat-form-field>
 
-    <button type="submit">Search</button>
-  </form>
-
-  <div class="hotel-offer-cards-container">
-    <a *ngFor="let hotelOffer of this.filteredHotelOffers" class="hotel-offer-card" (click)="onHotelOfferClick(hotelOffer)">
-      <div class="hotel-details">
-        <h2>{{hotelOffer?.hotelName}}</h2>
-        <p>Location: {{ hotelOffer?.location}}</p>
-        <!-- <p>Check In Date: {{ hotelOffer?.checkInDate | date:'MMMM d, yyyy'}}</p>
-        <p>Check Out Date: {{ hotelOffer?.checkOutDate | date:'MMMM d, yyyy'}}</p> -->
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Max Price</mat-label>
+          <input matInput id="maxPrice" type="number" formControlName="maxPrice">
+        </mat-form-field>
       </div>
-      <div class="hotel-price">
-        <p class="price">$ {{ hotelOffer?.totalPrice }}</p>
+
+      <div class="button-container">
+        <button mat-flat-button color="primary" type="submit">Search</button>
       </div>
-    </a>
-  </div>
+    </form>
+  </mat-card>
+
+  <mat-card *ngIf="filteredHotelOffers.length > 0" class="search-card">
+    <div class="hotel-offer-cards-container">
+      <a *ngFor="let hotel of filteredHotelOffers"
+         class="hotel-offer-card"
+         (click)="onHotelOfferClick(hotel)">
+         <div class="hotel-details">
+           <h2>{{ hotel.hotelName }}</h2>
+           <p>Location: {{ hotel.location }}</p>
+         </div>
+         <div class="hotel-price">
+           <p class="price">$ {{ hotel.totalPrice }}</p>
+         </div>
+      </a>
+    </div>
+  </mat-card>
 </div>

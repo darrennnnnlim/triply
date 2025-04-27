@@ -7,13 +7,20 @@ import { HotelSearchPageComponent } from './hotel-search-page.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { HotelSearchPageService } from './hotel-search-page.service';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [HotelSearchPageComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: HotelSearchPageComponent }]),
+    MatFormFieldModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule
   ],
   providers: [
     provideHttpClient(

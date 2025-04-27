@@ -1,36 +1,59 @@
 <div class="flight-search-container">
   <h1>Flight Search</h1>
 
-  <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
-    <label>Origin:</label>
-    <input type="text" formControlName="origin" />
+  <mat-card class="search-card">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="form-fields">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Origin</mat-label>
+          <input matInput id="origin" type="text" formControlName="origin">
+        </mat-form-field>
 
-    <label>Destination:</label>
-    <input type="text" formControlName="destination" />
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Destination</mat-label>
+          <input matInput id="destination" type="text" formControlName="destination">
+        </mat-form-field>
 
-    <label>Arrival Date:</label>
-    <input type="text" formControlName="arrivalDate" />
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Departure Date</mat-label>
+          <input matInput id="departureDate" type="text" formControlName="departureDate">
+        </mat-form-field>
 
-    <label>Departure Date:</label>
-    <input type="text" formControlName="departureDate" />
-
-    <label>Max Price:</label>
-    <input type="number" formControlName="maxPrice" />
-
-    <button type="submit">Search</button>
-  </form>
-
-  <div class="flight-offer-cards-container">
-    <a *ngFor="let flightOffer of filteredFlightOffers" class="flight-offer-card" (click)="onFlightOfferClick(flightOffer)">
-      <div class="flight-details">
-        <h2>{{ flightOffer.origin }} to {{ flightOffer.destination }}</h2>
-        <p>Departure: {{ flightOffer.departureDate | date:'MMMM d, yyyy, h:mm a'}}</p>
-        <p>Arrival: {{ flightOffer.arrivalDate | date:'MMMM d, yyyy, h:mm a'}}</p>
-        <p>Flight: {{ flightOffer.flightNumber }}</p>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Max Price</mat-label>
+          <input matInput id="maxPrice" type="number" formControlName="maxPrice">
+        </mat-form-field>
       </div>
-      <div class="flight-price">
-        <p class="price">$ {{ flightOffer.basePrice }}</p>
+
+      <div class="button-container">
+        <button mat-flat-button color="primary" type="submit">Search</button>
       </div>
-    </a>
-  </div>
+    </form>
+  </mat-card>
+
+  <mat-card *ngIf="filteredFlightOffers.length > 0" class="search-card">
+    <div class="flight-offer-cards-container">
+      <a *ngFor="let flightOffer of filteredFlightOffers"
+        class="flight-offer-card"
+        (click)="onFlightOfferClick(flightOffer)">
+        <div class="flight-details">
+          <h2>
+            {{ flightOffer.origin }} to {{ flightOffer.destination }}
+          </h2>
+          <p>
+            Departure: {{ flightOffer.departureDate | date:'MMMM d, yyyy, h:mm a' }}
+          </p>
+          <p>
+            Arrival: {{ flightOffer.arrivalDate | date:'MMMM d, yyyy, h:mm a' }}
+          </p>
+          <p>
+            Flight: {{ flightOffer.flightNumber }}
+          </p>
+        </div>
+        <div class="flight-price">
+          <p class="price">$ {{ flightOffer.basePrice }}</p>
+        </div>
+      </a>
+    </div>
+  </mat-card>
 </div>

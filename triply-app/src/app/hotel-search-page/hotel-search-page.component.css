@@ -5,16 +5,27 @@
   text-align: center;
 }
 
-.search-bar {
-  margin-bottom: 20px;
+.search-card {
+  padding: 8px;
+  margin: 16px 0;
 }
 
-.search-bar input {
-  padding: 10px;
-  width: 80%;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.form-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.form-field {
+  flex: 1 1 200px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
 }
 
 .hotel-offer-cards-container {
@@ -23,7 +34,7 @@
   align-items: center;
   gap: 20px;
   padding: 20px;
-  overflow-y: auto; /* Enable scrolling if exceed container height */
+  overflow-y: auto;
   max-height: 80vh;
   margin-top: 20px;
 }
@@ -31,19 +42,15 @@
 .hotel-offer-card {
   display: flex;
   flex-direction: row;
-  justify-content: space-between
+  justify-content: space-between;
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   text-align: left;
-}
-
-/* Inside a specific class or container */
-.hotel-offer-card {
   text-decoration: none;
-  color: inherit; /* Inherit color from parent element */
+  color: inherit;
 }
 
 .hotel-offer-card:hover,
@@ -52,14 +59,13 @@
   text-decoration: none;
 }
 
-
 .hotel-details {
-  flex: 1
+  flex: 1;
 }
 
 .hotel-price {
   text-align: right;
-  margin-left: 20px
+  margin-left: 20px;
 }
 
 .hotel-offer-card h2 {

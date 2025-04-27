@@ -16,6 +16,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelInformationFacadeServiceImpl {
@@ -33,6 +34,11 @@ public class HotelInformationFacadeServiceImpl {
     }
 
     public List<HotelOfferDTO> getHotelPrices(HotelSearchRequestDTO hotelSearchRequest) {
+        LocalDate checkInDate = hotelSearchRequest.getCheckInDate();
+        LocalDate checkOutDate = hotelSearchRequest.getCheckOutDate();
+        Integer guests = hotelSearchRequest.getGuests();
+        BigDecimal maxPrice = hotelSearchRequest.getMaxPrice();
+
         List<HotelOfferDTO> hotelOfferDTOS = new ArrayList<>();
 
         List<Hotel> hotels =  hotelRepository.findAllByLocation(hotelSearchRequest.getLocation());
@@ -43,8 +49,6 @@ public class HotelInformationFacadeServiceImpl {
             for (HotelRoomType hotelRoomType : hotelRoomTypes) {
                 List<HotelRoomPrice> hotelRoomPrices = hotelRoomPriceRepository.findPricesWithOverlappingDates(hotelRoomType.getId(), hotelSearchRequest.getCheckInDate().atStartOfDay(), hotelSearchRequest.getCheckOutDate().atStartOfDay());
 
-                LocalDate checkInDate = hotelSearchRequest.getCheckInDate();
-                LocalDate checkOutDate = hotelSearchRequest.getCheckOutDate();
                 BigDecimal basePrice = hotelRoomType.getBasePrice();
 
                 HotelOfferDTO hotelOfferDTO = new HotelOfferDTO();
@@ -71,6 +75,14 @@ public class HotelInformationFacadeServiceImpl {
                 hotelOfferDTOS.add(hotelOfferDTO);
             }
         }
+        hotelOfferDTOS = hotelOfferDTOS.stream().filter(hotelOfferDTO -> {
+            if (maxPrice != null) {
+                return hotelOfferDTO.getCapacity() >= guests
+                        && hotelOfferDTO.getTotalPrice().compareTo(maxPrice) <= 0;
+            } else {
+                return hotelOfferDTO.getCapacity() >= guests;
+            }
+        }).collect(Collectors.toList());
         hotelOfferDTOS.sort(Comparator.comparing(HotelOfferDTO::getTotalPrice));
         return hotelOfferDTOS;
     }

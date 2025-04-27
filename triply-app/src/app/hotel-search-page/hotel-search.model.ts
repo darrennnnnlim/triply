@@ -16,6 +16,7 @@ export interface HotelSearchDTO {
     checkInDate: string;
     checkOutDate: string;
     maxPrice: number;
+    guests: number;
 }
 
 export interface Hotel {
