@@ -10,14 +10,25 @@
         <button mat-flat-button class="booking-button" (click)="makeBooking()">Make a Booking!</button>
       </div>
       <div class="horizontal-line"></div>
-      <div *ngFor="let rating of ratings" class="rating-item">
-        <span class="username">Username {{rating.user}}:</span>
-        <div class="stars">
-          <span *ngFor="let r of [].constructor(rating.rating); let i = index" class="star">★</span>
-          <span *ngFor="let r of [].constructor(5 - rating.rating); let i = index" class="star empty-star">★</span>
+      <div *ngIf="ratings.length > 0" class="element">
+        <h2>Flight Ratings: </h2>
+
+        <p><strong>Average Rating: </strong>
+          <span class="stars">
+            <span *ngFor="let r of [].constructor(averageRating); let i = index" class="star">★</span>
+            <span *ngFor="let r of [].constructor(5 - averageRating); let i = index" class="star empty-star">★</span>
+          </span>
+        </p>
+
+        <div *ngFor="let rating of ratings" class="rating-item">
+          <span class="username">Username {{rating.userId}}:</span>
+          <div class="stars">
+            <span *ngFor="let r of [].constructor(rating.rating); let i = index" class="star">★</span>
+            <span *ngFor="let r of [].constructor(5 - rating.rating); let i = index" class="star empty-star">★</span>
+          </div>
         </div>
       </div>
-      
+
       <div *ngIf="ratings.length === 0">
         <p>No ratings available.</p>
       </div>
