@@ -157,4 +157,17 @@ public class AdminService {
         entityManager.flush();
     }
 
+    @Transactional
+    public Map<String, Object> getUserById(Long userId) {
+        // Fetch user by ID or throw an exception if not found
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("id", user.getId());
+        userMap.put("username", user.getUsername());
+
+        return userMap;
+    }
+
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FlightOfferDataService } from './flight-offer-data.service';
 import { FlightOffer } from '../flight-search-page/flight-search.model';
 import { RatingService } from './rating.service';
-
+import { BanedUserRating } from '../banned-ratings/banned-ratings.service';
 @Component({
   selector: 'app-flight-offer',
   standalone: false,
@@ -20,7 +20,8 @@ export class FlightOfferComponent {
     private route: ActivatedRoute,
     private flightOfferDataService: FlightOfferDataService, // Assumed service to fetch flight data
     private router: Router,
-    private ratingService: RatingService
+    private ratingService: RatingService,
+    private bannedUserRatingService: BanedUserRating
   ) {}
 
   ngOnInit(): void {
@@ -43,13 +44,49 @@ export class FlightOfferComponent {
   }
   loadRatings(): void {
     this.ratingService.getRatings(this.flightId).subscribe((data: any[]) => {
-     
       this.ratings = data.filter(rating => rating.delete === 'F');
+  
 
-      const total = this.ratings.reduce((sum, rating) => sum + rating.rating, 0);
-      this.averageRating = this.ratings.length > 0 ? Math.round(total / this.ratings.length) : 0;
-      console.log(this.averageRating);
-      console.log(this.ratings);
+      const userIds = [...new Set(this.ratings.map(rating => rating.userId))];
+  
+
+      console.log(userIds)
+      const userDetailsPromises = userIds.map((userId: number) =>
+        this.bannedUserRatingService.getUser(userId).toPromise() 
+      );
+      
+  
+      Promise.all(userDetailsPromises)
+        .then(userDetailsResponses => {
+          const userDetailsMap = new Map<number, any>();
+          userDetailsResponses.forEach((user: any) => {
+            console.log('Data:', user);
+            const newdata = JSON.parse(user);
+            console.log(user)
+            userDetailsMap.set(newdata.id, newdata.username); 
+          });
+          console.log(userDetailsMap)
+  
+          this.ratings = this.ratings.map(rating => {
+            const user = userDetailsMap.get(rating.userId);
+            console.log('Data:', user);
+            return {
+              ...rating,
+              user, 
+            };
+          });
+  
+          const total = this.ratings.reduce((sum, rating) => sum + rating.rating, 0);
+          this.averageRating = this.ratings.length > 0 ? Math.round(total / this.ratings.length) : 0;
+  
+
+          console.log(this.averageRating);
+          console.log(this.ratings);
+        })
+        .catch(err => {
+          console.error("Error fetching user details:", err);
+        });
     });
   }
+  
 }

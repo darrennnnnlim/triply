@@ -5,6 +5,10 @@ import axios from 'axios';
 import moment from 'moment-timezone';
 import { HistoryService } from './history.service';
 import { Rating } from './history.model';
+import { AdminService } from '../admin/admin.service';
+import { AuthService } from '../auth/auth.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-history',
@@ -13,24 +17,71 @@ import { Rating } from './history.model';
   styleUrl: './history.component.css'
 })
 export class HistoryComponent implements OnInit {
+
+  authState$!: Observable<{
+      isLoggedIn: boolean;
+      username?: string;
+      role?: string;
+    }>;
   items: any = [];
-
-
+  currentUsername: string | null = null;
   expandedId: number | null = null;
   counter: number = 1;
+  userId: number=1;
 
 
-  constructor(private historyService: HistoryService) {}
+  constructor(private historyService: HistoryService, private router: Router, private adminService: AdminService,public authService: AuthService) {
+    this.authState$ = this.authService.authState$ as Observable<{
+          isLoggedIn: boolean;
+          username?: string;
+          role?: string;
+        }>;
+  }
 
   ngOnInit(): void {
-    const userId = 1;
+  
+    this.fetchUser().subscribe({
+      next: () => {
+        this.loadBookingData(this.userId);
+      },
+      error: (error) => {
+        console.error('Failed to fetch user:', error);
+      }
+    });
+  }
 
-    this.loadBookingData(userId);
+  fetchUser (): Observable<any> {
+    return new Observable(observer => {
+      this.authService.initAuthStateFromBackend();
+  
+      this.authState$.subscribe({
+        next: (authState) => {
+          console.log('Auth state:', authState);
+        },
+        error: (err) => {
+          observer.error('Error in auth state');
+        }
+      });
+  
+      this.adminService.getCurrentUser().subscribe({
+        next: (data) => {
+          console.log('Data:', data);
+          const newdata = JSON.parse(data);
+          this.userId=Number(newdata.userId);
+          observer.next(); 
+          observer.complete(); 
+        },
+        error: (err) => {
+          observer.error('Error fetching current user');
+          this.router.navigate(['/login']);
+        }
+      });
+    });
   }
 
  
   loadBookingData(userId: number): void {
-    
+    console.log("loadBookingData: " + userId)
     this.historyService.getFlightBookings(userId).subscribe(flightBookings => {
       this.historyService.getRatings(userId).subscribe(flightRatings => {
         const flightRatingsMap = flightRatings.reduce((acc: any, rating: any) => {
