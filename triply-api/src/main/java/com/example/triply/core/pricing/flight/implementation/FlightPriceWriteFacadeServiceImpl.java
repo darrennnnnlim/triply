@@ -75,7 +75,7 @@ public class FlightPriceWriteFacadeServiceImpl {
         publisher.publish(oldFlightPrices, newFlightPrices);
         return newFlightPrices;
     }
-        public void addPriceListener(FlightPriceListener listener) {
+    public void addPriceListener(FlightPriceListener listener) {
         publisher.addListener(listener);
     }
 
