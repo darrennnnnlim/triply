@@ -23,7 +23,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let user of banned">
-                    <td>{{ user.id }}</td>
+                    <td>{{ user.user }}</td>
                     <td *ngIf = "user.type=='Flight'">{{ user.name}}</td>
                     <td *ngIf = "user.type=='Hotel'">{{ user.name }}</td>
                     <td *ngIf = "user.type=='Flight'">Arrival: {{ user.arrivalTime}}<br> Departure: {{ user.departureTime}}</td>
@@ -54,7 +54,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let user of active">
-                    <td>{{ user.id }}</td>
+                    <td>{{ user.user }}</td>
                     <td *ngIf = "user.type=='Flight'">{{ user.name}}</td>
                     <td *ngIf = "user.type=='Hotel'">{{ user.name }}</td>
                     <td *ngIf = "user.type=='Flight'">Arrival: {{ user.arrivalTime}}<br> Departure: {{ user.departureTime}}</td>

@@ -55,8 +55,10 @@ export class AdminComponent {
       console.log('Auth state:', authState);
     });
     this.adminService.getCurrentUser().subscribe({
-      next: (username) => {
-        this.currentUsername = username;
+      next: (data) => {
+        console.log('Data:', data);
+        const newdata = JSON.parse(data);
+        this.currentUsername = newdata.username;
         // Fetch all users with roles
         this.adminService.getUsersWithRoles().subscribe({
           next: (data) => {
