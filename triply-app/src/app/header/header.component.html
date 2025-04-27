@@ -47,6 +47,22 @@
   <ul class="list-unstyled">
     <li>
       <a
+        routerLink="/home"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Home</a
+      >
+    </li>
+    <li *ngIf="isAdmin">
+      <a
+        routerLink="/admin"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Admin Panel</a
+      >
+    </li>
+    <li>
+      <a
         routerLink="/history"
         class="text-decoration-none"
         (click)="toggleHamburgerMenu()"

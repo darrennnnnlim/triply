@@ -101,8 +101,7 @@ public class AdminResource {
             username = authentication.getName();
             Optional<User> userFromDB = userRepository.findByUsername(username);
 
-
-            if (userFromDB == null) {
+            if (userFromDB.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
             }
 
