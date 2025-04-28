@@ -10,7 +10,7 @@ spring:
   application:
     name: Triply
   datasource:
-    url: jdbc:postgresql://localhost:5433/triply
+    url: jdbc:postgresql://localhost:5432/triply
     username: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -23,14 +23,14 @@ spring:
         envers:
           store_data_at_delete: true
           autoRegisterListeners: true
-#  sql:
-#    init:
-#      mode: always
+  sql:
+    init:
+      mode: always
 
 jwt:
   issuer: Triply
-  secret-key:
-  refresh-secret-key:
+  secret-key: Y4rDYh/8Q9UOnYYSeEErorUepFhVGxI7v0k+K8f/Thk=
+  refresh-secret-key: BIHkmGwx7ePWl2rCe0quZfSSbTxDnaph/ft9McenZk8=
   access-token:
     expiry: 600000
     cookie-expiry: 600

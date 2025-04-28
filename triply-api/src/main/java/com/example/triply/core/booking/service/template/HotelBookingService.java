@@ -168,7 +168,6 @@ public class HotelBookingService extends BookingTemplate {
         booking.setBookingTime(LocalDateTime.now());
         Booking saveBooking = bookingRepository.save(booking);
 
-//        Booking saveBooking = bookingService.saveBooking(booking);
         request.setId(saveBooking.getId());
 
         request.getHotelBooking().setBookingId(saveBooking.getId());
@@ -182,11 +181,6 @@ public class HotelBookingService extends BookingTemplate {
         }
 
         return saveBooking;
-    }
-
-    @Override
-    protected void confirmBooking(Booking booking) {
-
     }
 
     public List<HotelBookingResponse> getBookingByUserId (Long userId){

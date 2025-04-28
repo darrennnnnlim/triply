@@ -172,11 +172,6 @@ public class FlightBookingService extends BookingTemplate {
         return saveBooking;
     }
 
-    @Override
-    protected void confirmBooking(Booking booking) {
-
-    }
-
     public List<FlightBookingResponse> getBookingByUserId (Long userId){
         List<FlightBooking> flightBooking = flightBookingRepository.findByUserId(userId);
         List<FlightBookingResponse> flightBookingResponse = new ArrayList<>();
