@@ -39,10 +39,11 @@ public class AdminService {
         this.userStatusRepository = userStatusRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        initUserActions();
     }
 
     @PostConstruct
-    private void initUserActions() {
+     void initUserActions() {
         userActions.put("ban", user -> {
             if (user.getStatus() != null && STATUS_BANNED.equals(user.getStatus().getStatus())) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_ALREADY_BANNED);

@@ -17,25 +17,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUsernameAndStatus_Status(String username, String status);
 
-//    @Query("SELECT NEW com.example.triply.core.admin.dto.UserRoleDTO(u.id, u.username, r.name, COALESCE(u.status.status, 'not assigned')) " +
-//            "FROM User u JOIN u.roles r")
-//    List<UserRoleDTO> getUsersWithRoles();
     @Query("SELECT NEW com.example.triply.core.admin.dto.UserRoleDTO(u.id, u.username, u.role.name, COALESCE(u.status.status, 'not assigned')) " +
     "FROM User u")
     List<UserRoleDTO> getUsersWithRoles();
 
-//    @Query("SELECT NEW com.example.triply.core.admin.dto.UserRoleDTO(u.id, u.username, r.name, " +
-//            "CASE WHEN u.status IS NULL THEN 'not assigned' ELSE u.status.status END) " +
-//            "FROM User u JOIN u.roles r WHERE r.name = 'ROLE_ADMIN'")
-//    List<UserRoleDTO> getUsersAdminRoles();
     @Query("SELECT NEW com.example.triply.core.admin.dto.UserRoleDTO(u.id, u.username, u.role.name, " +
             "CASE WHEN u.status IS NULL THEN 'not assigned' ELSE u.status.status END) " +
             "FROM User u WHERE u.role.name = 'ROLE_ADMIN'")
     List<UserRoleDTO> getUsersAdminRoles();
-
-
-//    @Query("SELECT NEW com.example.triply.core.admin.dto.UserRoleDTO(u.id, u.username, r.name, u.status.status) FROM User u JOIN u.roles r WHERE u.status.status = 'BANNED'")
-//    List<UserRoleDTO> getBannedUsers();
 
     @Query("SELECT NEW com.example.triply.core.admin.dto.UserRoleDTO(u.id, u.username, u.role.name, u.status.status) " +
             "FROM User u WHERE u.status.status = 'BANNED'")
@@ -52,8 +41,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.status = (SELECT us FROM UserStatus us WHERE us.status = 'ACTIVE') WHERE u.id = :userId")
     void unbanUser(Long userId);
 
-//    @Query("SELECT COUNT(u) > 0 FROM User u JOIN u.roles r WHERE u.id = :userId AND r.name = :roleName")
-//    boolean hasRole(@Param("userId") Long userId, @Param("roleName") String roleName);
     @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.id = :userId AND u.role.name = :roleName")
     boolean hasRole(@Param("userId") Long userId, @Param("roleName") String roleName);
 
