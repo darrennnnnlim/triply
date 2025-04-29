@@ -14,4 +14,6 @@ public interface HotelRoomPriceRepository extends JpaRepository<HotelRoomPrice, 
     @Query("SELECT hrp FROM HotelRoomPrice hrp WHERE hrp.hotelRoomType.id = :hotelRoomTypeId AND NOT (hrp.endDate < :checkIn OR hrp.startDate > :checkOut)")
     List<HotelRoomPrice> findOverlappingPrices(Long hotelRoomTypeId, LocalDateTime checkIn, LocalDateTime checkOut);
 
+    @Query("SELECT hrp FROM HotelRoomPrice hrp WHERE hrp.hotelRoomType.id = :hotelRoomTypeId AND (:checkIn <= hrp.endDate AND :checkOut >= hrp.startDate)")
+    List<HotelRoomPrice> findPricesWithOverlappingDates(Long hotelRoomTypeId, LocalDateTime checkIn, LocalDateTime checkOut);
 }

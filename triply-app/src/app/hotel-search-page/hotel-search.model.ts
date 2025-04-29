@@ -1,14 +1,22 @@
 export interface HotelOffer {
-  hotel: Hotel;
+  totalPrice: number;
   checkInDate: string;
   checkOutDate: string;
-  pricing: Pricing
+  capacity: number;
+  location: string;
+
+  hotelId: number;
+  hotelName: string;
+  hotelRoomTypeId: number;
+  hotelRoomTypeName: string; 
 }
 
 export interface HotelSearchDTO {
     location: string;
     checkInDate: string;
     checkOutDate: string;
+    maxPrice: number;
+    guests: number;
 }
 
 export interface Hotel {

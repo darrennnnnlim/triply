@@ -1,0 +1,84 @@
+<div class="button-container">
+  <div>
+    <button
+      class="btn reset-btn"
+      (click)="showResetPassword = !showResetPassword"
+    >
+      Reset Password
+    </button>
+  </div>
+
+  <div *ngIf="showResetPassword" class="reset-form-container">
+    <form (ngSubmit)="resetPassword()">
+      <!-- Current Password Field -->
+      <div class="input-group">
+        <input
+          [type]="isCurrentPasswordVisible ? 'text' : 'password'"
+          [(ngModel)]="currentPassword"
+          name="currentPassword"
+          placeholder="Current Password"
+          required
+        />
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="togglePasswordVisibility('current')"
+        >
+          <i
+            class="fa"
+            [ngClass]="isCurrentPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"
+          ></i>
+        </button>
+      </div>
+
+      <!-- New Password Field -->
+      <div class="input-group">
+        <input
+          [type]="isNewPasswordVisible ? 'text' : 'password'"
+          [(ngModel)]="newPassword"
+          name="newPassword"
+          placeholder="New Password"
+          required
+        />
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="togglePasswordVisibility('new')"
+        >
+          <i
+            class="fa"
+            [ngClass]="isNewPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"
+          ></i>
+        </button>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="input-group">
+        <input
+          [type]="isConfirmPasswordVisible ? 'text' : 'password'"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm New Password"
+          required
+        />
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="togglePasswordVisibility('confirm')"
+        >
+          <i
+            class="fa"
+            [ngClass]="isConfirmPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"
+          ></i>
+        </button>
+      </div>
+
+      <div class="submit-group">
+        <button class="btn update-btn" type="submit">Update Password</button>
+      </div>
+    </form>
+
+    <div *ngIf="resetError" class="error-message">{{ resetError }}</div>
+    <div *ngIf="resetSuccess" class="success-message">{{ resetSuccess }}</div>
+  </div>
+</div>

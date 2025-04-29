@@ -11,24 +11,6 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  // test(): Observable<any> {
-  //   return this.http.get(`${this.API_URL}/test`, {
-  //     withCredentials: true,
-  //     responseType: 'text',
-  //   });
-  // }
-
-  // postTest(): Observable<any> {
-  //   return this.http.post(
-  //     `${this.API_URL}/test`,
-  //     {},
-  //     {
-  //       withCredentials: true,
-  //       responseType: 'text',
-  //     }
-  //   );
-  // }
-
   getUsersWithRoles(): Observable<UserRoleDTO[]> {
     return this.http.get<UserRoleDTO[]>(`${this.API_URL}/users`, {
       withCredentials: true,
@@ -71,11 +53,37 @@ export class AdminService {
   }
 
   getBannedUsers(): Observable<UserRoleDTO[]> {
-    return this.http
-      .get<UserRoleDTO[]>(`${this.API_URL}/isBanned`, {
-        withCredentials: true,
-      });
+    return this.http.get<UserRoleDTO[]>(`${this.API_URL}/isBanned`, {
+      withCredentials: true,
+    });
   }
-  
-  
+
+  searchUsersByUsername(username: string): Observable<UserRoleDTO[]> {
+    return this.http.get<UserRoleDTO[]>(`${this.API_URL}/users/search`, {
+      params: { username },
+      withCredentials: true,
+    });
+  }
+
+  searchBannedUsersByUsername(username: string): Observable<UserRoleDTO[]> {
+    return this.http.get<UserRoleDTO[]>(`${this.API_URL}/isBanned`, {
+      params: { username },
+      withCredentials: true,
+    });
+  }
+  promoteUser(userId: number): Observable<string> {
+    return this.http.post(
+      `${this.API_URL}/promote/${userId}`,
+      {},
+      { withCredentials: true, responseType: 'text' }
+    );
+  }
+
+  demoteUser(userId: number): Observable<string> {
+    return this.http.post(
+      `${this.API_URL}/demote/${userId}`,
+      {},
+      { withCredentials: true, responseType: 'text' }
+    );
+  }
 }

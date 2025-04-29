@@ -1,6 +1,5 @@
 package com.example.triply.core.ratings.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
@@ -18,12 +17,16 @@ public class RatingResponse {
     private int rating;
 
 
-
     @Null
     private Long flightId;
 
     @Null
     private Long hotelId;
+
+
+    @Null
+    private String delete;
+
 
     public Long getId() {
         return id;
@@ -65,6 +68,13 @@ public class RatingResponse {
         this.hotelId = hotelId;
     }
 
+    public String getDelete() {
+        return delete;
+    }
+
+    public void setDelete(String delete) {
+        this.delete = delete;
+    }
 
 
 }

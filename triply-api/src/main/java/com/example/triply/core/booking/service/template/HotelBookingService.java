@@ -168,7 +168,6 @@ public class HotelBookingService extends BookingTemplate {
         booking.setBookingTime(LocalDateTime.now());
         Booking saveBooking = bookingRepository.save(booking);
 
-//        Booking saveBooking = bookingService.saveBooking(booking);
         request.setId(saveBooking.getId());
 
         request.getHotelBooking().setBookingId(saveBooking.getId());
@@ -184,11 +183,6 @@ public class HotelBookingService extends BookingTemplate {
         return saveBooking;
     }
 
-    @Override
-    protected void confirmBooking(Booking booking) {
-
-    }
-
     public List<HotelBookingResponse> getBookingByUserId (Long userId){
         List<HotelBooking> hotelBookings = hotelBookingRepository.findByUserId(userId);
         List<HotelBookingResponse> hotelBookingResponses = new ArrayList<>();
@@ -196,8 +190,8 @@ public class HotelBookingService extends BookingTemplate {
             HotelBookingResponse resp = new HotelBookingResponse();
             resp.setUserId(userId);
             resp.setHotelId(booking.getHotel().getId());
-            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckIn(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOut(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             resp.setRoomType(booking.getHotelRoomType().getName());
             hotelBookingResponses.add(resp);
         }
@@ -205,14 +199,14 @@ public class HotelBookingService extends BookingTemplate {
     }
 
     public List<HotelBookingResponse> getBookingByBookingId (Long bookingId, Long userId){
-        List<HotelBooking> hotelBookings = hotelBookingRepository.findByBookingId(userId);
+        List<HotelBooking> hotelBookings = hotelBookingRepository.findByBookingId(bookingId);
         List<HotelBookingResponse> hotelBookingResponses = new ArrayList<>();
         for (HotelBooking booking : hotelBookings) {
             HotelBookingResponse resp = new HotelBookingResponse();
             resp.setUserId(userId);
             resp.setHotelId(booking.getHotel().getId());
-            resp.setCheckInDate(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            resp.setCheckOutDate(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckIn(booking.getCheckIn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            resp.setCheckOut(booking.getCheckOut().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             resp.setRoomType(booking.getHotelRoomType().getName());
             hotelBookingResponses.add(resp);
         }

@@ -1,0 +1,37 @@
+<div class="container">
+  <mat-card>
+    <div class="hotel-offer-container">
+      <div class="hotel-info">
+        <h2>{{ selectedHotelOffer?.hotelName }}</h2>
+        <p class="location">Location: {{ selectedHotelOffer?.location }}</p>
+        <p class="price">Price: ${{ selectedHotelOffer?.totalPrice }}</p>
+      </div>
+      <div class="button-container">
+        <button mat-flat-button class="booking-button" (click)="makeBooking()">Make a Booking!</button>
+      </div>
+      <div class="horizontal-line"></div>
+      <div *ngIf="ratings.length > 0" class="element">
+        <h2>Hotel Ratings: </h2>
+        
+        <p><strong>Average Rating: </strong>
+          <span class="stars">
+            <span *ngFor="let r of [].constructor(averageRating); let i = index" class="star">★</span>
+            <span *ngFor="let r of [].constructor(5 - averageRating); let i = index" class="star empty-star">★</span>
+          </span>
+        </p>
+          
+        <div *ngFor="let rating of ratings" class="rating-item">
+            <span class="username">Username {{rating.user}}:</span>
+            <div class="stars">
+              <span *ngFor="let r of [].constructor(rating.rating); let i = index" class="star">★</span>
+              <span *ngFor="let r of [].constructor(5 - rating.rating); let i = index" class="star empty-star">★</span>
+            </div>
+          </div>
+      </div>
+      
+      <div *ngIf="ratings.length === 0">
+        <p>No ratings available.</p>
+      </div>
+    </div>
+  </mat-card>
+</div>

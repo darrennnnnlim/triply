@@ -16,6 +16,7 @@ export class HeaderComponent {
   isHamburgerMenuVisible = false;
   isLoggedIn = false;
   userInitials = '';
+  isAdmin = false;
   private destroy$ = new Subject<void>();
 
   @ViewChild('hamburgerMenu', { static: false }) hamburgerMenu!: ElementRef;
@@ -28,16 +29,20 @@ export class HeaderComponent {
   ) {}
 
   ngOnInit() {
+    // Subscribe to the authState$ observable only once to update both isLoggedIn and isAdmin
     this.authService.authState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => {
+        // console.log('authState:', state);
         this.isLoggedIn = state.isLoggedIn;
+        this.isAdmin = state.role === 'ROLE_ADMIN'; // check if user is admin
         this.userInitials = state.username
           ? this.getUserInitials(state.username)
           : '';
       });
+    this.authService.initAuthStateFromBackend();
 
-    // Single initial check
+    // Initial check for session state
     this.authService.checkSession().subscribe();
   }
 

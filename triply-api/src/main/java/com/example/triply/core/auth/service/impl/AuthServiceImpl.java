@@ -4,6 +4,8 @@ import com.example.triply.common.constants.CommonConstants;
 import com.example.triply.common.exception.TokenException;
 import com.example.triply.common.exception.UserNotFoundException;
 import com.example.triply.common.exception.UsernameAlreadyExistException;
+import com.example.triply.common.exception.InvalidCurrentPasswordException;
+import com.example.triply.common.exception.SameNewPasswordException;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.core.admin.entity.UserStatus;
 import com.example.triply.core.admin.repository.UserStatusRepository;
@@ -16,7 +18,6 @@ import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.AuthService;
 import com.example.triply.core.auth.service.JwtService;
 import com.example.triply.core.auth.service.RefreshTokenService;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    public static final String INVALID_REFRESH_TOKEN = "Invalid refresh token";
 
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserStatusRepository userStatusRepository, @Lazy AuthenticationManager authenticationManager, JwtService jwtService, RefreshTokenService refreshTokenService, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userRepository = userRepository;
@@ -68,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
 
         Optional<User> userOptional = userRepository.findByUsername(authRequest.getUsername());
         if (userOptional.isPresent()) {
-            String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), userOptional.get().getRoles());
+            String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), Set.of(userOptional.get().getRole()));
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(userOptional.get());
 
             Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, accessToken);
@@ -88,6 +90,7 @@ public class AuthServiceImpl implements AuthService {
 
             AuthDTO authDTO = new AuthDTO();
             authDTO.setUsername(authRequest.getUsername());
+            authDTO.setRole(userOptional.get().getRole().getName());
             return authDTO;
 
         } else {
@@ -112,8 +115,7 @@ public class AuthServiceImpl implements AuthService {
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(encodedPassword);
-        newUser.setRoles(Set.of(role));
-
+        newUser.setRole(role);
         UserStatus activeStatus = userStatusRepository.findByStatus("ACTIVE")
                 .orElseThrow(() -> new RuntimeException("ACTIVE status not found"));
         newUser.setStatus(activeStatus);
@@ -139,14 +141,13 @@ public class AuthServiceImpl implements AuthService {
             tokenDTO.setAccessToken(newAccessToken);
             return tokenDTO;
         } catch (JwtException ex) {
-            throw new JwtException("Invalid refresh token");
+            throw new JwtException(INVALID_REFRESH_TOKEN);
         }
     }
 
     @Override
     public CheckSessionDTO checkSession(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = jwtAuthenticationFilter.extractAccessTokenFromCookie(request);
-        String refreshToken = jwtAuthenticationFilter.extractRefreshTokenFromCookie(request);
 
         CheckSessionDTO checkSessionDTO = new CheckSessionDTO();
         checkSessionDTO.setLoggedIn(false);
@@ -155,31 +156,23 @@ public class AuthServiceImpl implements AuthService {
             try {
                 String username = jwtService.extractUsername(accessToken, false);
                 if (username != null && jwtService.isTokenValid(accessToken, username, false)) {
-
-                    checkSessionDTO.setLoggedIn(true);
-                    checkSessionDTO.setUsername(username);
-                    checkSessionDTO.setAccessToken(accessToken);
-                    return checkSessionDTO;
+                    Optional<User> userOptional = userRepository.findByUsername(username); // Fetch user
+                    if (userOptional.isPresent()) {
+                        User user = userOptional.get();
+                        checkSessionDTO.setLoggedIn(true);
+                        checkSessionDTO.setUsername(username);
+                        checkSessionDTO.setRole(user.getRole().getName()); // <-- ADD THIS LINE
+                        checkSessionDTO.setAccessToken(accessToken);
+                        return checkSessionDTO;
+                    }
                 }
-            } catch (ExpiredJwtException ex) {
-                throw new TokenException("Access token expired");
             } catch (JwtException ex) {
-                throw new TokenException("Invalid access token");
+                // Token is invalid or expired
             }
-        }
-
-        if (refreshToken != null) {
-            String username = jwtService.extractUsername(refreshToken, false);
-            String newAccessToken = tokenValidation(response, refreshToken);
-
-            checkSessionDTO.setLoggedIn(true);
-            checkSessionDTO.setUsername(username);
-            checkSessionDTO.setAccessToken(newAccessToken);
-
-            return checkSessionDTO;
         }
         return checkSessionDTO;
     }
+
 
     @Override
     public String logout(RefreshRequest refreshRequest, HttpServletResponse response) {
@@ -207,17 +200,16 @@ public class AuthServiceImpl implements AuthService {
     private String tokenValidation(HttpServletResponse response, String refreshToken) {
         String username = jwtService.extractUsername(refreshToken, true);
         if (!jwtService.isTokenValid(refreshToken, username, true)) {
-            throw new TokenException("Invalid refresh token");
+            throw new TokenException(INVALID_REFRESH_TOKEN);
         }
 
         Optional<RefreshToken> validToken = refreshTokenService.getValidRefreshToken(refreshToken);
         if (validToken.isEmpty()) {
-            throw new TokenException("Invalid refresh token");
+            throw new TokenException(INVALID_REFRESH_TOKEN);
         }
 
         User user = validToken.get().getUser();
-        String newAccessToken = jwtService.generateAccessToken(user.getUsername(), user.getRoles());
-
+        String newAccessToken = jwtService.generateAccessToken(user.getUsername(), Set.of(user.getRole()));
         Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, newAccessToken);
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setSecure(true);
@@ -226,5 +218,23 @@ public class AuthServiceImpl implements AuthService {
         response.addCookie(accessTokenCookie);
 
         return newAccessToken;
+    }
+
+    @Override
+    public boolean resetPassword(String username, String currentPassword, String newPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(UserNotFoundException::new);
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new InvalidCurrentPasswordException();
+        }
+
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new SameNewPasswordException();
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
     }
 }

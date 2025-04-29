@@ -145,6 +145,25 @@ public class BookingServiceImpl implements BookingService {
         Map<Long, Hotel> hotelMap = hotelRepository.findAll().stream().collect(Collectors.toMap(Hotel::getId, hl -> hl));
         Map<Long, HotelRoomType> hotelRoomTypeMap = hotelRoomTypeRepository.findAll().stream().collect(Collectors.toMap(HotelRoomType::getId, hrt -> hrt));
 
+        setBooking(bookingDTOList, flightBookingMap, flightMap, airlineMap, hotelBookingMap, hotelMap, hotelRoomTypeMap);
+
+        List<Long> flightBookingIds = flightBookingList.stream().map(FlightBooking::getId).toList();
+        List<Long> hotelBookingIds = hotelBookingList.stream().map(HotelBooking::getId).toList();
+
+        List<FlightBookingAddon> flightBookingAddonList = flightBookingAddonRepository.findByFlightBookingIdIn(flightBookingIds);
+        List<HotelBookingAddon> hotelBookingAddonList = hotelBookingAddonRepository.findByHotelBookingIdIn(hotelBookingIds);
+
+        Map<Long, List<FlightBookingAddon>> flightBookingAddonMap = flightBookingAddonList.stream().collect(Collectors.groupingBy(fba -> fba.getFlightBooking().getId()));
+        Map<Long, List<HotelBookingAddon>> hotelBookingAddonMap = hotelBookingAddonList.stream().collect(Collectors.groupingBy(hba -> hba.getHotelBooking().getId()));
+        Map<Long, FlightAddon> flightAddonMap = flightAddonRepository.findAll().stream().collect(Collectors.toMap(FlightAddon::getId, fa -> fa));
+        Map<Long, HotelAddon> hotelAddonMap = hotelAddonRepository.findAll().stream().collect(Collectors.toMap(HotelAddon::getId, ha -> ha));
+
+        setAddon(bookingDTOList, flightBookingAddonMap, flightAddonMap, hotelBookingAddonMap, hotelAddonMap);
+
+        return bookingDTOList;
+    }
+
+    private void setBooking(List<BookingDTO> bookingDTOList, Map<Long, FlightBooking> flightBookingMap, Map<Long, Flight> flightMap, Map<Long, Airline> airlineMap, Map<Long, HotelBooking> hotelBookingMap, Map<Long, Hotel> hotelMap, Map<Long, HotelRoomType> hotelRoomTypeMap) {
         bookingDTOList.forEach(bookingDTO -> {
             bookingDTO.setFlightBooking(flightBookingMapper.toDto(flightBookingMap.get(bookingDTO.getId())));
             if (bookingDTO.getFlightBooking() != null) {
@@ -158,18 +177,9 @@ public class BookingServiceImpl implements BookingService {
                 bookingDTO.getHotelBooking().setHotelRoomType(hotelRoomTypeBasicMapper.toDto(hotelRoomTypeMap.get(bookingDTO.getHotelBooking().getHotelRoomTypeId())));
             }
         });
+    }
 
-        List<Long> flightBookingIds = flightBookingList.stream().map(FlightBooking::getId).toList();
-        List<Long> hotelBookingIds = hotelBookingList.stream().map(HotelBooking::getId).toList();
-
-        List<FlightBookingAddon> flightBookingAddonList = flightBookingAddonRepository.findByFlightBookingIdIn(flightBookingIds);
-        List<HotelBookingAddon> hotelBookingAddonList = hotelBookingAddonRepository.findByHotelBookingIdIn(hotelBookingIds);
-
-        Map<Long, List<FlightBookingAddon>> flightBookingAddonMap = flightBookingAddonList.stream().collect(Collectors.groupingBy(fba -> fba.getFlightBooking().getId()));
-        Map<Long, List<HotelBookingAddon>> hotelBookingAddonMap = hotelBookingAddonList.stream().collect(Collectors.groupingBy(hba -> hba.getHotelBooking().getId()));
-        Map<Long, FlightAddon> flightAddonMap = flightAddonRepository.findAll().stream().collect(Collectors.toMap(FlightAddon::getId, fa -> fa));
-        Map<Long, HotelAddon> hotelAddonMap = hotelAddonRepository.findAll().stream().collect(Collectors.toMap(HotelAddon::getId, ha -> ha));
-
+    private void setAddon(List<BookingDTO> bookingDTOList, Map<Long, List<FlightBookingAddon>> flightBookingAddonMap, Map<Long, FlightAddon> flightAddonMap, Map<Long, List<HotelBookingAddon>> hotelBookingAddonMap, Map<Long, HotelAddon> hotelAddonMap) {
         bookingDTOList.forEach(bookingDTO -> {
             if (bookingDTO.getFlightBooking() != null) {
                 bookingDTO.setFlightBookingAddon(flightBookingAddonMapper.toDto(flightBookingAddonMap.getOrDefault(bookingDTO.getFlightBooking().getId(), List.of())));
@@ -189,8 +199,6 @@ public class BookingServiceImpl implements BookingService {
                 }
             }
         });
-
-        return bookingDTOList;
     }
 
     @Override

@@ -1,62 +1,167 @@
-<div>
-    <div class="top-right-container">
+<div *ngIf="authState$ | async as authState">
+  <ng-container *ngIf="authState.isLoggedIn && authState.role === 'ROLE_ADMIN'">
+    <div class="top-container" *ngIf="!showBannedUsers">
+      <div class="top-left-container">
+        <input
+          type="text"
+          [(ngModel)]="searchUsername"
+          placeholder="Search by username"
+        />
+        <button class="search-btn" (click)="searchUsers()">Search</button>
+        <button class="clear-btn" (click)="clearSearch()">Clear</button>
+      </div>
+      <div class="top-right-container">
         <button class="view-banned-btn" (click)="toggleView()">
-            {{ showBannedUsers ? 'View All Users' : 'View Banned Users' }}
+          View Banned Users
         </button>
+      </div>
     </div>
 
-    <router-outlet *ngIf="showBannedUsers"></router-outlet>
+    <router-outlet></router-outlet>
 
     <div *ngIf="!showBannedUsers">
-        <h2>All Users</h2>
-        <div *ngIf="usersWithRoles && usersWithRoles.length > 0">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let user of usersWithRoles">
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.roleName }}</td>
-                        <td>
-                            <span
-                                [ngClass]="{'banned': user.status.toLowerCase().trim() === 'banned', 'active': user.status.toLowerCase().trim() !== 'banned'}">
-                                {{ user.status }}
-                            </span>
-                        </td>
-                        <td>
-                            <button *ngIf="user.status.toLowerCase().trim() !== 'banned'" class="ban-btn"
-                                (click)="openActionDialog(user.id, user.username, 'ban')">Ban</button>
-                            <button *ngIf="user.status.toLowerCase().trim() === 'banned'" class="unban-btn"
-                                (click)="openActionDialog(user.id, user.username, 'unban')">Unban</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div *ngIf="!usersWithRoles || usersWithRoles.length === 0">
-            No users found.
-        </div>
-    </div>
-
-    <div class="popup-container" [style.display]="isDialogOpen ? 'flex' : 'none'">
-        <div class="popup">
-            <h2>Confirm {{ dialogAction === 'ban' ? 'Ban' : 'Unban' }}</h2>
-            <p>Are you sure you want to {{ dialogAction }} this user <b>{{ userToAction }}</b>?</p>
-            <div class="actions">
-                <button class="cancel-btn" (click)="cancelAction()">Cancel</button>
-                <button class="confirm-btn" (click)="confirmAction()">
-                    {{ dialogAction === 'ban' ? 'Ban' : 'Unban' }}
+      <h2>All Users</h2>
+      <div *ngIf="usersWithRoles && usersWithRoles.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of usersWithRoles">
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.roleName }}</td>
+              <td>
+                <span
+                  [ngClass]="{
+                    banned: user.status.toLowerCase().trim() === 'banned',
+                    active: user.status.toLowerCase().trim() !== 'banned'
+                  }"
+                >
+                  {{ user.status }}
+                </span>
+              </td>
+              <td>
+                <button
+                  *ngIf="
+                    user.status.toLowerCase().trim() !== 'banned' &&
+                    user.id !== currentUserId
+                  "
+                  class="ban-btn role-btn"
+                  (click)="openActionDialog(user.id, user.username, 'ban')"
+                >
+                  Ban
                 </button>
-            </div>
+                <button
+                  *ngIf="
+                    user.status.toLowerCase().trim() !== 'banned' &&
+                    user.id === currentUserId
+                  "
+                  class="ban-btn role-btn"
+                  disabled
+                  title="You cannot ban yourself"
+                >
+                  Ban
+                </button>
 
-        </div>
+                <button
+                  *ngIf="user.status.toLowerCase().trim() === 'banned'"
+                  class="unban-btn role-btn"
+                  (click)="openActionDialog(user.id, user.username, 'unban')"
+                >
+                  Unban
+                </button>
+                <button
+                  *ngIf="
+                    user.status.toLowerCase().trim() !== 'banned' &&
+                    user.roleName !== 'ROLE_ADMIN'
+                  "
+                  class="role-btn"
+                  (click)="openActionDialog(user.id, user.username, 'promote')"
+                >
+                  Promote to Admin
+                </button>
+                <button
+                  *ngIf="
+                    user.status.toLowerCase().trim() !== 'banned' &&
+                    user.roleName === 'ROLE_ADMIN' &&
+                    user.id !== currentUserId
+                  "
+                  class="role-btn"
+                  (click)="openActionDialog(user.id, user.username, 'demote')"
+                >
+                  Demote to User
+                </button>
+
+                <button
+                  *ngIf="user.status.toLowerCase().trim() === 'banned'"
+                  class="role-btn"
+                  disabled
+                  title="Cannot change role of a banned user"
+                >
+                  Promote/Demote
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="!usersWithRoles || usersWithRoles.length === 0">
+        No users found.
+      </div>
     </div>
+    <div
+      class="popup-container"
+      [style.display]="isDialogOpen ? 'flex' : 'none'"
+    >
+      <div class="popup">
+        <h2>
+          Confirm
+          {{
+            dialogAction === "ban"
+              ? "Ban"
+              : dialogAction === "unban"
+              ? "Unban"
+              : dialogAction === "promote"
+              ? "Promote to Admin"
+              : "Demote to User"
+          }}
+        </h2>
+        <p>
+          Are you sure you want to
+          {{
+            dialogAction === "ban"
+              ? "ban"
+              : dialogAction === "unban"
+              ? "unban"
+              : dialogAction === "promote"
+              ? "promote"
+              : "demote"
+          }}
+          this user <b>{{ userToAction }}</b
+          >?
+        </p>
+        <div class="actions">
+          <button class="cancel-btn" (click)="cancelAction()">Cancel</button>
+          <button class="confirm-btn" (click)="confirmAction()">
+            {{
+              dialogAction === "ban"
+                ? "Ban"
+                : dialogAction === "unban"
+                ? "Unban"
+                : dialogAction === "promote"
+                ? "Promote"
+                : "Demote"
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>

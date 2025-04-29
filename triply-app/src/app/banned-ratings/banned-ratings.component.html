@@ -1,0 +1,71 @@
+<div class="container">
+    <h2>User Management</h2>
+
+    <!-- Tabs for showing banned (delete = 'T') and active (delete = 'F') users -->
+    <div class="tabs">
+        <button (click)="showDeleted = true" [class.active]="showDeleted">Banned Ratings</button>
+        <button (click)="showDeleted = false" [class.active]="!showDeleted">Active Ratings</button>
+    </div>
+
+    <!-- Tab Content for Banned Users (delete = 'T') -->
+    <div *ngIf="showDeleted">
+        <h3>Banned Users</h3>
+        <app-popup *ngIf="isPopup" [message]="popupMsg"></app-popup>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Flight/Hotel</th>
+                    <th>Details</th>
+                    <th>Ratings</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of banned">
+                    <td>{{ user.user }}</td>
+                    <td *ngIf = "user.type=='Flight'">{{ user.name}}</td>
+                    <td *ngIf = "user.type=='Hotel'">{{ user.name }}</td>
+                    <td *ngIf = "user.type=='Flight'">Arrival: {{ user.arrivalTime}}<br> Departure: {{ user.departureTime}}</td>
+                    <td *ngIf = "user.type=='Hotel'">Check In: {{ user.checkInDate}}<br> Check Out: {{ user.checkOutDate}}</td>
+                    <td><span class="star" *ngFor="let r of [].constructor(user.rating); let i = index">★</span></td>
+                    <td>
+                        <button *ngIf = "user.type=='Flight'" (click)="banORunban(user.user, user.flightId, user.type, 'unban')" class="button">Unban</button>
+                        <button *ngIf = "user.type=='Hotel'" (click)="banORunban(user.user, user.hotelId, user.type, 'unban')" class="button">Unban</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tab Content for Active Users (delete = 'F') -->
+    <div *ngIf="!showDeleted">
+        <h3>Active Users</h3>
+        <app-popup *ngIf="isPopup" [message]="popupMsg"></app-popup>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Flight/Hotel</th>
+                    <th>Details</th>
+                    <th>Ratings</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of active">
+                    <td>{{ user.user }}</td>
+                    <td *ngIf = "user.type=='Flight'">{{ user.name}}</td>
+                    <td *ngIf = "user.type=='Hotel'">{{ user.name }}</td>
+                    <td *ngIf = "user.type=='Flight'">Arrival: {{ user.arrivalTime}}<br> Departure: {{ user.departureTime}}</td>
+                    <td *ngIf = "user.type=='Hotel'">Check In: {{ user.checkInDate}}<br> Check Out: {{ user.checkOutDate}}</td>
+                    <td><span class="star" *ngFor="let r of [].constructor(user.rating); let i = index">★</span></td>
+                    <td>
+                        <button *ngIf = "user.type=='Flight'" (click)="banORunban(user.user, user.flightId, user.type, 'ban')" class="button">Ban</button>
+                        <button *ngIf = "user.type=='Hotel'" (click)="banORunban(user.user, user.hotelId, user.type, 'ban')" class="button">Ban</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
