@@ -199,7 +199,7 @@ public class HotelBookingService extends BookingTemplate {
     }
 
     public List<HotelBookingResponse> getBookingByBookingId (Long bookingId, Long userId){
-        List<HotelBooking> hotelBookings = hotelBookingRepository.findByBookingId(userId);
+        List<HotelBooking> hotelBookings = hotelBookingRepository.findByBookingId(bookingId);
         List<HotelBookingResponse> hotelBookingResponses = new ArrayList<>();
         for (HotelBooking booking : hotelBookings) {
             HotelBookingResponse resp = new HotelBookingResponse();
