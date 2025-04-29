@@ -52,11 +52,11 @@ export class AdminComponent {
   ngOnInit(): void {
     this.authService.initAuthStateFromBackend();
     this.authState$.subscribe((authState) => {
-      console.log('Auth state:', authState);
+      // console.log('Auth state:', authState);
     });
     this.adminService.getCurrentUser().subscribe({
       next: (data) => {
-        console.log('Data:', data);
+        // console.log('Data:', data);
         const newdata = JSON.parse(data);
         this.currentUsername = newdata.username;
         // Fetch all users with roles

@@ -15,31 +15,51 @@ export class ProfileComponent {
   confirmPassword = '';
   resetError = '';
   resetSuccess = '';
+  isCurrentPasswordVisible = false;
+  isNewPasswordVisible = false;
+  isConfirmPasswordVisible = false;
 
   private readonly API_URL = environment.apiUrl + '/auth/reset-password';
 
   constructor(private http: HttpClient) {}
 
+  togglePasswordVisibility(field: string) {
+    if (field === 'current') {
+      this.isCurrentPasswordVisible = !this.isCurrentPasswordVisible;
+    } else if (field === 'new') {
+      this.isNewPasswordVisible = !this.isNewPasswordVisible;
+    } else if (field === 'confirm') {
+      this.isConfirmPasswordVisible = !this.isConfirmPasswordVisible;
+    }
+  }
+
   resetPassword() {
     if (!this.currentPassword || !this.newPassword || !this.confirmPassword) {
-      this.resetError = "All password fields are required.";
+      this.resetError = 'All password fields are required.';
       return;
     }
     if (this.newPassword !== this.confirmPassword) {
-      this.resetError = "Passwords do not match";
+      this.resetError = 'Passwords do not match';
       return;
     }
     this.resetError = '';
     this.resetSuccess = '';
-    this.http.post(this.API_URL, {
-        currentPassword: this.currentPassword,
-        newPassword: this.newPassword
-      }, {
-        withCredentials: true
-      })
+    this.http
+      .post(
+        this.API_URL,
+        {
+          currentPassword: this.currentPassword,
+          newPassword: this.newPassword,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .subscribe({
-        next: () => this.resetSuccess = "Password updated successfully!",
-        error: err => this.resetError = err.error?.message || err.error || "Error resetting password"
+        next: () => (this.resetSuccess = 'Password updated successfully!'),
+        error: (err) =>
+          (this.resetError =
+            err.error?.message || err.error || 'Error resetting password'),
       });
   }
-  }
+}

@@ -5,6 +5,7 @@ import com.example.triply.core.admin.service.AdminService;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,6 +38,7 @@ public class AdminResource {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserRoleDTO>> getUsersWithRoles() {
         List<UserRoleDTO> usersWithRoles = adminService.getUsersWithRoles();
         return ResponseEntity.ok(usersWithRoles);
@@ -101,8 +103,7 @@ public class AdminResource {
             username = authentication.getName();
             Optional<User> userFromDB = userRepository.findByUsername(username);
 
-
-            if (userFromDB == null) {
+            if (userFromDB.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
             }
 
