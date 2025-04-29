@@ -29,6 +29,15 @@ public class RatingService {
     @Autowired
     private HotelBookingRepository hotelBookingRepository;
 
+    public RatingService(UserRepository userRepository,
+                         FlightBookingRepository flightBookingRepository,
+                         HotelBookingRepository hotelBookingRepository,
+                         RatingRepository ratingRepository) {
+        this.userRepository = userRepository;
+        this.flightBookingRepository = flightBookingRepository;
+        this.hotelBookingRepository = hotelBookingRepository;
+        this.ratingRepository = ratingRepository;
+    }
 
     public RatingResponse saveRating(RatingRequest ratingRequest) {
 
@@ -77,9 +86,9 @@ public class RatingService {
         RatingResponse ratingResponse = new RatingResponse();
         ratingResponse.setId(ratings.getId());
         ratingResponse.setRating(ratings.getRating());
+        System.out.println(ratings.getUser().getId());
         ratingResponse.setUserId(ratings.getUser().getId());
         ratingResponse.setDelete(ratings.getDelete());
-
 
         if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
             ratingResponse.setFlightId(ratings.getFlightBooking().getId());
