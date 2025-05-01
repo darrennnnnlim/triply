@@ -2,6 +2,7 @@ package com.example.triply.core.auth.service;
 
 import com.example.triply.common.exception.UserNotFoundException;
 import com.example.triply.core.auth.entity.User;
+import com.example.triply.core.auth.notification.UserRegistrationWritePublisher;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import com.example.triply.common.exception.InvalidCurrentPasswordException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Optional;
 import static org.mockito.Mockito.*;
@@ -18,13 +20,15 @@ class AuthServiceImplTest {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private AuthServiceImpl authService;
+    private UserRegistrationWritePublisher userRegistrationWritePublisher;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
+        userRegistrationWritePublisher = mock(UserRegistrationWritePublisher.class);
         authService = new AuthServiceImpl(
-                userRepository, null, passwordEncoder, null, null, null, null, null
+                userRepository, null, passwordEncoder, null, null, null, null, null, userRegistrationWritePublisher
         );
     }
 
