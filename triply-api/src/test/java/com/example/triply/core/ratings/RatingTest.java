@@ -39,7 +39,6 @@ class RatingServiceTest {
     private FlightBooking flightBooking;
     private HotelBooking hotelBooking;
     private RatingRequest ratingRequest;
-    private FlightRepository flightRepository;
 
     @BeforeEach
     void setUp() {
