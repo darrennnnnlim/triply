@@ -23,6 +23,7 @@ import com.example.triply.core.hotel.repository.HotelRoomPriceRepository;
 import com.example.triply.core.hotel.repository.HotelRoomTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -47,6 +48,7 @@ class HotelBookingServiceTest {
     private HotelBookingAddonMapper hotelBookingAddonMapper;
     private HotelBookingAddonRepository hotelBookingAddonRepository;
     private BookingRepository bookingRepository;
+    private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
@@ -60,11 +62,13 @@ class HotelBookingServiceTest {
         hotelBookingAddonMapper = mock(HotelBookingAddonMapper.class);
         hotelBookingAddonRepository = mock(HotelBookingAddonRepository.class);
         bookingRepository = mock(BookingRepository.class);
+        eventPublisher = mock(ApplicationEventPublisher.class);
 
         hotelBookingService = new HotelBookingService(hotelRepository, hotelRoomTypeRepository, hotelAddonRepository,
                 hotelRoomPriceRepository, bookingMapper, hotelBookingMapper,
                 hotelBookingRepository, hotelBookingAddonMapper,
-                hotelBookingAddonRepository, bookingRepository);
+                hotelBookingAddonRepository, bookingRepository,
+                eventPublisher);
     }
 
     @Test
