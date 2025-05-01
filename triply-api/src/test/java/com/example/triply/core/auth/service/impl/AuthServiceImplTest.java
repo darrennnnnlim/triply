@@ -9,6 +9,7 @@ import com.example.triply.core.auth.dto.*;
 import com.example.triply.core.auth.entity.RefreshToken;
 import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
+import com.example.triply.core.auth.notification.UserRegistrationWritePublisher;
 import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.auth.service.JwtService;
@@ -69,12 +70,15 @@ class AuthServiceImplTest {
     @Captor
     private ArgumentCaptor<Cookie> cookieCaptor;
 
+    @Mock
+    private UserRegistrationWritePublisher userRegistrationWritePublisher;
+
     @BeforeEach
     void setup() {
         authService = new AuthServiceImpl(
                 userRepository, roleRepository, passwordEncoder,
                 userStatusRepository, authenticationManager, jwtService,
-                refreshTokenService, jwtAuthenticationFilter);
+                refreshTokenService, jwtAuthenticationFilter, userRegistrationWritePublisher);
 
         ReflectionTestUtils.setField(authService, "accessTokenCookieExpiry", 3600);
         ReflectionTestUtils.setField(authService, "refreshTokenCookieExpiry", 7200);
