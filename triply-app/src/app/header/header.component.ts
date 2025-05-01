@@ -57,11 +57,12 @@ export class HeaderComponent {
     return initials.toUpperCase();
   }
 
-  openLoginModal(): void {
+  openLoginModal(isLoginMode: boolean = true): void {
     // Open LoginComponent as the modal content.
-    this.modalService.open(LoginComponent, {
+    const modalRef = this.modalService.open(LoginComponent, {
       ariaLabelledBy: 'modal-basic-title',
     });
+    modalRef.componentInstance.isLoginMode = isLoginMode;
   }
 
   toggleHamburgerMenu(): void {

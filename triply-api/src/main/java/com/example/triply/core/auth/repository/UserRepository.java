@@ -15,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> findByEmail(String email);
+
     boolean existsByUsernameAndStatus_Status(String username, String status);
 
     @Query("SELECT NEW com.example.triply.core.admin.dto.UserRoleDTO(u.id, u.username, u.role.name, COALESCE(u.status.status, 'not assigned')) " +

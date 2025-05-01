@@ -38,6 +38,7 @@ public class AuthResource {
 
     @PostMapping("/login")
     public ResponseEntity<AuthDTO> login(@RequestBody AuthRequest authRequest, HttpServletResponse response) {
+        System.out.println("Received login request for username: " + authRequest.getUsername());
         try {
             AuthDTO login = authService.login(authRequest, response);
             return ResponseEntity.status(HttpStatus.OK).body(login);

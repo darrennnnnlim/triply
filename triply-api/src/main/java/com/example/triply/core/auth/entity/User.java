@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.util.Set;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 @Entity
 @Table(name = "users")
 @Getter
@@ -25,6 +28,11 @@ public class User extends Auditable {
 
     @Column(nullable = false)
     private String password;
+
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email must be a valid email address")
+    @Column(unique = true, nullable = false)
+    private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status_id")

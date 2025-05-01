@@ -13,8 +13,16 @@ import java.time.LocalDateTime;
 @Setter
 public class FlightPriceDTO extends MutableDTO {
     private Long id;
+    // Keep original entities for potential other uses, but don't rely on them in async listeners
     private Flight flight;
     private FlightClass flightClass;
+
+    // Add primitive fields needed by the listener
+    private String flightNumber;
+    private String origin;
+    private String destination;
+    private String flightClassName;
+
     private LocalDateTime departureDate;
     private BigDecimal basePrice;
     private BigDecimal discount = BigDecimal.valueOf(1.00);

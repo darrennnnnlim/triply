@@ -2,6 +2,7 @@ package com.example.triply.core.pricing.flight.notification;
 
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier; // Import Qualifier
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -13,15 +14,21 @@ import java.util.List;
 public class FlightPriceWritePublisherImpl {
     private final List<FlightPriceListener> listeners;
     private final NotificationTest notificationTest;
+    private final FlightPriceListener emailNotificationListener; // Add email listener field
 
     @Autowired
-    public FlightPriceWritePublisherImpl(NotificationTest notificationTest) {
+    public FlightPriceWritePublisherImpl(NotificationTest notificationTest,
+                                         @Qualifier("flightPriceEmailNotificationListener") FlightPriceListener emailNotificationListener // Qualify the listener bean
+                                        ) {
         this.listeners = new ArrayList<>();
 
         this.notificationTest = notificationTest;
+        this.emailNotificationListener = emailNotificationListener; // Assign injected listener
 
         // Register listeners here
         this.addListener(this.notificationTest);
+        this.addListener(notificationTest);
+        this.addListener(this.emailNotificationListener); // Register email listener
     }
 
     public void addListener(FlightPriceListener listener) {

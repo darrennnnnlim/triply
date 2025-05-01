@@ -21,9 +21,9 @@ public class FlightPriceWriteFacadeServiceImpl {
 
     private final FlightPriceRepository flightPriceRepository;
     private final FlightPriceMapper flightPriceMapper;
-    private final FlightPriceWritePublisherImpl publisher;
+    private final FlightPriceWritePublisherImpl publisher; // Use concrete class type
 
-    public FlightPriceWriteFacadeServiceImpl(FlightPriceRepository flightPriceRepository, FlightPriceMapper flightPriceMapper, FlightPriceWritePublisherImpl publisher) {
+    public FlightPriceWriteFacadeServiceImpl(FlightPriceRepository flightPriceRepository, FlightPriceMapper flightPriceMapper, FlightPriceWritePublisherImpl publisher) { // Use concrete class type
         this.flightPriceRepository = flightPriceRepository;
         this.flightPriceMapper = flightPriceMapper;
         this.publisher = publisher;
@@ -66,6 +66,7 @@ public class FlightPriceWriteFacadeServiceImpl {
         publisher.publish(oldFlightPrices, newFlightPrices);
         return newFlightPrices;
     }
+
     public void addPriceListener(FlightPriceListener listener) {
         publisher.addListener(listener);
     }

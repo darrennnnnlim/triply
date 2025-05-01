@@ -53,10 +53,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
+        System.out.println("Configuring security filter chain...");
         CsrfTokenRequestAttributeHandler requestAttributeHandler = new CsrfTokenRequestAttributeHandler();
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password")
+                        .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password", "/test/**")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestAttributeHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
