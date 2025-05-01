@@ -37,4 +37,6 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
             @Param("originIATA") String originIATA,
             @Param("destIATA") String destIATA,
             @Param("arrivalTime") LocalDateTime arrivalTime);
+
+    List<Flight> findAllByAirlineId(Long airlineId);
 }

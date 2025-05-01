@@ -63,4 +63,9 @@ public class RatingResource {
         }
     }
 
+    @GetMapping("/airline/{airlineId}")
+    public ResponseEntity<List<RatingResponse>> getRatingsByAirlineId(@PathVariable Long airlineId) {
+        List<RatingResponse> ratings = ratingService.getRatingsByAirlineId(airlineId);
+        return ResponseEntity.ok(ratings);
+    }
 }

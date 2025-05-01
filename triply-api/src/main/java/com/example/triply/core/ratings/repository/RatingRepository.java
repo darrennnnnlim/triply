@@ -2,6 +2,7 @@ package com.example.triply.core.ratings.repository;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
+import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.ratings.entity.Ratings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,5 +26,5 @@ public interface  RatingRepository extends JpaRepository<Ratings, Long> {
 
     Ratings findByUserAndHotelBooking(User user, HotelBooking hotelBooking);
 
-
+    List<Ratings> findAllByFlightBookingIdIn(List<Long> flightsWithAirlineId);
 }

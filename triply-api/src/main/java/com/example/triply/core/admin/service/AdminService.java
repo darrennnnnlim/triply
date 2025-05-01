@@ -10,6 +10,7 @@ import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.notification.UserBanWriteEvent; // Added in-house event import
 import com.example.triply.core.auth.notification.UserBanWritePublisher; // Added in-house publisher import
 import com.example.triply.core.auth.repository.UserRepository;
+import com.example.triply.core.ratings.service.RatingService;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -52,6 +53,7 @@ public class AdminService {
     private final FlightPriceRepository flightPriceRepository; // Added field
     private final FlightPriceWritePublisherImpl flightPriceWritePublisher; // Changed to concrete class type
     private final FlightPriceMapper flightPriceMapper; // Added field
+    private final RatingService ratingService;
 
     public AdminService(UserStatusRepository userStatusRepository,
                        UserRepository userRepository,
@@ -59,7 +61,8 @@ public class AdminService {
                        UserBanWritePublisher userBanWritePublisher, // Added in-house publisher
                        FlightPriceRepository flightPriceRepository, // Added constructor param
                        FlightPriceWritePublisherImpl flightPriceWritePublisher, // Use concrete class type
-                       FlightPriceMapper flightPriceMapper) { // Added constructor param
+                       FlightPriceMapper flightPriceMapper,
+                        RatingService ratingService) { // Added constructor param
         this.userStatusRepository = userStatusRepository;
         this.userRepository = userRepository;
         // this.applicationEventPublisher = applicationEventPublisher; // Removed assignment
@@ -68,6 +71,7 @@ public class AdminService {
         this.flightPriceWritePublisher = flightPriceWritePublisher;
         this.flightPriceMapper = flightPriceMapper; // Added assignment
         this.roleRepository = roleRepository;
+        this.ratingService = ratingService;
         initUserActions();
     }
 
@@ -134,6 +138,9 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_ALREADY_BANNED);
         }
 
+        // Soft Delete for this user
+        ratingService.softDeleteAllBy(userId);
+
         // Publish user banned event using in-house publisher
         String banReason = "Violation of community guidelines"; // Default reason
         UserBanWriteEvent event = new UserBanWriteEvent(this, user, banReason);
@@ -158,6 +165,9 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_BANNED);
         }
         userRepository.unbanUser(userId);
+
+        // Soft Delete for this user
+        ratingService.undoSoftDeleteAllBy(userId);
 
         // Consider adding an unban event/notification if needed
         // Removed direct email sending block for unban as well
@@ -194,7 +204,9 @@ public class AdminService {
 
         // Return the new DTO
         return newPriceDTO;
-    }    public List<UserRoleDTO> searchUsersByUsername(String username) {
+    }
+
+    public List<UserRoleDTO> searchUsersByUsername(String username) {
         if (username == null || username.isEmpty()) {
             return userStatusRepository.getUsersWithRoles();
         }

@@ -6,6 +6,8 @@ import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
+import com.example.triply.core.flight.model.entity.Flight;
+import com.example.triply.core.flight.repository.FlightRepository;
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
 import com.example.triply.core.ratings.repository.RatingRepository;
@@ -21,18 +23,20 @@ public class RatingService {
     private final UserRepository userRepository;
     private final FlightBookingRepository flightBookingRepository;
     private final HotelBookingRepository hotelBookingRepository;
-
+    private final FlightRepository flightRepository;
 
     public static final String FLIGHT = "Flight";
 
     public RatingService(UserRepository userRepository,
                          FlightBookingRepository flightBookingRepository,
                          HotelBookingRepository hotelBookingRepository,
-                         RatingRepository ratingRepository) {
+                         RatingRepository ratingRepository,
+                         FlightRepository flightRepository) {
         this.userRepository = userRepository;
         this.flightBookingRepository = flightBookingRepository;
         this.hotelBookingRepository = hotelBookingRepository;
         this.ratingRepository = ratingRepository;
+        this.flightRepository = flightRepository;
     }
 
     public RatingResponse saveRating(RatingRequest ratingRequest) {
@@ -213,5 +217,67 @@ public class RatingService {
             ratings.setDelete("F");
         }
         ratingRepository.save(ratings);
+    }
+
+    public void softDeleteAllBy(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Ratings> ratings = null;
+        ratings = ratingRepository.findByUserId(userId);
+
+        for (Ratings rating : ratings) {
+            if (rating == null) {
+                throw new RatingsNotFoundException("Ratings not found for the provided criteria");
+            }
+
+            if ("F".equals(rating.getDelete())) {
+                rating.setDelete("T");
+            }
+        }
+        ratingRepository.saveAll(ratings);
+    }
+
+    public void undoSoftDeleteAllBy(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Ratings> ratings = null;
+        ratings = ratingRepository.findByUserId(userId);
+
+        for (Ratings rating : ratings) {
+            if (rating == null) {
+                throw new RatingsNotFoundException("Ratings not found for the provided criteria");
+            }
+
+            if ("T".equals(rating.getDelete())) {
+                rating.setDelete("F");
+            }
+        }
+        ratingRepository.saveAll(ratings);
+    }
+
+    public List<RatingResponse> getRatingsByAirlineId(Long airlineId) {
+        List<Long> flightsWithAirlineId = flightRepository.findAllByAirlineId(airlineId).stream().map(flight -> flight.getAirline().getId()).toList();
+        List<Long> flightBookingsWithAirlineId = flightBookingRepository.findAllByFlightIdIn(flightsWithAirlineId).stream().map(flightBooking -> flightBooking.getFlight().getId()).toList();
+        List<Ratings> ratings = ratingRepository.findAllByFlightBookingIdIn(flightBookingsWithAirlineId);
+        List<RatingResponse> ratingResponses = new ArrayList<>();
+        for (Ratings rating : ratings) {
+            RatingResponse resp = new RatingResponse();
+            resp.setId(rating.getId());
+            resp.setRating(rating.getRating());
+            resp.setUserId(rating.getUser().getId());
+            resp.setDelete(rating.getDelete());
+            if (rating.getFlightBooking() == null) {
+                resp.setFlightId(null);
+                resp.setHotelId(rating.getHotelBooking().getId());
+            } else {
+                resp.setFlightId(rating.getFlightBooking().getId());
+                resp.setAirlineId(airlineId);
+                resp.setHotelId(null);
+            }
+            ratingResponses.add(resp);
+        }
+        return ratingResponses;
     }
 }
