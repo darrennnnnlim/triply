@@ -37,36 +37,22 @@ public class PriceThresholdServiceImpl implements PriceThresholdService {
 
     @Override
     @Transactional
-    public PriceThresholdDTO createThreshold(CreatePriceThresholdRequest request, String username) {
-        log.info("Creating price threshold for user: {}", username);
-
+    public PriceThresholdDTO createThreshold(CreatePriceThresholdRequest request) {
         // --- Validation ---
-        if ((request.getFlightId() == null && request.getHotelId() == null) ||
-            (request.getFlightId() != null && request.getHotelId() != null)) {
-            throw new IllegalArgumentException("Exactly one of flightId or hotelId must be provided.");
-        }
-
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with username: " + username));
-
-        Flight flight = null;
-        if (request.getFlightId() != null) {
-            flight = flightRepository.findById(request.getFlightId())
-                    .orElseThrow(() -> new EntityNotFoundException("Flight not found with ID: " + request.getFlightId()));
-        }
-
-        Hotel hotel = null;
-        if (request.getHotelId() != null) {
-            hotel = hotelRepository.findById(request.getHotelId())
-                    .orElseThrow(() -> new EntityNotFoundException("Hotel not found with ID: " + request.getHotelId()));
+        if (request.getThresholdPrice() == null || request.getThresholdPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            log.error("Invalid threshold price: {}", request.getThresholdPrice());
+            throw new IllegalArgumentException("Threshold price must be greater than zero.");
         }
 
         // --- Creation ---
         PriceThreshold threshold = new PriceThreshold();
-        threshold.setUser(user);
-        threshold.setFlight(flight);
-        threshold.setHotel(hotel);
+        threshold.setConceptId(request.getConceptId());
+        threshold.setConceptType(request.getConceptType());
+        threshold.setStartDate(request.getStartDate().atStartOfDay());
+        threshold.setEndDate(request.getEndDate().atStartOfDay());
         threshold.setThresholdPrice(request.getThresholdPrice());
+        User userReference = userRepository.getReferenceById(request.getUserId());
+        threshold.setUser(userRepository.getReferenceById(userReference.getId()));
 
         PriceThreshold savedThreshold = priceThresholdRepository.save(threshold);
         log.info("Successfully created price threshold with ID: {}", savedThreshold.getId());
@@ -87,6 +73,7 @@ public class PriceThresholdServiceImpl implements PriceThresholdService {
                 .collect(Collectors.toList());
     }
 
+    
     @Override
     @Transactional
     public void deleteThreshold(Long thresholdId, String username) {
@@ -111,7 +98,7 @@ public class PriceThresholdServiceImpl implements PriceThresholdService {
     @Transactional(readOnly = true)
     public List<User> findUsersToNotifyForFlight(Flight flight, BigDecimal newPrice) {
         log.debug("Finding users to notify for flight ID: {} with price <= {}", flight.getId(), newPrice);
-        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByFlightAndThresholdPriceLessThanEqual(flight, newPrice);
+        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByConceptTypeAndConceptIdAndThresholdPriceLessThanEqual("FLIGHT", flight.getId(), newPrice);
 
         // Fetch users and initialize necessary fields within the transaction
         List<User> users = matchingThresholds.stream()
@@ -130,7 +117,7 @@ public class PriceThresholdServiceImpl implements PriceThresholdService {
     @Transactional(readOnly = true)
     public List<User> findUsersToNotifyForHotel(Hotel hotel, BigDecimal newPrice) {
         log.debug("Finding users to notify for hotel ID: {} with price <= {}", hotel.getId(), newPrice);
-        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByHotelAndThresholdPriceLessThanEqual(hotel, newPrice);
+        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByConceptTypeAndConceptIdAndThresholdPriceLessThanEqual("HOTEL", hotel.getId(), newPrice);
 
         return matchingThresholds.stream()
                 .map(PriceThreshold::getUser)

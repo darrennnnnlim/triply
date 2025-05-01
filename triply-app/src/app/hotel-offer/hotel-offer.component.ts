@@ -4,6 +4,8 @@ import { HotelOfferDataService } from './hotel-offer-data.service';
 import { HotelOffer } from '../hotel-search-page/hotel-search.model';
 import { RatingService } from './rating.service';
 import { BanedUserRating } from '../banned-ratings/banned-ratings.service';
+import { MatDialog } from '@angular/material/dialog'; // Import MatDialog
+import { PriceThresholdDialogComponent } from '../flight-offer/price-threshold-dialog/price-threshold-dialog.component'; // Import the existing dialog component
 
 @Component({
   selector: 'app-hotel-offer',
@@ -22,7 +24,8 @@ export class HotelOfferComponent {
     private hotelOfferDataService: HotelOfferDataService, // assumed service to fetch hotel data
     private router: Router,
     private ratingService: RatingService,
-    private bannedUserRatingService: BanedUserRating
+    private bannedUserRatingService: BanedUserRating,
+    private dialog: MatDialog // Inject MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -88,5 +91,22 @@ export class HotelOfferComponent {
         });
     });
   }
-  
+
+  setPriceThreshold(): void {
+    const dialogRef = this.dialog.open(PriceThresholdDialogComponent, {
+      width: '300px',
+      // You could pass hotel-specific data if needed:
+      // data: { currentPrice: this.selectedHotelOffer?.totalPrice }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result !== null) {
+        console.log('Hotel price threshold set to:', result);
+        
+        alert(`Hotel price threshold set to: $${result}`); // Simple alert for now
+      } else {
+        console.log('Set hotel price threshold cancelled or closed without value.');
+      }
+    });
+  }
 }
