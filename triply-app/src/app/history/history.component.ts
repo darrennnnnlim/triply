@@ -186,9 +186,6 @@ export class HistoryComponent implements OnInit {
     const [day, month, year, hour, minute] = time.split(/[ /:]/);
     const date = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
 
-    console.log('Current Time:', currentTime);
-    console.log('Compared Time:', date);
-
     return currentTime > date; 
   }
 
