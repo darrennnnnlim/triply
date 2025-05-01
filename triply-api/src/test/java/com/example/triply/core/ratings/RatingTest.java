@@ -6,6 +6,7 @@ import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
+import com.example.triply.core.flight.repository.FlightRepository;
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
 import com.example.triply.core.ratings.entity.Ratings;
@@ -32,6 +33,7 @@ class RatingServiceTest {
     private FlightBooking flightBooking;
     private HotelBooking hotelBooking;
     private RatingRequest ratingRequest;
+    private FlightRepository flightRepository;
 
     @BeforeEach
     void setUp() {
@@ -39,8 +41,9 @@ class RatingServiceTest {
         flightBookingRepository = mock(FlightBookingRepository.class);
         hotelBookingRepository = mock(HotelBookingRepository.class);
         ratingRepository = mock(RatingRepository.class);
+        flightRepository = mock(FlightRepository.class);
 
-        ratingService = new RatingService(userRepository, flightBookingRepository, hotelBookingRepository, ratingRepository);
+        ratingService = new RatingService(userRepository, flightBookingRepository, hotelBookingRepository, ratingRepository, flightRepository);
 
 
         user = new User();
