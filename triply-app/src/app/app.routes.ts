@@ -62,7 +62,7 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./hotel-offer/hotel-offer.module').then((m) => m.HotelOfferModule),
   },
-  { path: 'history', component: HistoryComponent },
+  { path: 'rateBooking', component: HistoryComponent },
   { path: 'banned', component: BannedRatingsComponent },
   {
     path: '**',

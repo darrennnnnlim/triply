@@ -67,12 +67,20 @@
         >Admin Panel</a
       >
     </li>
-    <li>
+    <li *ngIf="isAdmin">
       <a
-        routerLink="/history"
+        routerLink="/banned"
         class="text-decoration-none"
         (click)="toggleHamburgerMenu()"
-        >History</a
+        >Ban Ratings</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/rateBooking"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Rate Booking</a
       >
     </li>
     <li>
