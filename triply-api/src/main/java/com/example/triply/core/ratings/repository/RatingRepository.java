@@ -5,9 +5,11 @@ import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import com.example.triply.core.ratings.entity.Ratings;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface  RatingRepository extends JpaRepository<Ratings, Long> {
 
     @Query("SELECT r FROM Ratings r WHERE r.user.id = :userId")

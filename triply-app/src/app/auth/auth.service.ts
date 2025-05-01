@@ -67,7 +67,6 @@ export class AuthService {
       );
   }
 
-<<<<<<< HEAD
   initAuthStateFromBackend() {
     this.http
       .get<{ loggedIn: boolean; username?: string; role?: string }>(

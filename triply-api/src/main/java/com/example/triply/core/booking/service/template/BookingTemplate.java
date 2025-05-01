@@ -11,11 +11,15 @@ public abstract class BookingTemplate{
         validateBooking(request);
         BigDecimal addOnPrice = calculateAddonPrice(request);
         calculateTotalPrice(request, addOnPrice);
-        return createBooking(request);
+        Booking booking = createBooking(request);
+        confirmBooking(booking);
+        return booking;
     }
 
     protected abstract void validateBooking(BookingDTO request);
     protected abstract BigDecimal calculateAddonPrice(BookingDTO request);
     protected abstract void calculateTotalPrice(BookingDTO request, BigDecimal addOnPrice);
     protected abstract Booking createBooking(BookingDTO request);
+
+    protected abstract void confirmBooking(Booking booking);
 }

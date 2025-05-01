@@ -1,5 +1,6 @@
 package com.example.triply.core.pricethreshold.entity;
 
+import com.example.triply.common.audit.Auditable;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.hotel.model.entity.Hotel;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PriceThreshold {
+public class PriceThreshold extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
