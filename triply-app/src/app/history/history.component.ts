@@ -180,7 +180,17 @@ export class HistoryComponent implements OnInit {
 
     console.log(this.items);
   }
+  isAfterDateTime(time: string): boolean {
+    const currentTime = new Date(); 
 
+    const [day, month, year, hour, minute] = time.split(/[ /:]/);
+    const date = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute));
+
+    console.log('Current Time:', currentTime);
+    console.log('Compared Time:', date);
+
+    return currentTime > date; 
+  }
 
 
   toggleExpand(id: number) {

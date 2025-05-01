@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-sm">
             <div *ngFor="let item of items">
-                <div class="card" *ngIf = "item.type=='Flight'">
+                <div class="card" *ngIf = "item.type=='Flight' && isAfterDateTime(item.arrivalTime)">
                     <h3>{{ item.name }}</h3>
                     <p>Flight Number: {{ item.flightNumber }}</p>
                     <p> Arrtival Date Time: {{ item.arrivalTime }}</p>
@@ -15,7 +15,7 @@
                     </button>
                 </div>
 
-                <div class="card" *ngIf = "item.type=='Hotel'">
+                <div class="card" *ngIf = "item.type=='Hotel' && isAfterDateTime(item.checkOutDate)">
                     <h3>{{ item.name }}</h3>
                     <p>Check In Date Time: {{ item.checkInDate }}</p>
                     <p>Check Out Date Time: {{ item.checkOutDate }}</p>
