@@ -4,8 +4,13 @@ import com.example.triply.core.admin.entity.UserStatus;
 import com.example.triply.core.admin.repository.UserStatusRepository;
 import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
+import com.example.triply.core.auth.notification.UserBanWritePublisher;
 import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
+import com.example.triply.core.flight.mapper.FlightPriceMapper;
+import com.example.triply.core.flight.repository.FlightPriceRepository;
+import com.example.triply.core.pricing.flight.notification.FlightPriceWritePublisherImpl;
+import com.example.triply.core.ratings.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,13 +26,19 @@ class AdminServiceTest {
     private RoleRepository roleRepository;
     private UserStatusRepository userStatusRepository;
     private AdminService adminService;
+    private RatingService ratingService;
+    private UserBanWritePublisher userBanWritePublisher;
+    private FlightPriceRepository flightPriceRepository;
+    private FlightPriceWritePublisherImpl flightPriceWritePublisher;
+    private FlightPriceMapper flightPriceMapper;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         roleRepository = mock(RoleRepository.class);
         userStatusRepository = mock(UserStatusRepository.class);
-        adminService = new AdminService(userStatusRepository, userRepository, roleRepository);
+        ratingService = mock(RatingService.class);
+        adminService = new AdminService(userStatusRepository, userRepository, roleRepository, userBanWritePublisher, flightPriceRepository, flightPriceWritePublisher, flightPriceMapper, ratingService);
         adminService.initUserActions();
     }
 
