@@ -39,6 +39,7 @@ class RatingServiceTest {
     private FlightBooking flightBooking;
     private HotelBooking hotelBooking;
     private RatingRequest ratingRequest;
+    private FlightRepository flightRepository;
 
     @BeforeEach
     void setUp() {
@@ -46,6 +47,7 @@ class RatingServiceTest {
         flightBookingRepository = mock(FlightBookingRepository.class);
         hotelBookingRepository = mock(HotelBookingRepository.class);
         ratingRepository = mock(RatingRepository.class);
+        flightRepository = mock(FlightRepository.class);
 
         ratingService = new RatingService(userRepository, flightBookingRepository, hotelBookingRepository, ratingRepository, flightRepository);
 
