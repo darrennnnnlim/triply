@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Set Price Threshold</h2>
+<mat-dialog-content>
+  <p>Enter the maximum price you are willing to pay:</p>
+  <mat-form-field appearance="fill">
+    <mat-label>Price Threshold ($)</mat-label>
+    <input matInput type="number" [(ngModel)]="threshold" placeholder="e.g., 500">
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSet()" [disabled]="threshold === null || threshold < 0">Set</button>
+</mat-dialog-actions>

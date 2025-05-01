@@ -57,13 +57,13 @@ public class SecurityConfig {
         CsrfTokenRequestAttributeHandler requestAttributeHandler = new CsrfTokenRequestAttributeHandler();
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password", "/test/**")
+                        .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password", "/test/**", "/api/v1/priceThreshold")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestAttributeHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/{version}/auth/login/**", "/api/{version}/auth/register/**", "/api/{version}/auth/reset-password/**").permitAll()
-                        .requestMatchers("/api/{version}/auth/reset-password", "/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/ratings/**", "/api/v1/booking/**", "/api/v1/flight/**", "/api/v1/hotel/**", "/api/v1/flightsearch").authenticated()
+                        .requestMatchers("/api/{version}/auth/reset-password", "/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/ratings/**", "/api/v1/booking/**", "/api/v1/flight/**", "/api/v1/hotel/**", "/api/v1/flightsearch", "/api/v1/priceThreshold").authenticated()
                         .requestMatchers("/api/{version}/auth/check-session").authenticated()
                         .requestMatchers("/api/{version}/auth/refresh").authenticated()
                         .requestMatchers("/api/{version}/admin/user/**").authenticated()

@@ -8,6 +8,7 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@a
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog'; // Import MatDialogModule
 @NgModule({
   declarations: [HotelOfferComponent],
   imports: [
@@ -15,7 +16,8 @@ import { MatCardModule } from '@angular/material/card';
     ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: HotelOfferComponent }]),
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule // Add MatDialogModule here
   ],
   providers: [
     provideHttpClient(

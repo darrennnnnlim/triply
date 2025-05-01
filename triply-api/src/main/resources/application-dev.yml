@@ -24,10 +24,9 @@ spring:
         envers:
           store_data_at_delete: true
           autoRegisterListeners: true
-
-  sql:
-    init:
-      mode: always
+      #sql:
+      #init:
+      #mode: always
 
   mail:
     host: smtp.gmail.com
