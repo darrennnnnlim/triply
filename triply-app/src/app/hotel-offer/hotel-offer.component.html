@@ -6,8 +6,13 @@
         <p class="location">Location: {{ selectedHotelOffer?.location }}</p>
         <p class="price">Price: ${{ selectedHotelOffer?.totalPrice }}</p>
       </div>
-      <div class="button-container">
-        <button mat-flat-button class="booking-button" (click)="makeBooking()">Make a Booking!</button>
+      <div class="buttons-wrapper" style="display: flex; gap: 20px;">
+        <div class="button-container">
+          <button mat-flat-button class="booking-button" (click)="setPriceThreshold()">Set price threshold</button>
+        </div>
+        <div class="button-container">
+          <button mat-flat-button class="booking-button" (click)="makeBooking()">Make a Booking!</button>
+        </div>
       </div>
       <div class="horizontal-line"></div>
       <div *ngIf="ratings.length > 0" class="element">
