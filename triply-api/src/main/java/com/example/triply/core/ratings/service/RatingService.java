@@ -6,7 +6,6 @@ import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
-import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.flight.repository.FlightRepository;
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
@@ -26,6 +25,8 @@ public class RatingService {
     private final FlightRepository flightRepository;
 
     public static final String FLIGHT = "Flight";
+    private static final String RATINGS_NOT_FOUND_MESSAGE = "Ratings not found for the provided criteria";
+    private static final String USER_NOT_FOUND_MESSAGE = "User not found";
 
     public RatingService(UserRepository userRepository,
                          FlightBookingRepository flightBookingRepository,
@@ -43,7 +44,7 @@ public class RatingService {
 
 
         User user = userRepository.findById(ratingRequest.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE));
 
 
         FlightBooking flightBooking = null;
@@ -191,7 +192,7 @@ public class RatingService {
 
     public void softDelete(Long userId, Long flightId, Long hotelId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE));
 
         Ratings ratings = null;
 
@@ -208,7 +209,7 @@ public class RatingService {
         }
 
         if (ratings == null) {
-            throw new RatingsNotFoundException("Ratings not found for the provided criteria");
+            throw new RatingsNotFoundException(RATINGS_NOT_FOUND_MESSAGE);
         }
 
         if ("F".equals(ratings.getDelete())) {
@@ -221,14 +222,14 @@ public class RatingService {
 
     public void softDeleteAllBy(Long userId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.findById(userId).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE));
 
         List<Ratings> ratings = null;
         ratings = ratingRepository.findByUserId(userId);
 
         for (Ratings rating : ratings) {
             if (rating == null) {
-                throw new RatingsNotFoundException("Ratings not found for the provided criteria");
+                throw new RatingsNotFoundException(RATINGS_NOT_FOUND_MESSAGE);
             }
 
             if ("F".equals(rating.getDelete())) {
@@ -240,14 +241,14 @@ public class RatingService {
 
     public void undoSoftDeleteAllBy(Long userId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.findById(userId).orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE));
 
         List<Ratings> ratings = null;
         ratings = ratingRepository.findByUserId(userId);
 
         for (Ratings rating : ratings) {
             if (rating == null) {
-                throw new RatingsNotFoundException("Ratings not found for the provided criteria");
+                throw new RatingsNotFoundException(RATINGS_NOT_FOUND_MESSAGE);
             }
 
             if ("T".equals(rating.getDelete())) {
