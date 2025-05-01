@@ -6,6 +6,9 @@ import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
+import com.example.triply.core.flight.model.entity.Airline;
+import com.example.triply.core.flight.model.entity.Flight;
+import com.example.triply.core.flight.repository.FlightRepository;
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
 import com.example.triply.core.ratings.entity.Ratings;
@@ -15,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -26,9 +30,12 @@ class RatingServiceTest {
     private HotelBookingRepository hotelBookingRepository;
     private RatingRepository ratingRepository;
     private RatingService ratingService;
+    private FlightRepository flightRepository;
 
     private User user;
     private User user2;
+    private Flight flight;
+    private Airline airline;
     private FlightBooking flightBooking;
     private HotelBooking hotelBooking;
     private RatingRequest ratingRequest;
@@ -40,7 +47,7 @@ class RatingServiceTest {
         hotelBookingRepository = mock(HotelBookingRepository.class);
         ratingRepository = mock(RatingRepository.class);
 
-        ratingService = new RatingService(userRepository, flightBookingRepository, hotelBookingRepository, ratingRepository);
+        ratingService = new RatingService(userRepository, flightBookingRepository, hotelBookingRepository, ratingRepository, flightRepository);
 
 
         user = new User();
@@ -51,8 +58,15 @@ class RatingServiceTest {
         user2.setId(1L);
         user2.setUsername("testuser");
 
+        airline = new Airline();
+        airline.setId(1L);
+        flight = new Flight();
+        flight.setId(1L);
+        flight.setAirline(airline);
+
         flightBooking = new FlightBooking();
         flightBooking.setId(1L);
+        flightBooking.setFlight(flight);
 
 
         hotelBooking = new HotelBooking();
@@ -477,4 +491,111 @@ class RatingServiceTest {
 
         assertEquals("Ratings not found for the provided criteria", exception.getMessage());
     }
+
+    @Test
+    void testGetRatingsByAirlineId() {
+        Airline airline = new Airline();
+        airline.setId(1L);
+
+        Flight flight = new Flight();
+        flight.setId(1L);
+        flight.setAirline(airline);
+
+        FlightBooking flightBooking = new FlightBooking();
+        flightBooking.setId(1L);
+        flightBooking.setFlight(flight);
+
+        Ratings rating1 = new Ratings();
+        rating1.setId(1L);
+        rating1.setRating(5);
+        rating1.setUser(user);
+        rating1.setDelete("F");
+        rating1.setFlightBooking(flightBooking);
+        rating1.setHotelBooking(null);
+
+        Ratings rating2 = new Ratings();
+        rating2.setId(2L);
+        rating2.setRating(4);
+        rating2.setUser(user);
+        rating2.setDelete("F");
+        rating2.setFlightBooking(null);
+        rating2.setHotelBooking(hotelBooking);
+
+        List<Flight> flights = List.of(flight);
+        List<FlightBooking> flightBookings = List.of(flightBooking);
+        when(flightRepository.findAllByAirlineId(1L)).thenReturn(flights);
+        when(flightBookingRepository.findAllByFlightIdIn(List.of(1L))).thenReturn(flightBookings);
+        when(ratingRepository.findAllByFlightBookingIdIn(List.of(1L))).thenReturn(List.of(rating1));
+
+        List<RatingResponse> response = ratingService.getRatingsByAirlineId(1L);
+
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+
+        RatingResponse resp1 = response.get(0);
+        assertEquals(1L, resp1.getId());
+        assertEquals(5, resp1.getRating());
+        assertEquals(1L, resp1.getUserId());
+        assertEquals("F", resp1.getDelete());
+        assertEquals(1L, resp1.getFlightId());
+        assertNull(resp1.getHotelId());
+    }
+
+    @Test
+    void testSoftDeleteAllBy() {
+
+        user.setId(1L);
+
+        Ratings rating1 = new Ratings();
+        rating1.setId(1L);
+        rating1.setDelete("F");
+
+        Ratings rating2 = new Ratings();
+        rating2.setId(2L);
+        rating2.setDelete("F");
+
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(ratingRepository.findByUserId(1L)).thenReturn(List.of(rating1, rating2));
+
+
+        ratingService.softDeleteAllBy(1L);
+
+
+        verify(ratingRepository, times(1)).saveAll(List.of(rating1, rating2));  // Ensure saveAll is called once with the modified ratings
+
+
+        assertEquals("T", rating1.getDelete());
+        assertEquals("T", rating2.getDelete());
+    }
+
+    @Test
+    void testUndoSoftDeleteAllBy() {
+
+        user.setId(1L);
+
+        Ratings rating1 = new Ratings();
+        rating1.setId(1L);
+        rating1.setDelete("T");
+
+        Ratings rating2 = new Ratings();
+        rating2.setId(2L);
+        rating2.setDelete("T");
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(ratingRepository.findByUserId(1L)).thenReturn(List.of(rating1, rating2));
+
+
+        ratingService.undoSoftDeleteAllBy(1L);
+
+
+        verify(ratingRepository, times(1)).saveAll(List.of(rating1, rating2));  // Ensure saveAll is called once with the modified ratings
+
+
+        assertEquals("F", rating1.getDelete());
+        assertEquals("F", rating2.getDelete());
+    }
+
+
 }
