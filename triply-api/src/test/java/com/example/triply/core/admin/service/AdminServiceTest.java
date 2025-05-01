@@ -4,6 +4,7 @@ import com.example.triply.core.admin.entity.UserStatus;
 import com.example.triply.core.admin.repository.UserStatusRepository;
 import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
+import com.example.triply.core.auth.notification.UserBanWriteEvent;
 import com.example.triply.core.auth.notification.UserBanWritePublisher;
 import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
@@ -38,6 +39,7 @@ class AdminServiceTest {
         roleRepository = mock(RoleRepository.class);
         userStatusRepository = mock(UserStatusRepository.class);
         ratingService = mock(RatingService.class);
+        userBanWritePublisher = mock(UserBanWritePublisher.class);
         adminService = new AdminService(userStatusRepository, userRepository, roleRepository, userBanWritePublisher, flightPriceRepository, flightPriceWritePublisher, flightPriceMapper, ratingService);
         adminService.initUserActions();
     }
@@ -51,10 +53,11 @@ class AdminServiceTest {
         user.setStatus(status);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
+        doNothing().when(userBanWritePublisher).publish(any(UserBanWriteEvent.class));
         adminService.banUser(1L);
 
         verify(userRepository).banUser(1L);
+        verify(userBanWritePublisher, times(1)).publish(any(UserBanWriteEvent.class));
     }
 
     @Test
