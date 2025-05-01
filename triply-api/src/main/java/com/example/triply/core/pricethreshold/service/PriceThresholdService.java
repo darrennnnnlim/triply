@@ -18,7 +18,7 @@ public interface PriceThresholdService {
      * @param username The username of the user creating the threshold.
      * @return The created PriceThresholdDTO.
      */
-    PriceThresholdDTO createThreshold(CreatePriceThresholdRequest request, String username);
+    PriceThresholdDTO createThreshold(CreatePriceThresholdRequest request);
 
     /**
      * Retrieves all price thresholds for the specified user.

@@ -1711,10 +1711,10 @@ INSERT INTO users (username, password, email, status_id, role_id, created_dt, cr
 ('System2', '$2a$10$giPlj1WXG3RDyLddXUVrY.5AmMYQOIIi0CmFserGhd8eRZx/0ao8e', 'perafe3113@exitings.com', 1, 1, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM'),
 ('System3', '$2a$10$giPlj1WXG3RDyLddXUVrY.5AmMYQOIIi0CmFserGhd8eRZx/0ao8e', 'pekac65992@harinv.com', 1, 1, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM');;
 
-INSERT INTO price_thresholds (user_id, flight_id, hotel_id, threshold_price, created_dt, created_by, updated_dt, updated_by) VALUES
-(1, 1, NULL, 100.00, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM'),
-(1, 2, NULL, 150.00, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM'),
-(1, 3, NULL, 200.00, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM');
+INSERT INTO price_thresholds (user_id, threshold_price, concept_Id, concept_Type, start_date, end_date, created_dt, created_by, updated_dt, updated_by) VALUES
+(1, 100.00, 1, 'FLIGHT', '2025-08-01', '2025-08-05', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 150.00, 2, 'FLIGHT', '2025-08-01', '2025-08-05', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(1, 200.00, 3, 'FLIGHT', '2025-08-01', '2025-08-05', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
 
 INSERT INTO Booking (user_id, final_price, status, booking_time, created_dt, created_by, updated_dt, updated_by) VALUES
 (1, 200.00, 'Confirmed', '2025-05-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),

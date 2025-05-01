@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/thresholds") // Using a common base path like /api/v1
-@RequiredArgsConstructor
-@PreAuthorize("isAuthenticated()") // Require authentication for all methods in this controller
+@RequestMapping("/api/v1/priceThreshold") // Using a common base path like /api/v1
 public class PriceThresholdController {
 
     private final PriceThresholdService priceThresholdService;
+    
+    public PriceThresholdController(PriceThresholdService priceThresholdService) {
+        this.priceThresholdService = priceThresholdService;
+    }
 
     /**
      * POST /api/v1/thresholds : Create a new price threshold for the authenticated user.
@@ -31,8 +33,7 @@ public class PriceThresholdController {
      */
     @PostMapping
     public ResponseEntity<PriceThresholdDTO> createThreshold(@Valid @RequestBody CreatePriceThresholdRequest request) {
-        String username = getCurrentUsername();
-        PriceThresholdDTO createdThreshold = priceThresholdService.createThreshold(request, username);
+        PriceThresholdDTO createdThreshold = priceThresholdService.createThreshold(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdThreshold);
     }
 

@@ -1,8 +1,6 @@
 package com.example.triply.core.pricethreshold.mapper;
 
 import com.example.triply.core.auth.entity.User;
-import com.example.triply.core.flight.model.entity.Flight;
-import com.example.triply.core.hotel.model.entity.Hotel;
 import com.example.triply.core.pricethreshold.dto.PriceThresholdDTO;
 import com.example.triply.core.pricethreshold.entity.PriceThreshold;
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-04-23T21:39:40+0800",
+    date = "2025-05-01T23:49:11+0800",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.1 (Oracle Corporation)"
 )
 @Component
@@ -27,8 +25,6 @@ public class PriceThresholdMapperImpl implements PriceThresholdMapper {
         PriceThresholdDTO priceThresholdDTO = new PriceThresholdDTO();
 
         priceThresholdDTO.setUserId( priceThresholdUserId( priceThreshold ) );
-        priceThresholdDTO.setFlightId( priceThresholdFlightId( priceThreshold ) );
-        priceThresholdDTO.setHotelId( priceThresholdHotelId( priceThreshold ) );
         priceThresholdDTO.setId( priceThreshold.getId() );
         priceThresholdDTO.setThresholdPrice( priceThreshold.getThresholdPrice() );
 
@@ -58,36 +54,6 @@ public class PriceThresholdMapperImpl implements PriceThresholdMapper {
             return null;
         }
         Long id = user.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
-    }
-
-    private Long priceThresholdFlightId(PriceThreshold priceThreshold) {
-        if ( priceThreshold == null ) {
-            return null;
-        }
-        Flight flight = priceThreshold.getFlight();
-        if ( flight == null ) {
-            return null;
-        }
-        Long id = flight.getId();
-        if ( id == null ) {
-            return null;
-        }
-        return id;
-    }
-
-    private Long priceThresholdHotelId(PriceThreshold priceThreshold) {
-        if ( priceThreshold == null ) {
-            return null;
-        }
-        Hotel hotel = priceThreshold.getHotel();
-        if ( hotel == null ) {
-            return null;
-        }
-        Long id = hotel.getId();
         if ( id == null ) {
             return null;
         }

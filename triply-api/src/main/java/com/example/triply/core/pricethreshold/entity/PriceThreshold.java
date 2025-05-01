@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "price_thresholds")
@@ -26,6 +27,22 @@ public class PriceThreshold extends Auditable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "concept_type", nullable = false)
+    private String conceptType; // "FLIGHT" or "HOTEL"
+
+    @Column(name = "concept_id", nullable = false)
+    private Long conceptId; // This can be either flightId or hotelId
+
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date", nullable = false)
+    private LocalDateTime endDate;
+
+    @Column(name = "threshold_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal thresholdPrice;
+
+    /*
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id") // Nullable if threshold can be for hotel only
     private Flight flight;
@@ -36,7 +53,5 @@ public class PriceThreshold extends Auditable {
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal thresholdPrice;
-
-    // Ensure that either flight or hotel is set, but not both (or handle this logic in service layer)
-    // Consider adding constraints or validation logic if needed
+    */
 }

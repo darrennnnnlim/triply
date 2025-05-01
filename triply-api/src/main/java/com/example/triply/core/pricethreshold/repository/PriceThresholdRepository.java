@@ -29,7 +29,7 @@ public interface PriceThresholdRepository extends JpaRepository<PriceThreshold, 
      * @param price  The price to compare against.
      * @return A list of matching price thresholds.
      */
-    List<PriceThreshold> findByFlightAndThresholdPriceLessThanEqual(Flight flight, BigDecimal price);
+    List<PriceThreshold> findByConceptTypeAndConceptIdAndThresholdPriceLessThanEqual(String conceptType, Long conceptId, BigDecimal price);
 
     /**
      * Finds all price thresholds for a specific hotel where the threshold price
@@ -39,6 +39,6 @@ public interface PriceThresholdRepository extends JpaRepository<PriceThreshold, 
      * @param price The price to compare against.
      * @return A list of matching price thresholds.
      */
-    List<PriceThreshold> findByHotelAndThresholdPriceLessThanEqual(Hotel hotel, BigDecimal price);
+    //List<PriceThreshold> findByHotelAndThresholdPriceLessThanEqual(Hotel hotel, BigDecimal price);
 
 }
