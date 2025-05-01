@@ -1,4 +1,5 @@
 package com.example.triply.core.ratings.service;
+import com.example.triply.common.exception.RatingsNotFoundException;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.booking.entity.flight.FlightBooking;
@@ -9,25 +10,20 @@ import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
 import com.example.triply.core.ratings.repository.RatingRepository;
 import com.example.triply.core.ratings.entity.Ratings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Objects;
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class RatingService {
-    @Autowired
-    private RatingRepository ratingRepository;
-    @Autowired
-    private UserRepository userRepository;
 
-    @Autowired
-    private FlightBookingRepository flightBookingRepository;
+    private final RatingRepository ratingRepository;
+    private final UserRepository userRepository;
+    private final FlightBookingRepository flightBookingRepository;
+    private final HotelBookingRepository hotelBookingRepository;
 
-    @Autowired
-    private HotelBookingRepository hotelBookingRepository;
+
+    public static final String FLIGHT = "Flight";
 
     public RatingService(UserRepository userRepository,
                          FlightBookingRepository flightBookingRepository,
@@ -49,7 +45,7 @@ public class RatingService {
         FlightBooking flightBooking = null;
         HotelBooking hotelBooking = null;
 
-        if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
+        if (FLIGHT.equalsIgnoreCase(ratingRequest.getType())) {
             flightBooking = flightBookingRepository.findById(ratingRequest.getFlightId())
                     .orElseThrow(() -> new RuntimeException("Flight Booking not found"));
         } else {
@@ -59,7 +55,7 @@ public class RatingService {
 
 
         Ratings existingRating = null;
-        if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
+        if (FLIGHT.equalsIgnoreCase(ratingRequest.getType())) {
             existingRating = ratingRepository.findByUserAndFlightBooking(user, flightBooking);
         } else {
             existingRating = ratingRepository.findByUserAndHotelBooking(user, hotelBooking);
@@ -86,11 +82,10 @@ public class RatingService {
         RatingResponse ratingResponse = new RatingResponse();
         ratingResponse.setId(ratings.getId());
         ratingResponse.setRating(ratings.getRating());
-        System.out.println(ratings.getUser().getId());
         ratingResponse.setUserId(ratings.getUser().getId());
         ratingResponse.setDelete(ratings.getDelete());
 
-        if ("Flight".equalsIgnoreCase(ratingRequest.getType())) {
+        if (FLIGHT.equalsIgnoreCase(ratingRequest.getType())) {
             ratingResponse.setFlightId(ratings.getFlightBooking().getId());
             ratingResponse.setHotelId(null);
         } else {
@@ -209,7 +204,7 @@ public class RatingService {
         }
 
         if (ratings == null) {
-            throw new RuntimeException("Ratings not found for the provided criteria");
+            throw new RatingsNotFoundException("Ratings not found for the provided criteria");
         }
 
         if ("F".equals(ratings.getDelete())) {
