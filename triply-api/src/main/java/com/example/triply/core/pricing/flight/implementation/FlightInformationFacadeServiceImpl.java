@@ -39,11 +39,10 @@ public class FlightInformationFacadeServiceImpl {
     public List<FlightOfferDTO> getFlightPrices(FlightSearchRequestDTO flightSearchRequestDTO) {
 		String originIATA = flightSearchRequestDTO.getOrigin();
 		String destIATA = flightSearchRequestDTO.getDestination();
-		LocalDateTime departureTime = flightSearchRequestDTO.getDepartureDate();
-		LocalDateTime arrivalTime = flightSearchRequestDTO.getDepartureDate();
+		LocalDateTime departureTime = flightSearchRequestDTO.getDepartureDate().atTime(0,0);
 		BigDecimal maxPrice = flightSearchRequestDTO.getMaxPrice();
 
-	 	List<Flight> filteredFlights =  flightRepository.findByOriginAndDestinationAndDepartureTimeAndArrivalTime(originIATA, destIATA, departureTime, arrivalTime);
+	 	List<Flight> filteredFlights = flightRepository.findByOriginAndDestinationAndDepartureTime(originIATA, destIATA, departureTime);
 	 	List<Long> flightIds = new ArrayList<>();
 	 	Map<Long, Flight> flightIdToFlightMap = new HashMap<>();
 	 	List<Long> airlineIds = new ArrayList<>();
@@ -90,7 +89,11 @@ public class FlightInformationFacadeServiceImpl {
 
 			 flightOfferDTOs.add(foDTO);
 	 	}
-
+		if (maxPrice != null) {
+			flightOfferDTOs = flightOfferDTOs.stream().filter(flightOfferDTO -> flightOfferDTO.getBasePrice().compareTo(maxPrice) <= 0)
+					.collect(Collectors.toList());
+		}
+		flightOfferDTOs.sort(Comparator.comparing(FlightOfferDTO::getBasePrice));
 	 	return flightOfferDTOs;
 	}
 }

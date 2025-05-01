@@ -19,9 +19,11 @@ export class AuthService {
   private readonly API_URL = environment.apiUrl + '/auth';
   private userSubject: BehaviorSubject<User | null> =
     new BehaviorSubject<User | null>(null);
+
   private authState = new BehaviorSubject<{
     isLoggedIn: boolean;
     username?: string;
+    role?: string;
   }>({ isLoggedIn: false });
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -38,7 +40,7 @@ export class AuthService {
     return this.http
       .post<LoginResponse>(`${this.API_URL}/login`, credentials, {
         // Temporarily disabled withCredentials for testing
-        // withCredentials: true,
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
@@ -54,11 +56,39 @@ export class AuthService {
         tap((response) => {
           this.authState.next({
             isLoggedIn: true,
-            username: response.username, // Add username to login response
+            username: response.username,
+            role: response.role,
           });
+          // Persist to localStorage
+          localStorage.setItem('user_role', response.role);
+          localStorage.setItem('username', response.username);
         }),
         map(() => undefined)
       );
+  }
+
+  initAuthStateFromBackend() {
+    this.http
+      .get<{ loggedIn: boolean; username?: string; role?: string }>(
+        `${this.API_URL}/check-session`,
+        { withCredentials: true }
+      )
+      .subscribe((response) => {
+        let role = response.role;
+        if (!role) {
+          role = localStorage.getItem('user_role') || '';
+        }
+        this.authState.next({
+          isLoggedIn: response.loggedIn,
+          username: response.username,
+          role: response.role,
+        });
+        // Optionally, persist to localStorage for instant reloads
+        if (response.role && response.username) {
+          localStorage.setItem('user_role', response.role);
+          localStorage.setItem('username', response.username);
+        }
+      });
   }
 
   register(credentials: { // Update register method
@@ -126,11 +156,25 @@ export class AuthService {
 
   logout(): Observable<void> {
     return this.http
-      .post<void>(`${this.API_URL}/logout`, {}, { withCredentials: true })
+      .post<void>(
+        `${this.API_URL}/logout`,
+        {},
+        { withCredentials: true, responseType: 'text' as 'json' }
+      )
       .pipe(
         tap(() => {
-          this.isLoggedInSubject.next(false);
+          this.authState.next({ isLoggedIn: false });
+          localStorage.removeItem('user_role');
+          localStorage.removeItem('username');
         })
       );
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('access_token');
+  }
+
+  isAdmin(): boolean {
+    return localStorage.getItem('user_role') === 'ROLE_ADMIN';
   }
 }

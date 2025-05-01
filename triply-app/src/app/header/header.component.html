@@ -53,10 +53,34 @@
   <ul class="list-unstyled">
     <li>
       <a
-        routerLink="/history"
+        routerLink="/home"
         class="text-decoration-none"
         (click)="toggleHamburgerMenu()"
-        >History</a
+        >Home</a
+      >
+    </li>
+    <li *ngIf="isAdmin">
+      <a
+        routerLink="/admin"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Admin Panel</a
+      >
+    </li>
+    <li *ngIf="isAdmin">
+      <a
+        routerLink="/banned"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Ban Ratings</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/rateBooking"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Rate Booking</a
       >
     </li>
     <li>

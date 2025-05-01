@@ -3,7 +3,7 @@ package com.example.triply.core.pricing.hotel.notification;
 import com.example.triply.core.hotel.model.dto.HotelRoomTypeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class HotelRoomTypeWritePublisherImpl {
     private final List<HotelRoomTypeListener> listeners;
-    private final HotelRoomTypeNotificationTest hotelRoomTypeNotificationTest;
+    private HotelRoomTypeNotificationTest hotelRoomTypeNotificationTest;
 
     @Autowired
     public HotelRoomTypeWritePublisherImpl(HotelRoomTypeNotificationTest hotelRoomTypeNotificationTest) {
@@ -21,7 +21,7 @@ public class HotelRoomTypeWritePublisherImpl {
         this.hotelRoomTypeNotificationTest = hotelRoomTypeNotificationTest;
 
         // Register listeners here
-        this.addListener(hotelRoomTypeNotificationTest);
+        this.addListener(this.hotelRoomTypeNotificationTest);
     }
 
     public void addListener(HotelRoomTypeListener listener) {
@@ -32,17 +32,17 @@ public class HotelRoomTypeWritePublisherImpl {
         listeners.remove(listener);
     }
 
+    public void clearListeners() { this.listeners.clear(); }
+
     public void publish(List<HotelRoomTypeDTO> oldHotelRoomTypes, List<HotelRoomTypeDTO> newHotelRoomTypes) {
         HotelRoomTypeWriteEvent event = new HotelRoomTypeWriteEvent(oldHotelRoomTypes, newHotelRoomTypes);
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @Override
                 public void afterCommit() {
                     notifyListeners(event);
                 }
             });
-        } else {
-            notifyListeners(event);
         }
     }
 

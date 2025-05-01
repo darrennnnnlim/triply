@@ -23,6 +23,8 @@ public class RatingResponse {
     @Null
     private Long hotelId;
 
+    @Null
+    private Long airlineId;
 
     @Null
     private String delete;

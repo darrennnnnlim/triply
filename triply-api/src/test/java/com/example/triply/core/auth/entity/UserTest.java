@@ -19,19 +19,39 @@ public class UserTest {
         UserStatus status = new UserStatus();
         user.setStatus(status);
 
-        Role role1 = new Role();
-        Role role2 = new Role();
-        Set<Role> roles = new HashSet<>();
-        roles.add(role1);
-        roles.add(role2);
-        user.setRoles(roles);
+        Role role = new Role();
+        user.setRole(role);
 
         assertEquals(1L, user.getId());
         assertEquals("testuser", user.getUsername());
         assertEquals("secret", user.getPassword());
         assertEquals(status, user.getStatus());
-        assertEquals(2, user.getRoles().size());
+        assertEquals(role, user.getRole());
     }
+
+//    @Test
+//    void testNoArgsConstructorAndSetters() {
+//        User user = new User();
+//        user.setId(1L);
+//        user.setUsername("testuser");
+//        user.setPassword("secret");
+//
+//        UserStatus status = new UserStatus();
+//        user.setStatus(status);
+//
+//        Role role1 = new Role();
+//        Role role2 = new Role();
+//        Set<Role> roles = new HashSet<>();
+//        roles.add(role1);
+//        roles.add(role2);
+//        user.setRoles(roles);
+//
+//        assertEquals(1L, user.getId());
+//        assertEquals("testuser", user.getUsername());
+//        assertEquals("secret", user.getPassword());
+//        assertEquals(status, user.getStatus());
+//        assertEquals(2, user.getRoles().size());
+//    }
 
     @Test
     void testUsernameConstructor() {

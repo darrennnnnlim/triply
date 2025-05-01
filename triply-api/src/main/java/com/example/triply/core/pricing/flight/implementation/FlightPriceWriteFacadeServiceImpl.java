@@ -31,7 +31,6 @@ public class FlightPriceWriteFacadeServiceImpl {
 
     @Transactional
     public List<FlightPriceDTO> updateExistingFlightPrice(Long flightId, Long flightClassId, BigDecimal newBasePrice) {
-        //TODO: (Bryan) Swap repository calls to service calls
         Optional<FlightPrice> flightPriceOptional = flightPriceRepository.findByFlightAndFlightClass(flightId, flightClassId);
         List<FlightPriceDTO> oldFlightPrices = new ArrayList<>();
         List<FlightPriceDTO> newFlightPrices = new ArrayList<>();
@@ -55,14 +54,6 @@ public class FlightPriceWriteFacadeServiceImpl {
     public List<FlightPriceDTO> insertNewFlightPrice(Long flightId, Long flightClassId,
                                                   BigDecimal newBasePrice, BigDecimal discount,
                                                   BigDecimal surgeMultiplier) {
-        //TODO: Validate flight and flight class exists in their repos
-
-
-        //TODO: Validate no existing FlightPrice for this flightId and flightClassId
-
-        //TODO: Infer departureDate from Flight
-
-        //TODO:  Build new Flightprice with null id
         FlightPrice newFlightPrice = new FlightPrice();
 
         // Insert new FlightPrice into Repo
@@ -75,7 +66,13 @@ public class FlightPriceWriteFacadeServiceImpl {
         publisher.publish(oldFlightPrices, newFlightPrices);
         return newFlightPrices;
     }
-    // Removed addPriceListener and removePriceListener as they are not defined in the FlightPriceWritePublisher interface
-    // Listener registration is handled automatically by Spring's event mechanism (@EventListener)
+
+    public void addPriceListener(FlightPriceListener listener) {
+        publisher.addListener(listener);
+    }
+
+    public void removePriceListener(FlightPriceListener listener) {
+        publisher.removeListener(listener);
+    }
 
 }

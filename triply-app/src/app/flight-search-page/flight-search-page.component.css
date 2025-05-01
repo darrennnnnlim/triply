@@ -31,7 +31,7 @@
 .flight-offer-card {
   display: flex;
   flex-direction: row;
-  justify-content: space-between
+  justify-content: space-between;
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 8px;
@@ -55,6 +55,7 @@
 
 .flight-details {
   flex: 1
+  
 }
 
 .flight-price {
@@ -77,4 +78,22 @@
   font-weight: bold;
   color: #28a745;
   margin-top: 10px;
+}
+
+.form-fields {
+  display: flex;
+}
+
+.form-field {
+  margin: 4px;
+}
+
+.search-card {
+  padding: 4px;
+  margin: 8px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: end;
 }

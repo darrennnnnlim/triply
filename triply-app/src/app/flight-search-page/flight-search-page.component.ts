@@ -48,18 +48,12 @@ export class FlightSearchPageComponent {
       arrivalDate: this.searchForm.value.arrivalDate,
       maxPrice: this.searchForm.value.maxPrice ? this.searchForm.value.maxPrice : undefined
     };
-    console.log(searchRequest)
     this.flightSearchPageService.searchFlights(searchRequest).subscribe(response => {
-      console.log('Search Results:', response);
       this.filteredFlightOffers = response;
     })
   }
 
   ngOnInit(): void {
-    // Dynamically setting the offerUrl after initialization
-    // this.flightOffers.forEach(f => {
-    //   f.offerUrl = 'https://www.google.com';  // Set a placeholder URL for each flight offer
-    // });
   }
 
   onFlightOfferClick(flightOffer: any): void {
@@ -68,7 +62,6 @@ export class FlightSearchPageComponent {
 
     // Navigate to the flight offer details page
     // this.router.navigate(['/flight-offer']);
-    console.log(flightOffer)
     this.router.navigate(['/flight-offer'], {
       state: { selectedFlightOffer : flightOffer }
     });

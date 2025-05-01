@@ -11,7 +11,6 @@ import org.hibernate.envers.Audited;
 import java.util.Set;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
 @Entity
 @Table(name = "users")
 @Getter
@@ -39,13 +38,10 @@ public class User extends Auditable {
     @JoinColumn(name = "status_id")
     private UserStatus status;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+
 
     public User(String username) {
         this.username = username;

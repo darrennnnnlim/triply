@@ -5,19 +5,19 @@ import { CommonModule } from '@angular/common';
   selector: 'app-banned-users',
   imports: [CommonModule],
   templateUrl: './banned-users.component.html',
-  styleUrl: './banned-users.component.css'
+  styleUrl: './banned-users.component.css',
 })
 export class BannedUsersComponent {
   bannedUsers = [
-    {id: 1, name: "Hello", email: "test@mail.com"},
-    {id: 2, name: "kelvin", email: "kelvin@mail.com"}
-  ]
+    { id: 1, name: 'Hello', email: 'test@mail.com' },
+    { id: 2, name: 'kelvin', email: 'kelvin@mail.com' },
+  ];
   isPopup = false;
-  popupMsg = "";
-  unbanUser (id: number){
-    this.bannedUsers = this.bannedUsers.filter(user => user.id !== id);
-    console.log("user with ID: " + id + " has been unbanned");
+  popupMsg = '';
+  unbanUser(id: number) {
+    this.bannedUsers = this.bannedUsers.filter((user) => user.id !== id);
+    // console.log("user with ID: " + id + " has been unbanned");
     this.isPopup = !this.isPopup;
-    this.popupMsg = "user with ID: " + id + " has been unbanned";
+    this.popupMsg = 'user with ID: ' + id + ' has been unbanned';
   }
 }

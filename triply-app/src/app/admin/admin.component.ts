@@ -5,6 +5,8 @@ import { EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { AuthService } from '../auth/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -13,6 +15,24 @@ import { environment } from '../../environments/environment';
   standalone: false,
 })
 export class AdminComponent {
+  authState$!: Observable<{
+    isLoggedIn: boolean;
+    username?: string;
+    role?: string;
+  }>;
+
+  constructor(
+    private adminService: AdminService,
+    private router: Router,
+    public authService: AuthService
+  ) {
+    this.authState$ = this.authService.authState$ as Observable<{
+      isLoggedIn: boolean;
+      username?: string;
+      role?: string;
+    }>;
+  }
+
   response: string | null = null;
   errorMessage: string | null = null;
   usersWithRoles: UserRoleDTO[] = [];
@@ -25,19 +45,30 @@ export class AdminComponent {
   showBannedUsers = false;
   userToAction = '';
   userIdToAction: number | null = null;
-  dialogAction: 'ban' | 'unban' = 'ban';
+  dialogAction: 'ban' | 'unban' | 'promote' | 'demote' = 'ban';
   searchUsername: string = '';
+  currentUserId: number | null = null;
 
-  constructor(private adminService: AdminService, private router: Router) {}
-  private readonly API_URL = environment.apiUrl + '/admin';
   ngOnInit(): void {
+    this.authService.initAuthStateFromBackend();
+    this.authState$.subscribe((authState) => {
+      // console.log('Auth state:', authState);
+    });
     this.adminService.getCurrentUser().subscribe({
-      next: (username) => {
-        this.currentUsername = username;
+      next: (data) => {
+        // console.log('Data:', data);
+        const newdata = JSON.parse(data);
+        this.currentUsername = newdata.username;
         // Fetch all users with roles
         this.adminService.getUsersWithRoles().subscribe({
           next: (data) => {
             this.usersWithRoles = data;
+            // Find the current user's ID
+            this.currentUserId =
+              this.usersWithRoles.find(
+                (user) => user.username === this.currentUsername
+              )?.id ?? null;
+
             // Check if the current user is an admin
             this.isAdmin = this.usersWithRoles.some(
               (user) =>
@@ -50,51 +81,30 @@ export class AdminComponent {
           },
           error: (error) => {
             console.error('Error fetching users with roles:', error);
-            this.router.navigate(['/home']); // Optional: handle error
+            this.router.navigate(['/home']);
           },
         });
       },
       error: (error) => {
         console.error('Error fetching current user:', error);
-        this.router.navigate(['/login']); // 🚨 Redirect if not logged in!
+        this.router.navigate(['/login']);
       },
     });
   }
-  
-  // ngOnInit(): void {
-  //   this.adminService.getCurrentUser().subscribe({
-  //     next: (username) => {
-  //       this.currentUsername = username;
-  //       // console.log('Current username:', this.currentUsername);
 
-  //       // Fetch all users with roles
-  //       this.adminService.getUsersWithRoles().subscribe({
-  //         next: (data) => {
-  //           // console.log('Users with roles:', data);
-  //           this.usersWithRoles = data;
+  promoteUser(userId: number): void {
+    this.adminService.promoteUser(userId).subscribe({
+      next: () => this.fetchUsersWithRoles(),
+      error: (error) => console.error(`Error promoting user:`, error),
+    });
+  }
 
-  //           // Check if the current user is an admin
-  //           this.isAdmin = this.usersWithRoles.some(
-  //             (user) =>
-  //               user.username === this.currentUsername &&
-  //               user.roleName === 'ROLE_ADMIN'
-  //           );
-  //           // console.log('Is admin?', this.isAdmin);
-
-  //           if (!this.isAdmin) {
-  //             this.router.navigate(['/home']);
-  //           }
-  //         },
-  //         error: (error) => {
-  //           console.error('Error fetching users with roles:', error);
-  //         },
-  //       });
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching current user:', error);
-  //     },
-  //   });
-  // }
+  demoteUser(userId: number): void {
+    this.adminService.demoteUser(userId).subscribe({
+      next: () => this.fetchUsersWithRoles(),
+      error: (error) => console.error(`Error demoting user:`, error),
+    });
+  }
 
   searchUsers() {
     if (this.showBannedUsers) {
@@ -138,31 +148,9 @@ export class AdminComponent {
     });
   }
 
-  openActionDialog(
-    userId: number,
-    username: string,
-    action: 'ban' | 'unban'
-  ): void {
-    this.userIdToAction = userId;
-    this.userToAction = username;
-    this.isDialogOpen = true;
-    this.dialogAction = action;
-  }
-
   cancelAction() {
     this.isDialogOpen = false;
     this.userIdToAction = null;
-  }
-
-  confirmAction(): void {
-    if (this.userIdToAction !== null) {
-      if (this.dialogAction === 'ban') {
-        this.banUser(this.userIdToAction);
-      } else if (this.dialogAction === 'unban') {
-        this.unbanUser(this.userIdToAction);
-      }
-    }
-    this.isDialogOpen = false;
   }
 
   unbanUser(userId: number): void {
@@ -197,5 +185,31 @@ export class AdminComponent {
         console.error('Error fetching users:', error);
       },
     });
+  }
+
+  confirmAction(): void {
+    if (this.userIdToAction !== null) {
+      if (this.dialogAction === 'ban') {
+        this.banUser(this.userIdToAction);
+      } else if (this.dialogAction === 'unban') {
+        this.unbanUser(this.userIdToAction);
+      } else if (this.dialogAction === 'promote') {
+        this.promoteUser(this.userIdToAction);
+      } else if (this.dialogAction === 'demote') {
+        this.demoteUser(this.userIdToAction);
+      }
+    }
+    this.isDialogOpen = false;
+  }
+
+  openActionDialog(
+    userId: number,
+    username: string,
+    action: 'ban' | 'unban' | 'promote' | 'demote'
+  ): void {
+    this.userIdToAction = userId;
+    this.userToAction = username;
+    this.isDialogOpen = true;
+    this.dialogAction = action;
   }
 }

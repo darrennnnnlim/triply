@@ -176,7 +176,6 @@ public class HotelBookingService extends BookingTemplate {
         booking.setBookingTime(LocalDateTime.now());
         Booking saveBooking = bookingRepository.save(booking);
 
-//        Booking saveBooking = bookingService.saveBooking(booking);
         request.setId(saveBooking.getId());
 
         request.getHotelBooking().setBookingId(saveBooking.getId());
@@ -220,7 +219,7 @@ public class HotelBookingService extends BookingTemplate {
     }
 
     public List<HotelBookingResponse> getBookingByBookingId (Long bookingId, Long userId){
-        List<HotelBooking> hotelBookings = hotelBookingRepository.findByBookingId(userId);
+        List<HotelBooking> hotelBookings = hotelBookingRepository.findByBookingId(bookingId);
         List<HotelBookingResponse> hotelBookingResponses = new ArrayList<>();
         for (HotelBooking booking : hotelBookings) {
             HotelBookingResponse resp = new HotelBookingResponse();

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SecurityConfig {
 
@@ -60,11 +62,12 @@ public class SecurityConfig {
                         .csrfTokenRequestHandler(requestAttributeHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/{version}/auth/reset-password").authenticated()
-                        .requestMatchers("/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/ratings/**", "/api/v1/booking/**", "/api/v1/flight/**", "/api/v1/hotel/**").permitAll()
-                        .requestMatchers("/api/{version}/auth/check-session").permitAll()
-                        .requestMatchers("/api/{version}/auth/refresh").permitAll()
-                        .requestMatchers("/api/{version}/admin/currentuser").permitAll()
+                        .requestMatchers("/api/{version}/auth/login/**", "/api/{version}/auth/register/**", "/api/{version}/auth/reset-password/**").permitAll()
+                        .requestMatchers("/api/{version}/auth/reset-password", "/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/ratings/**", "/api/v1/booking/**", "/api/v1/flight/**", "/api/v1/hotel/**", "/api/v1/flightsearch").authenticated()
+                        .requestMatchers("/api/{version}/auth/check-session").authenticated()
+                        .requestMatchers("/api/{version}/auth/refresh").authenticated()
+                        .requestMatchers("/api/{version}/admin/user/**").authenticated()
+                        .requestMatchers("/api/{version}/admin/currentuser").authenticated()
                         .requestMatchers("/api/{version}/booking/test").hasRole("USER")
                         .requestMatchers("/api/{version}/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/{version}/booking/test", "/api/{version}/ratings/**").hasRole("USER")
