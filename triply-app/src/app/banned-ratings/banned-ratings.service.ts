@@ -11,15 +11,15 @@ export class BanedUserRating {
     constructor(private http: HttpClient) {}
 
     getAllRatings(): Observable<any> {
-    return this.http.get(`${this.RATINGS_URL}/allRatings`);
+    return this.http.get(`${this.RATINGS_URL}/allRatings`, { withCredentials: true });
     }
 
     getFlightDetails(flightId: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/flight/${flightId}`);
+    return this.http.get(`${environment.apiUrl}/flight/${flightId}`, { withCredentials: true });
     }
 
     getHotelDetails(hotelId: number): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/hotel/${hotelId}`);
+    return this.http.get(`${environment.apiUrl}/hotel/${hotelId}`, { withCredentials: true });
     }
 
     getUser(userId: number): Observable<string> {

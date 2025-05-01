@@ -40,7 +40,7 @@ export class AuthService {
     return this.http
       .post<LoginResponse>(`${this.API_URL}/login`, credentials, {
         // Temporarily disabled withCredentials for testing
-        // withCredentials: true,
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'

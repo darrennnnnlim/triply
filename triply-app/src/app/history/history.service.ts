@@ -13,27 +13,27 @@ export class HistoryService {
   constructor(private http: HttpClient) {}
 
   getFlightBookings(userId: number): Observable<any> {
-    return this.http.get(`${this.API_URL}/flight/user/${userId}`);
+    return this.http.get(`${this.API_URL}/flight/user/${userId}`, { withCredentials: true });
   }
 
   getHotelBookings(userId: number): Observable<any> {
-    return this.http.get(`${this.API_URL}/hotel/user/${userId}`);
+    return this.http.get(`${this.API_URL}/hotel/user/${userId}`, { withCredentials: true });
   }
 
   getFlightDetails(flightId: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `/flight/${flightId}`);
+    return this.http.get(environment.apiUrl + `/flight/${flightId}`, { withCredentials: true });
   }
 
   getHotelDetails(hotelId: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `/hotel/${hotelId}`);
+    return this.http.get(environment.apiUrl + `/hotel/${hotelId}`, { withCredentials: true });
   }
 
   getRatings(userId: number): Observable<any> {
-    return this.http.get(`${this.RATINGS_URL}/user/${userId}`);
+    return this.http.get(`${this.RATINGS_URL}/user/${userId}`, { withCredentials: true });
   }
 
   // getHotelRatings(userId: number): Observable<any> {
-  //   return this.http.get(`${this.RATINGS_URL}/user/${userId}`);
+  //   return this.http.get(`${this.RATINGS_URL}/user/${userId}`, { withCredentials: true });
   // }
 
   postRating(rating: Rating): Observable<Rating> {
