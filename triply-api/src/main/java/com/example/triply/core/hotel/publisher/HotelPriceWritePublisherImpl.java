@@ -1,7 +1,6 @@
 package com.example.triply.core.hotel.publisher;
 
 import com.example.triply.core.hotel.event.HotelPriceWriteEvent;
-import com.example.triply.core.hotel.listener.HotelPriceEmailNotificationListener; // To be created
 import com.example.triply.core.hotel.listener.HotelPriceListener;
 import com.example.triply.core.hotel.model.dto.HotelPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
