@@ -6,6 +6,7 @@ import com.example.triply.core.auth.entity.Role;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.notification.UserBanWriteEvent;
 import com.example.triply.core.auth.notification.UserBanWritePublisher;
+import com.example.triply.core.auth.notification.UserUnbanWritePublisher;
 import com.example.triply.core.auth.repository.RoleRepository;
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.flight.mapper.FlightPriceMapper;
@@ -32,6 +33,7 @@ class AdminServiceTest {
     private FlightPriceRepository flightPriceRepository;
     private FlightPriceWritePublisherImpl flightPriceWritePublisher;
     private FlightPriceMapper flightPriceMapper;
+    private UserUnbanWritePublisher userUnbanWritePublisher;
 
     @BeforeEach
     void setUp() {
@@ -40,7 +42,8 @@ class AdminServiceTest {
         userStatusRepository = mock(UserStatusRepository.class);
         ratingService = mock(RatingService.class);
         userBanWritePublisher = mock(UserBanWritePublisher.class);
-        adminService = new AdminService(userStatusRepository, userRepository, roleRepository, userBanWritePublisher, flightPriceRepository, flightPriceWritePublisher, flightPriceMapper, ratingService);
+        userUnbanWritePublisher = mock(UserUnbanWritePublisher.class);
+        adminService = new AdminService(userStatusRepository, userRepository, roleRepository, userBanWritePublisher, userUnbanWritePublisher, flightPriceRepository, flightPriceWritePublisher, flightPriceMapper, ratingService);
         adminService.initUserActions();
     }
 
