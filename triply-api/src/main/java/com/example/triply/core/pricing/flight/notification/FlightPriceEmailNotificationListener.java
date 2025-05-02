@@ -73,7 +73,7 @@ public class FlightPriceEmailNotificationListener implements FlightPriceListener
                     }
                     log.debug("Querying thresholds for flight ID {} with new price {}", newPrice.getFlight().getId(), newEffectivePrice);
                     // Pass the Flight object, not just the ID
-                    List<User> usersToNotify = priceThresholdService.findUsersToNotifyForFlight(newPrice.getFlight(), newEffectivePrice);
+                    List<User> usersToNotify = priceThresholdService.findUsersToNotifyForFlight(newPrice.getFlight().getId(), newEffectivePrice);
 
                     log.info("Found {} users to notify for flight price drop.", usersToNotify.size());
                     if (usersToNotify != null && !usersToNotify.isEmpty()) { // Added null check

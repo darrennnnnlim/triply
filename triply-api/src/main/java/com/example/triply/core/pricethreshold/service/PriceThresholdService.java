@@ -39,11 +39,11 @@ public interface PriceThresholdService {
     /**
      * Finds users whose flight price thresholds are met by a new price.
      *
-     * @param flight   The flight entity.
+     * @param flightId   The flight entity.
      * @param newPrice The new price of the flight.
      * @return A list of User entities to notify.
      */
-    List<User> findUsersToNotifyForFlight(Flight flight, BigDecimal newPrice);
+    List<User> findUsersToNotifyForFlight(Long flightId, BigDecimal newPrice);
 
     /**
      * Finds users whose hotel price thresholds are met by a new price.
