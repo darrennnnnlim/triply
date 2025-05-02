@@ -46,7 +46,11 @@ pipeline {
             steps {
                 dir(env.BACKEND_DIR) {
                     withSonarQubeEnv(credentialsId: env.SONARCLOUD_CREDENTIAL_ID, installationName: 'SonarCloud') {
-                        sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar'
+                        sh '''
+                            mvn clean verify
+                            mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.11.0.3922:sonar \
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        '''
                     }
                 }
             }
