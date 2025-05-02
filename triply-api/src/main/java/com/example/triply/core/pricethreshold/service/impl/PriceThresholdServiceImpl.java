@@ -96,9 +96,9 @@ public class PriceThresholdServiceImpl implements PriceThresholdService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> findUsersToNotifyForFlight(Flight flight, BigDecimal newPrice) {
-        log.debug("Finding users to notify for flight ID: {} with price <= {}", flight.getId(), newPrice);
-        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByConceptTypeAndConceptIdAndThresholdPriceLessThanEqual("FLIGHT", flight.getId(), newPrice);
+    public List<User> findUsersToNotifyForFlight(Long flightId, BigDecimal newPrice) {
+        log.debug("Finding users to notify for flight ID: {} with price <= {}", flightId, newPrice);
+        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByConceptTypeAndConceptIdAndThresholdPriceGreaterThanEqual("FLIGHT", flightId, newPrice);
 
         // Fetch users and initialize necessary fields within the transaction
         List<User> users = matchingThresholds.stream()
@@ -117,7 +117,7 @@ public class PriceThresholdServiceImpl implements PriceThresholdService {
     @Transactional(readOnly = true)
     public List<User> findUsersToNotifyForHotel(Hotel hotel, BigDecimal newPrice) {
         log.debug("Finding users to notify for hotel ID: {} with price <= {}", hotel.getId(), newPrice);
-        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByConceptTypeAndConceptIdAndThresholdPriceLessThanEqual("HOTEL", hotel.getId(), newPrice);
+        List<PriceThreshold> matchingThresholds = priceThresholdRepository.findByConceptTypeAndConceptIdAndThresholdPriceGreaterThanEqual("HOTEL", hotel.getId(), newPrice);
 
         return matchingThresholds.stream()
                 .map(PriceThreshold::getUser)

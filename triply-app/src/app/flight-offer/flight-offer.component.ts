@@ -139,7 +139,7 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
       const thresholdData: PriceThresholdDialogData = {
           thresholdPrice: thresholdPrice,
           conceptType: 'FLIGHT',
-          conceptId: this.selectedFlightOffer.flightPriceId,
+          conceptId: this.selectedFlightOffer.flightId,
           userId: this.currentUserId,
           startDate: this.selectedFlightOffer.departureDate,
           endDate: this.selectedFlightOffer.arrivalDate
