@@ -4,6 +4,7 @@ export interface FlightOffer {
   destination: string;
   departureDate: string; // ISO string format
   arrivalDate: string; // ISO string format
+  flightId: number;
   flightNumber: string;
 
   flightClassId: number;

@@ -114,4 +114,14 @@ public class AuthResource {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MESSAGE, ex.getMessage()));
         }
     }
+
+    @GetMapping("/userid")
+    public ResponseEntity<Long> getUserId(HttpServletRequest httpRequest) {
+        String username = jwtService.extractUsernameFromRequest(httpRequest);
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(authService.getUserId(username));
+    }
 }

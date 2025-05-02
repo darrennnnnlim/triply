@@ -13,10 +13,10 @@ import { RouterModule } from '@angular/router';
 import { LoginModule } from './auth/login/login.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BookingModule } from './booking/booking.module';
 import { HeaderModule } from './header/header.module';
 import { ViewBookingModule } from './booking/viewbooking/viewbooking.module';
 import { MakeBookingModule } from './booking/makebooking/makebooking.module';
+import { ConfirmedBookingModule } from './booking/confirmedbooking/confirmedbooking.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,10 +26,10 @@ import { MakeBookingModule } from './booking/makebooking/makebooking.module';
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(routes),
-    BookingModule,
     HeaderModule,
     ViewBookingModule,
-    MakeBookingModule
+    MakeBookingModule,
+    ConfirmedBookingModule,
   ],
   providers: [
     provideHttpClient(

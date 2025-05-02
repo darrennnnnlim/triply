@@ -1,6 +1,9 @@
 package com.example.triply.core.booking.service.template;
 
 import com.example.triply.core.booking.event.BookingConfirmedEvent;
+import com.example.triply.core.flight.mapper.FlightAddonMapper;
+import com.example.triply.core.flight.model.entity.*;
+import com.example.triply.core.flight.repository.*;
 import org.springframework.context.ApplicationEventPublisher;
 
 import com.example.triply.core.booking.dto.BookingDTO;
@@ -18,14 +21,6 @@ import com.example.triply.core.booking.repository.flight.FlightBookingRepository
 import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.flight.FlightBookingAddon;
 import com.example.triply.core.booking.repository.flight.FlightBookingAddonRepository;
-import com.example.triply.core.flight.model.entity.Flight;
-import com.example.triply.core.flight.model.entity.FlightAddonPrice;
-import com.example.triply.core.flight.model.entity.FlightClass;
-import com.example.triply.core.flight.model.entity.FlightPrice;
-import com.example.triply.core.flight.repository.FlightAddonPriceRepository;
-import com.example.triply.core.flight.repository.FlightClassRepository;
-import com.example.triply.core.flight.repository.FlightPriceRepository;
-import com.example.triply.core.flight.repository.FlightRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,18 +50,20 @@ public class FlightBookingService extends BookingTemplate {
     private final FlightBookingAddonMapper flightBookingAddonMapper;
     private final BookingRepository bookingRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final FlightAddonRepository flightAddonRepository;
+    private final FlightAddonMapper flightAddonMapper;
 
     public FlightBookingService(FlightRepository flightRepository,
-                              FlightClassRepository flightClassRepository,
-                              FlightAddonPriceRepository flightAddonPriceRepository,
-                              FlightPriceRepository flightPriceRepository,
-                              BookingMapper bookingMapper,
-                              FlightBookingMapper flightBookingMapper,
-                              FlightBookingRepository flightBookingRepository,
-                              FlightBookingAddonRepository flightBookingAddonRepository,
-                              FlightBookingAddonMapper flightBookingAddonMapper,
-                              BookingRepository bookingRepository,
-                              ApplicationEventPublisher eventPublisher) {
+                                FlightClassRepository flightClassRepository,
+                                FlightAddonPriceRepository flightAddonPriceRepository,
+                                FlightPriceRepository flightPriceRepository,
+                                BookingMapper bookingMapper,
+                                FlightBookingMapper flightBookingMapper,
+                                FlightBookingRepository flightBookingRepository,
+                                FlightBookingAddonRepository flightBookingAddonRepository,
+                                FlightBookingAddonMapper flightBookingAddonMapper,
+                                BookingRepository bookingRepository,
+                                ApplicationEventPublisher eventPublisher, FlightAddonRepository flightAddonRepository, FlightAddonMapper flightAddonMapper) {
         this.flightRepository = flightRepository;
         this.flightClassRepository = flightClassRepository;
         this.flightAddonPriceRepository = flightAddonPriceRepository;
@@ -78,6 +75,8 @@ public class FlightBookingService extends BookingTemplate {
         this.flightBookingAddonMapper = flightBookingAddonMapper;
         this.bookingRepository = bookingRepository;
         this.eventPublisher = eventPublisher;
+        this.flightAddonRepository = flightAddonRepository;
+        this.flightAddonMapper = flightAddonMapper;
     }
 
     @Override
@@ -170,7 +169,12 @@ public class FlightBookingService extends BookingTemplate {
         request.setFlightBooking(flightBookingMapper.toDto(saveFlightBooking));
 
         if (request.getFlightBookingAddon() != null && !request.getFlightBookingAddon().isEmpty()) {
-            request.getFlightBookingAddon().forEach(flightBookingAddonDTO -> flightBookingAddonDTO.setFlightBookingId(saveFlightBooking.getId()));
+            request.getFlightBookingAddon().forEach(flightBookingAddonDTO -> {
+                flightBookingAddonDTO.setFlightBookingId(saveFlightBooking.getId());
+
+                Optional<FlightAddon> flightAddon = flightAddonRepository.findFlightAddonById(flightBookingAddonDTO.getFlightAddonId());
+                flightAddon.ifPresent(addon -> flightBookingAddonDTO.setFlightAddon(flightAddonMapper.toDto(addon)));
+            });
             List<FlightBookingAddon> flightBookingAddonList = flightBookingAddonMapper.toEntity(request.getFlightBookingAddon());
             flightBookingAddonRepository.saveAll(flightBookingAddonList);
         }
@@ -184,6 +188,9 @@ public class FlightBookingService extends BookingTemplate {
             LOGGER.info("Publishing BookingConfirmedEvent for booking ID: {}", booking.getId());
             BookingConfirmedEvent event = new BookingConfirmedEvent(booking);
             eventPublisher.publishEvent(event);
+
+            booking.setStatus(BookingStatusEnum.CONFIRMED.name());
+            bookingRepository.save(booking);
         } else {
             LOGGER.warn("Skipping event publication for booking ID: {} due to null data or non-PENDING status.",
                 booking != null ? booking.getId() : "null");

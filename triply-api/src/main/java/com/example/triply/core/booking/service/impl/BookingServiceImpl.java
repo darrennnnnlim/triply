@@ -134,8 +134,8 @@ public class BookingServiceImpl implements BookingService {
 
         List<Long> bookingIds = bookingDTOList.stream().map(BookingDTO::getId).toList();
 
-        List<FlightBooking> flightBookingList = flightBookingRepository.findByFlightIdIn(bookingIds);
-        List<HotelBooking> hotelBookingList = hotelBookingRepository.findByHotelIdIn(bookingIds);
+        List<FlightBooking> flightBookingList = flightBookingRepository.findByBookingIdsIn(bookingIds);
+        List<HotelBooking> hotelBookingList = hotelBookingRepository.findByBookingIdsIn(bookingIds);
 
         Map<Long, FlightBooking> flightBookingMap = flightBookingList.stream().collect(Collectors.toMap(fb -> fb.getBooking().getId(), fb -> fb));
         Map<Long, HotelBooking> hotelBookingMap = hotelBookingList.stream().collect(Collectors.toMap(hb -> hb.getBooking().getId(), hb -> hb));

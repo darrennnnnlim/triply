@@ -14,13 +14,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatRow } from '@angular/material/table';
-import { MakeBookingComponent } from './makebooking.component';
 import { AuthInterceptor } from '../../interceptors/auth.interceptor';
 import { BookingService } from '../booking.service';
 import { RouterModule } from '@angular/router';
+import { ConfirmedBookingComponent } from './confirmedbooking.component';
 
 @NgModule({
-  declarations: [MakeBookingComponent],
+  declarations: [ConfirmedBookingComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -33,7 +33,7 @@ import { RouterModule } from '@angular/router';
     MatTableModule,
     MatRow,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: MakeBookingComponent }]),
+    RouterModule.forChild([{ path: '', component: ConfirmedBookingComponent }]),
   ],
   providers: [
     provideHttpClient(
@@ -46,6 +46,6 @@ import { RouterModule } from '@angular/router';
     },
     BookingService,
   ],
-  exports: [MakeBookingComponent],
+  exports: [ConfirmedBookingComponent],
 })
-export class MakeBookingModule {}
+export class ConfirmedBookingModule {}
