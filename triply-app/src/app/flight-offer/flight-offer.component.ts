@@ -89,7 +89,7 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
       if (typeof result === 'number') {
         const thresholdPrice = result;
         console.log('Price threshold set to:', thresholdPrice);
-        
+
         this.fetchUser().subscribe({
           next: () => {
             this.createPriceThreshold(thresholdPrice);
@@ -108,7 +108,7 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
   fetchUser (): Observable<any> {
       return new Observable(observer => {
         this.authService.initAuthStateFromBackend();
-    
+
         this.authState$.subscribe({
           next: (authState) => {
             console.log('Auth state:', authState);
@@ -117,14 +117,14 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
             observer.error('Error in auth state');
           }
         });
-    
+
         this.adminService.getCurrentUser().subscribe({
           next: (data) => {
             console.log('Data:', data);
             const newdata = JSON.parse(data);
             this.currentUserId=Number(newdata.userId);
-            observer.next(); 
-            observer.complete(); 
+            observer.next();
+            observer.complete();
           },
           error: (err) => {
             observer.error('Error fetching current user');

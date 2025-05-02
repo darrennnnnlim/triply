@@ -17,4 +17,7 @@ public interface HotelBookingRepository extends JpaRepository<HotelBooking, Long
 
     @Query("SELECT hb FROM HotelBooking hb WHERE hb.booking.id = :bookingId")
     List<HotelBooking> findByBookingId(Long bookingId);
+
+    @Query("SELECT hb FROM HotelBooking hb WHERE hb.booking.id IN :bookingIds")
+    List<HotelBooking> findByBookingIdsIn(List<Long> bookingIds);
 }

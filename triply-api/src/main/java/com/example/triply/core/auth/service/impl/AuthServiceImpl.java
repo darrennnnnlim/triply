@@ -257,4 +257,9 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
         return true;
     }
+
+    @Override
+    public Long getUserId(String username) {
+        return userRepository.getUserIdByUsername(username);
+    }
 }

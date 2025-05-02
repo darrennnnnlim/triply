@@ -1,0 +1,96 @@
+<div class="container my-5">
+  <h2 class="mb-4 text-success">Booking Confirmed!</h2>
+
+  <!-- Flight Section -->
+  <div class="card mb-4" *ngIf="booking?.bookingFlightInfo">
+    <div class="card-header bg-primary text-white">Flight Details</div>
+    <div class="card-body">
+      <p>
+        <strong>Flight Number:</strong>
+        {{ booking?.bookingFlightInfo?.flightNumber }}
+      </p>
+      <p><strong>Origin:</strong> {{ booking?.bookingFlightInfo?.origin }}</p>
+      <p>
+        <strong>Destination:</strong>
+        {{ booking?.bookingFlightInfo?.destination }}
+      </p>
+      <p>
+        <strong>Departure:</strong>
+        {{ booking?.bookingFlightInfo?.departureDate | date : "medium" }}
+      </p>
+      <p>
+        <strong>Class:</strong>
+        {{ booking?.bookingFlightInfo?.flightClassName }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Hotel Section -->
+  <div class="card mb-4" *ngIf="booking?.bookingHotelInfo">
+    <div class="card-header bg-primary text-white">Hotel Details</div>
+    <div class="card-body">
+      <p>
+        <strong>Hotel Name:</strong>
+        {{ booking?.bookingHotelInfo?.hotelName }}
+      </p>
+      <p>
+        <strong>Room Type:</strong>
+        {{ booking?.bookingHotelInfo?.hotelRoomTypeName }}
+      </p>
+      <p>
+        <strong>Check-In:</strong>
+        {{ booking?.bookingHotelInfo?.checkInDate | date : "medium" }}
+      </p>
+      <p>
+        <strong>Check-Out:</strong>
+        {{ booking?.bookingHotelInfo?.checkOutDate | date : "medium" }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Flight Add-ons -->
+  <div
+    class="card mb-4"
+    *ngIf="booking?.bookingResponse?.flightBookingAddon?.length"
+  >
+    <div class="card-header bg-info text-white">Flight Add-ons</div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let addon of booking?.bookingResponse?.flightBookingAddon"
+        >
+          {{ addon?.flightAddon?.name }} × {{ addon?.quantity }} — SGD
+          {{ addon?.price | number : "1.2-2" }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Hotel Add-ons -->
+  <div
+    class="card mb-4"
+    *ngIf="booking?.bookingResponse?.hotelBookingAddon?.length"
+  >
+    <div class="card-header bg-info text-white">Hotel Add-ons</div>
+    <div class="card-body">
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          *ngFor="let addon of booking?.bookingResponse?.hotelBookingAddon"
+        >
+          {{ addon?.hotelAddon?.name }} × {{ addon?.quantity }} — SGD
+          {{ addon?.hotelAddon?.price | number : "1.2-2" }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Final Price -->
+  <div class="alert alert-success mt-4">
+    <h5>
+      Total Price: SGD
+      {{ booking?.bookingResponse.finalPrice | number : "1.2-2" }}
+    </h5>
+  </div>
+</div>

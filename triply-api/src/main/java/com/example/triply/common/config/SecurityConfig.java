@@ -2,6 +2,7 @@ package com.example.triply.common.config;
 
 import com.example.triply.common.filter.CsrfTokenResponseFilter;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
+import com.example.triply.common.handler.CsrfAccessDeniedHandler;
 import com.example.triply.core.auth.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -44,10 +45,12 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CsrfAccessDeniedHandler csrfAccessDeniedHandler;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter, CsrfAccessDeniedHandler csrfAccessDeniedHandler) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.csrfAccessDeniedHandler = csrfAccessDeniedHandler;
     }
 
     @Bean
@@ -60,7 +63,8 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password", "/test/**", "/api/v1/priceThreshold")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestAttributeHandler))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .exceptionHandling(exception -> exception.accessDeniedHandler(csrfAccessDeniedHandler))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/{version}/auth/login/**", "/api/{version}/auth/register/**", "/api/{version}/auth/reset-password/**").permitAll()
                         .requestMatchers("/api/{version}/auth/reset-password", "/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/ratings/**", "/api/v1/booking/**", "/api/v1/flight/**", "/api/v1/hotel/**", "/api/v1/flightsearch", "/api/v1/priceThreshold").authenticated()

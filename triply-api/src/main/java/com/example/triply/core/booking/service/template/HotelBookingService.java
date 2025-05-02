@@ -1,6 +1,8 @@
 package com.example.triply.core.booking.service.template;
 
 import com.example.triply.core.booking.event.BookingConfirmedEvent;
+import com.example.triply.core.flight.model.entity.FlightAddon;
+import com.example.triply.core.hotel.mapper.HotelAddonMapper;
 import org.springframework.context.ApplicationEventPublisher;
 
 import com.example.triply.core.booking.dto.BookingDTO;
@@ -55,18 +57,19 @@ public class HotelBookingService extends BookingTemplate {
     private final HotelBookingAddonRepository hotelBookingAddonRepository;
     private final BookingRepository bookingRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final HotelAddonMapper hotelAddonMapper;
 
     public HotelBookingService(HotelRepository hotelRepository,
-                             HotelRoomTypeRepository hotelRoomTypeRepository,
-                             HotelAddonRepository hotelAddonRepository,
-                             HotelRoomPriceRepository hotelRoomPriceRepository,
-                             BookingMapper bookingMapper,
-                             HotelBookingMapper hotelBookingMapper,
-                             HotelBookingRepository hotelBookingRepository,
-                             HotelBookingAddonMapper hotelBookingAddonMapper,
-                             HotelBookingAddonRepository hotelBookingAddonRepository,
-                             BookingRepository bookingRepository,
-                             ApplicationEventPublisher eventPublisher) {
+                               HotelRoomTypeRepository hotelRoomTypeRepository,
+                               HotelAddonRepository hotelAddonRepository,
+                               HotelRoomPriceRepository hotelRoomPriceRepository,
+                               BookingMapper bookingMapper,
+                               HotelBookingMapper hotelBookingMapper,
+                               HotelBookingRepository hotelBookingRepository,
+                               HotelBookingAddonMapper hotelBookingAddonMapper,
+                               HotelBookingAddonRepository hotelBookingAddonRepository,
+                               BookingRepository bookingRepository,
+                               ApplicationEventPublisher eventPublisher, HotelAddonMapper hotelAddonMapper) {
         this.hotelRepository = hotelRepository;
         this.hotelRoomTypeRepository = hotelRoomTypeRepository;
         this.hotelAddonRepository = hotelAddonRepository;
@@ -78,6 +81,7 @@ public class HotelBookingService extends BookingTemplate {
         this.hotelBookingAddonMapper = hotelBookingAddonMapper;
         this.hotelBookingAddonRepository = hotelBookingAddonRepository;
         this.eventPublisher = eventPublisher;
+        this.hotelAddonMapper = hotelAddonMapper;
     }
 
     @Override
@@ -183,7 +187,12 @@ public class HotelBookingService extends BookingTemplate {
         HotelBooking saveHotelBooking = hotelBookingRepository.save(hotelBooking);
 
         if (request.getHotelBookingAddon() != null && !request.getHotelBookingAddon().isEmpty()) {
-            request.getHotelBookingAddon().forEach(hotelBookingAddonDTO -> hotelBookingAddonDTO.setHotelBookingId(saveHotelBooking.getId()));
+            request.getHotelBookingAddon().forEach(hotelBookingAddonDTO -> {
+                hotelBookingAddonDTO.setHotelBookingId(saveHotelBooking.getId());
+
+                Optional<HotelAddon> hotelAddon = hotelAddonRepository.findHotelAddonById(hotelBookingAddonDTO.getHotelAddonId());
+                hotelAddon.ifPresent(addon -> hotelBookingAddonDTO.setHotelAddon(hotelAddonMapper.toDto(addon)));
+            });
             List<HotelBookingAddon> hotelBookingAddonList = hotelBookingAddonMapper.toEntity(request.getHotelBookingAddon());
             hotelBookingAddonRepository.saveAll(hotelBookingAddonList);
         }
