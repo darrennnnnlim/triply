@@ -13,6 +13,7 @@ import com.example.triply.core.booking.mapper.hotel.HotelBookingMapper;
 import com.example.triply.core.booking.repository.BookingRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingAddonRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
+import com.example.triply.core.hotel.mapper.HotelAddonMapper;
 import com.example.triply.core.hotel.model.entity.Hotel;
 import com.example.triply.core.hotel.model.entity.HotelAddon;
 import com.example.triply.core.hotel.model.entity.HotelRoomPrice;
@@ -49,6 +50,7 @@ class HotelBookingServiceTest {
     private HotelBookingAddonRepository hotelBookingAddonRepository;
     private BookingRepository bookingRepository;
     private ApplicationEventPublisher eventPublisher;
+    private HotelAddonMapper hotelAddonMapper;
 
     @BeforeEach
     void setUp() {
@@ -63,12 +65,13 @@ class HotelBookingServiceTest {
         hotelBookingAddonRepository = mock(HotelBookingAddonRepository.class);
         bookingRepository = mock(BookingRepository.class);
         eventPublisher = mock(ApplicationEventPublisher.class);
+        hotelAddonMapper = mock(HotelAddonMapper.class);
 
         hotelBookingService = new HotelBookingService(hotelRepository, hotelRoomTypeRepository, hotelAddonRepository,
                 hotelRoomPriceRepository, bookingMapper, hotelBookingMapper,
                 hotelBookingRepository, hotelBookingAddonMapper,
                 hotelBookingAddonRepository, bookingRepository,
-                eventPublisher);
+                eventPublisher, hotelAddonMapper);
     }
 
     @Test
