@@ -17,6 +17,7 @@ public class FlightOfferDTO {
     private BigDecimal basePrice;
 
     //Other properties
+    private Long flightId;
     private String flightNumber;
     private Long flightClassId;
     private String flightClassName;

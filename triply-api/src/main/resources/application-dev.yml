@@ -17,16 +17,16 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
-    #      ddl-auto: create
+#      ddl-auto: create
     defer-datasource-initialization: true
     properties:
       hibernate:
         envers:
           store_data_at_delete: true
           autoRegisterListeners: true
-      #sql:
-      #init:
-      #mode: always
+#  sql:
+#    init:
+#      mode: always
 
   mail:
     host: smtp.gmail.com

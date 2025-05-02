@@ -20,4 +20,7 @@ public interface FlightBookingRepository extends JpaRepository<FlightBooking, Lo
     List<FlightBooking> findByBookingId(Long bookingId);
 
     List<FlightBooking> findAllByFlightIdIn(List<Long> flightsWithAirlineId);
+
+    @Query("SELECT fb FROM FlightBooking fb WHERE fb.booking.id IN :bookingIds")
+    List<FlightBooking> findByBookingIdsIn(List<Long> bookingIds);
 }

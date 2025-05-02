@@ -11,4 +11,5 @@ public interface AuthService {
     public CheckSessionDTO checkSession(HttpServletRequest request, HttpServletResponse response);
     public String logout(RefreshRequest refreshRequest, HttpServletResponse response);
     public boolean resetPassword(String username, String currentPassword, String newPassword);
+    public Long getUserId(String username);
 }
