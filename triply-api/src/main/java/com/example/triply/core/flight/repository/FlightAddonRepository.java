@@ -1,6 +1,5 @@
 package com.example.triply.core.flight.repository;
 
-import com.example.triply.core.flight.model.dto.FlightAddonResponse;
 import com.example.triply.core.flight.model.entity.FlightAddon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
