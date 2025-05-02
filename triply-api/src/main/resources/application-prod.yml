@@ -52,8 +52,8 @@ springdoc:
   api-docs:
     enabled: false  # disable API docs in prod unless you need it
 
-logging:
-  level:
-    org:
-      springframework:
-        security: info  # change to error/info in prod to reduce log noise
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: info  # change to error/info in prod to reduce log noise
