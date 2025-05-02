@@ -1,6 +1,5 @@
 package com.example.triply;
 
-import com.example.triply.common.filter.JwtAuthenticationFilter;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
