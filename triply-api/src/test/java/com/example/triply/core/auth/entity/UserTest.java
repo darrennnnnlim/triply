@@ -4,10 +4,7 @@ import com.example.triply.core.admin.entity.UserStatus;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
-public class UserTest {
+class UserTest {
 
     @Test
     void testNoArgsConstructorAndSetters() {

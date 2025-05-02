@@ -6,7 +6,6 @@ import com.example.triply.core.booking.dto.HotelBookingDTO;
 import com.example.triply.core.booking.dto.HotelBookingResponse;
 import com.example.triply.core.booking.entity.Booking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
-import com.example.triply.core.booking.entity.hotel.HotelBookingAddon;
 import com.example.triply.core.booking.mapper.BookingMapper;
 import com.example.triply.core.booking.mapper.hotel.HotelBookingAddonMapper;
 import com.example.triply.core.booking.mapper.hotel.HotelBookingMapper;
