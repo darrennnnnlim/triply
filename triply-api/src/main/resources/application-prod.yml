@@ -17,12 +17,25 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         envers:
           store_data_at_delete: true
           autoRegisterListeners: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: triplymain@gmail.com
+    password: lsim irxc efjx zczi
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+      sql:
+        init:
+          mode: always
 
 jwt:
   issuer: Triply
