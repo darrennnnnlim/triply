@@ -31,8 +31,8 @@ public class PriceThresholdServiceImpl implements PriceThresholdService {
 
     private final PriceThresholdRepository priceThresholdRepository;
     private final UserRepository userRepository;
-    private final FlightRepository flightRepository;
-    private final HotelRepository hotelRepository;
+    //private final FlightRepository flightRepository;
+    //private final HotelRepository hotelRepository;
     private final PriceThresholdMapper priceThresholdMapper; // Inject mapper
 
     @Override
