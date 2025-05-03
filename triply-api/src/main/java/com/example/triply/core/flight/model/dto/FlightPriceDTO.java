@@ -13,9 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 public class FlightPriceDTO extends MutableDTO {
     private Long id;
-    // Keep original entities for potential other uses, but don't rely on them in async listeners
-    private Flight flight;
-    private FlightClass flightClass;
+    private FlightDTO flightDTO;
+    private FlightClassDTO flightClassDTO;
 
     // Add primitive fields needed by the listener
     private String flightNumber;
