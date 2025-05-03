@@ -87,7 +87,7 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(new CsrfTokenResponseFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterAfter(new CsrfTokenResponseFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
