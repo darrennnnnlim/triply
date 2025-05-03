@@ -185,7 +185,7 @@ class RatingServiceTest {
         ratingRequest.setUserId(1L);
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.empty()); // User not found
+        when(userRepository.findById(1L)).thenReturn(Optional.empty()); // User not found
 
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -204,8 +204,8 @@ class RatingServiceTest {
         ratingRequest.setUserId(1L);
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty()); // Flight booking not found
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.empty()); // Flight booking not found
 
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -223,8 +223,8 @@ class RatingServiceTest {
         ratingRequest.setHotelId(1L);
         ratingRequest.setUserId(1L);
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty()); // Hotel booking not found
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.empty()); // Hotel booking not found
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ratingService.saveRating(ratingRequest);
@@ -432,8 +432,8 @@ class RatingServiceTest {
         rating.setDelete("F");
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.of(flightBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(rating);
 
         ratingService.softDelete(1L, 1L, null);
@@ -449,8 +449,8 @@ class RatingServiceTest {
         rating.setDelete("F");
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(java.util.Optional.of(hotelBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.of(hotelBooking));
         when(ratingRepository.findByUserAndHotelBooking(user, hotelBooking)).thenReturn(rating);
 
 
@@ -464,8 +464,8 @@ class RatingServiceTest {
     @Test
     void testSoftDeleteNotFoundForFlight() {
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ratingService.softDelete(1L, 2L, null);
@@ -477,8 +477,8 @@ class RatingServiceTest {
     @Test
     void testSoftDeleteNotFoundForHotel() {
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ratingService.softDelete(1L, null, 2L);
@@ -491,8 +491,8 @@ class RatingServiceTest {
     void testSoftDeleteRatingsNotFound() {
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(3L)).thenReturn(java.util.Optional.of(flightBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(3L)).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(null); // No rating found
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
