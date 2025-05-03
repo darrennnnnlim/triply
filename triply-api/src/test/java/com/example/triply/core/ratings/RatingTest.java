@@ -495,16 +495,6 @@ class RatingServiceTest {
 
     @Test
     void testGetRatingsByAirlineId() {
-        Airline airline = new Airline();
-        airline.setId(1L);
-
-        Flight flight = new Flight();
-        flight.setId(1L);
-        flight.setAirline(airline);
-
-        FlightBooking flightBooking = new FlightBooking();
-        flightBooking.setId(1L);
-        flightBooking.setFlight(flight);
 
         Ratings rating1 = new Ratings();
         rating1.setId(1L);
