@@ -4,10 +4,14 @@ import com.example.triply.common.filter.CsrfTokenResponseFilter;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.common.handler.CsrfAccessDeniedHandler;
 import com.example.triply.core.auth.service.impl.UserDetailsServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -18,12 +22,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 @Configuration
 @EnableWebSecurity
@@ -62,7 +69,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password", "/test/**", "/api/v1/priceThreshold")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(requestAttributeHandler))
+                        .csrfTokenRequestHandler(customCsrfTokenRequestHandler()))
                 .exceptionHandling(exception -> exception.accessDeniedHandler(csrfAccessDeniedHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
@@ -83,6 +90,31 @@ public class SecurityConfig {
         http.addFilterAfter(new CsrfTokenResponseFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+    @Bean
+    public CsrfTokenRequestHandler customCsrfTokenRequestHandler() {
+        return new CsrfTokenRequestHandler() {
+
+            private final CsrfTokenRequestAttributeHandler delegate = new CsrfTokenRequestAttributeHandler();
+
+            public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
+                delegate.handle(request, response, csrfToken);
+
+                if (csrfToken != null) {
+                    ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", csrfToken.get().getToken())
+                            .path("/")
+                            .httpOnly(false)
+                            .secure(true)
+                            .sameSite("None")
+                            .domain("darrennnnnlim.com")
+                            .build();
+
+                    response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+                }
+            }
+        };
+    }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
