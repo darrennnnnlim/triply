@@ -1,5 +1,7 @@
 package com.example.triply.core.flight.mapper;
 
+import com.example.triply.core.flight.model.dto.FlightClassDTO;
+import com.example.triply.core.flight.model.dto.FlightDTO;
 import com.example.triply.core.flight.model.dto.FlightPriceDTO;
 import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.flight.model.entity.FlightClass;
@@ -12,14 +14,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class FlightPriceMapperTest {
 
     private FlightPriceMapper flightPriceMapper;
+    private FlightMapper flightMapper;
+    private FlightClassMapper flightClassMapper;
 
     @BeforeEach
     void setUp() {
-        flightPriceMapper = new FlightPriceMapper();
+        flightClassMapper = mock(FlightClassMapper.class);
+        flightMapper = mock(FlightMapper.class);
+        flightPriceMapper = new FlightPriceMapper(flightMapper, flightClassMapper);
     }
 
     @Test
@@ -34,6 +43,14 @@ class FlightPriceMapperTest {
         FlightClass flightClass = new FlightClass();
         flightClass.setClassName("Economy");
 
+        FlightDTO flightDTO = new FlightDTO();
+        flightDTO.setFlightNumber("TR123");
+        flightDTO.setOrigin("SIN");
+        flightDTO.setDestination("BKK");
+
+        FlightClassDTO flightClassDTO = new FlightClassDTO();
+        flightClassDTO.setClassName("Economy");
+
         FlightPrice price = new FlightPrice();
         price.setId(1L);
         price.setDepartureDate(departureDate);
@@ -42,6 +59,9 @@ class FlightPriceMapperTest {
         price.setSurgeMultiplier(BigDecimal.valueOf(1.2));
         price.setFlight(flight);
         price.setFlightClass(flightClass);
+
+        when(flightMapper.toDto(any(Flight.class))).thenReturn(flightDTO);
+        when(flightClassMapper.toDto(any(FlightClass.class))).thenReturn(flightClassDTO);
 
         FlightPriceDTO dto = flightPriceMapper.toDto(price);
 
@@ -57,8 +77,8 @@ class FlightPriceMapperTest {
         assertEquals("BKK", dto.getDestination());
         assertEquals("Economy", dto.getFlightClassName());
 
-        assertSame(flight, dto.getFlight());
-        assertSame(flightClass, dto.getFlightClass());
+        assertSame(flightDTO, dto.getFlightDTO());
+        assertSame(flightClassDTO, dto.getFlightClassDTO());
     }
 
     @Test
@@ -93,8 +113,8 @@ class FlightPriceMapperTest {
         assertNull(dto.getDestination());
         assertNull(dto.getFlightClassName());
 
-        assertNull(dto.getFlight());
-        assertNull(dto.getFlightClass());
+        assertNull(dto.getFlightDTO());
+        assertNull(dto.getFlightClassDTO());
     }
 
     @Test

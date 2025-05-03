@@ -67,13 +67,13 @@ public class FlightPriceEmailNotificationListener implements FlightPriceListener
                     // Note: The service method signature findUsersToNotifyForFlight(Flight, BigDecimal)
                     // doesn't explicitly include flightClass or departureDate.
                     // Assuming the service implementation handles this filtering internally based on the Flight entity.
-                    if (newPrice.getFlight() == null || newPrice.getFlight().getId() == null) {
+                    if (newPrice.getFlightDTO() == null || newPrice.getFlightDTO().getId() == null) {
                          log.warn("Cannot find users to notify because flight information is missing in the new price DTO for key: {}", key);
                          continue; // Skip if flight info is missing
                     }
-                    log.debug("Querying thresholds for flight ID {} with new price {}", newPrice.getFlight().getId(), newEffectivePrice);
+                    log.debug("Querying thresholds for flight ID {} with new price {}", newPrice.getFlightDTO().getId(), newEffectivePrice);
                     // Pass the Flight object, not just the ID
-                    List<User> usersToNotify = priceThresholdService.findUsersToNotifyForFlight(newPrice.getFlight().getId(), newEffectivePrice);
+                    List<User> usersToNotify = priceThresholdService.findUsersToNotifyForFlight(newPrice.getFlightDTO().getId(), newEffectivePrice);
 
                     log.info("Found {} users to notify for flight price drop.", usersToNotify.size());
                     if (usersToNotify != null && !usersToNotify.isEmpty()) { // Added null check
@@ -117,8 +117,8 @@ public class FlightPriceEmailNotificationListener implements FlightPriceListener
     // Helper method to create a unique key for a flight price entry
     private String createPriceKey(FlightPriceDTO price) {
         // Ensure null safety for components of the key
-        String flightId = price.getFlight() != null && price.getFlight().getId() != null ? price.getFlight().getId().toString() : "null_flight";
-        String flightClassId = price.getFlightClass() != null && price.getFlightClass().getId() != null ? price.getFlightClass().getId().toString() : "null_class";
+        String flightId = price.getFlightDTO() != null && price.getFlightDTO().getId() != null ? price.getFlightDTO().getId().toString() : "null_flight";
+        String flightClassId = price.getFlightClassDTO() != null && price.getFlightClassDTO().getId() != null ? price.getFlightClassDTO().getId().toString() : "null_class";
         String departureDateStr = price.getDepartureDate() != null ? price.getDepartureDate().toString() : "null_date";
 
         return String.format("%s-%s-%s", flightId, flightClassId, departureDateStr);
