@@ -9,6 +9,7 @@ import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
 import com.example.triply.core.flight.repository.FlightRepository;
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
+import com.example.triply.core.ratings.factory.RatingFactory;
 import com.example.triply.core.ratings.repository.RatingRepository;
 import com.example.triply.core.ratings.entity.Ratings;
 import org.springframework.stereotype.Service;
@@ -41,11 +42,8 @@ public class RatingService {
     }
 
     public RatingResponse saveRating(RatingRequest ratingRequest) {
-
-
         User user = userRepository.findById(ratingRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND_MESSAGE));
-
 
         FlightBooking flightBooking = null;
         HotelBooking hotelBooking = null;
@@ -58,7 +56,6 @@ public class RatingService {
                     .orElseThrow(() -> new RuntimeException("Hotel Booking not found"));
         }
 
-
         Ratings existingRating = null;
         if (FLIGHT.equalsIgnoreCase(ratingRequest.getType())) {
             existingRating = ratingRepository.findByUserAndFlightBooking(user, flightBooking);
@@ -68,41 +65,31 @@ public class RatingService {
 
         Ratings ratings;
         if (existingRating != null) {
-            // Update Rating
             ratings = existingRating;
             ratings.setRating(ratingRequest.getRating());
         } else {
-//            Submit Rating
-            ratings = new Ratings();
-            ratings.setRating(ratingRequest.getRating());
-            ratings.setUser(user);
-            ratings.setStatus("Submitted");
-            ratings.setFlightBooking(flightBooking);
-            ratings.setHotelBooking(hotelBooking);
-            ratings.setDelete("F");
+            ratings = RatingFactory.createRating(ratingRequest, user, flightBooking, hotelBooking);
         }
 
         Ratings savedRating = ratingRepository.save(ratings);
 
         RatingResponse ratingResponse = new RatingResponse();
-        ratingResponse.setId(ratings.getId());
-        ratingResponse.setRating(ratings.getRating());
-        ratingResponse.setUserId(ratings.getUser().getId());
-        ratingResponse.setDelete(ratings.getDelete());
+        ratingResponse.setId(savedRating.getId());
+        ratingResponse.setRating(savedRating.getRating());
+        ratingResponse.setUserId(savedRating.getUser().getId());
+        ratingResponse.setDelete(savedRating.getDelete());
 
         if (FLIGHT.equalsIgnoreCase(ratingRequest.getType())) {
-            ratingResponse.setFlightId(ratings.getFlightBooking().getId());
+            ratingResponse.setFlightId(savedRating.getFlightBooking().getId());
             ratingResponse.setHotelId(null);
         } else {
             ratingResponse.setFlightId(null);
-            ratingResponse.setHotelId(ratings.getHotelBooking().getId());
+            ratingResponse.setHotelId(savedRating.getHotelBooking().getId());
         }
-
-
-        ratingResponse.setId(savedRating.getId());
 
         return ratingResponse;
     }
+
 
     public List<RatingResponse> getAllRatings() {
         List<Ratings> ratings = ratingRepository.findAll();
