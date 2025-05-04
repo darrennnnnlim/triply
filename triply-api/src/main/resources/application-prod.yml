@@ -33,9 +33,9 @@ spring:
         smtp:
           auth: true
           starttls.enable: true
-      sql:
-        init:
-          mode: always
+  sql:
+    init:
+      mode: always
 
 jwt:
   issuer: Triply
