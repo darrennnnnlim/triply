@@ -13,7 +13,8 @@ mat-card {
 
 .button-container {
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .horizontal-line {

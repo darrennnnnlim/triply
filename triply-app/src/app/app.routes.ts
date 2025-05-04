@@ -16,7 +16,8 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
+    loadChildren: () =>
+      import('./profile/profile.module').then((m) => m.ProfileModule),
   },
   {
     path: 'makebooking',
@@ -24,11 +25,6 @@ export const routes: Routes = [
       import('./booking/makebooking/makebooking.module').then(
         (m) => m.MakeBookingModule
       ),
-  },
-  {
-    path: 'booking',
-    loadChildren: () =>
-      import('./booking/booking.module').then((m) => m.BookingModule),
   },
   {
     path: 'viewbooking',
@@ -43,27 +39,42 @@ export const routes: Routes = [
       import('./admin/admin.module').then((m) => m.AdminModule),
   },
   {
-      path: 'flight-search',
-      loadChildren: () =>
-            import('./flight-search-page/flight-search-page.module').then((m) => m.FlightSearchPageModule),
+    path: 'flight-search',
+    loadChildren: () =>
+      import('./flight-search-page/flight-search-page.module').then(
+        (m) => m.FlightSearchPageModule
+      ),
   },
   {
     path: 'flight-offer', // Dynamic route for flight offer details
     loadChildren: () =>
-      import('./flight-offer/flight-offer.module').then((m) => m.FlightOfferModule),
+      import('./flight-offer/flight-offer.module').then(
+        (m) => m.FlightOfferModule
+      ),
   },
   {
     path: 'hotel-search',
     loadChildren: () =>
-          import('./hotel-search-page/hotel-search-page.module').then((m) => m.HotelSearchPageModule),
+      import('./hotel-search-page/hotel-search-page.module').then(
+        (m) => m.HotelSearchPageModule
+      ),
   },
   {
     path: 'hotel-offer', // Dynamic route for hotel offer details
     loadChildren: () =>
-      import('./hotel-offer/hotel-offer.module').then((m) => m.HotelOfferModule),
+      import('./hotel-offer/hotel-offer.module').then(
+        (m) => m.HotelOfferModule
+      ),
   },
   { path: 'rateBooking', component: HistoryComponent },
   { path: 'banned', component: BannedRatingsComponent },
+  {
+    path: 'confirmedbooking',
+    loadChildren: () =>
+      import('./booking/confirmedbooking/confirmedbooking.module').then(
+        (m) => m.ConfirmedBookingModule
+      ),
+  },
   {
     path: '**',
     redirectTo: '',

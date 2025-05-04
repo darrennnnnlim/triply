@@ -9,6 +9,8 @@ import com.example.triply.core.auth.repository.RoleRepository;
 // import com.example.triply.core.auth.event.UserBannedEvent; // Removed Spring event import
 import com.example.triply.core.auth.notification.UserBanWriteEvent; // Added in-house event import
 import com.example.triply.core.auth.notification.UserBanWritePublisher; // Added in-house publisher import
+import com.example.triply.core.auth.notification.UserUnbanWriteEvent; // Added unban event import
+import com.example.triply.core.auth.notification.UserUnbanWritePublisher; // Added unban publisher import
 import com.example.triply.core.auth.repository.UserRepository;
 import com.example.triply.core.ratings.service.RatingService;
 import jakarta.annotation.PostConstruct;
@@ -50,6 +52,7 @@ public class AdminService {
     private final Map<String, Consumer<User>> userActions = new HashMap<>();
     // private final ApplicationEventPublisher applicationEventPublisher; // Removed Spring publisher field
     private final UserBanWritePublisher userBanWritePublisher; // Added in-house publisher field
+    private final UserUnbanWritePublisher userUnbanWritePublisher; // Added unban publisher field
     private final FlightPriceRepository flightPriceRepository; // Added field
     private final FlightPriceWritePublisherImpl flightPriceWritePublisher; // Changed to concrete class type
     private final FlightPriceMapper flightPriceMapper; // Added field
@@ -59,6 +62,7 @@ public class AdminService {
                        UserRepository userRepository,
                         RoleRepository roleRepository,
                        UserBanWritePublisher userBanWritePublisher, // Added in-house publisher
+                       UserUnbanWritePublisher userUnbanWritePublisher, // Added unban publisher
                        FlightPriceRepository flightPriceRepository, // Added constructor param
                        FlightPriceWritePublisherImpl flightPriceWritePublisher, // Use concrete class type
                        FlightPriceMapper flightPriceMapper,
@@ -67,6 +71,7 @@ public class AdminService {
         this.userRepository = userRepository;
         // this.applicationEventPublisher = applicationEventPublisher; // Removed assignment
         this.userBanWritePublisher = userBanWritePublisher; // Added assignment
+        this.userUnbanWritePublisher = userUnbanWritePublisher; // Corrected assignment
         this.flightPriceRepository = flightPriceRepository; // Added assignment
         this.flightPriceWritePublisher = flightPriceWritePublisher;
         this.flightPriceMapper = flightPriceMapper; // Added assignment
@@ -166,18 +171,11 @@ public class AdminService {
         }
         userRepository.unbanUser(userId);
 
-        // Soft Delete for this user
-        ratingService.undoSoftDeleteAllBy(userId);
+        // Publish user unbanned event
+        UserUnbanWriteEvent event = new UserUnbanWriteEvent(this, user);
+        userUnbanWritePublisher.publish(event);
 
-        // Consider adding an unban event/notification if needed
-        // Removed direct email sending block for unban as well
-        // try {
-        //     emailService.sendBanNotification(user.getEmail(), user.getUsername(),
-        //         "Your account has been reinstated");
-        //     System.out.println("Sent unban notification to " + user.getEmail());
-        // } catch (Exception e) {
-        //     System.err.println("Failed to send unban notification: " + e.getMessage());
-        // }
+        ratingService.undoSoftDeleteAllBy(userId);
     }
 
     @Transactional

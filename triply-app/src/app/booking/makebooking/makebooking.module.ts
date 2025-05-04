@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   HTTP_INTERCEPTORS,
   provideHttpClient,
@@ -32,6 +32,7 @@ import { RouterModule } from '@angular/router';
     MatTabsModule,
     MatTableModule,
     MatRow,
+    FormsModule,
     RouterModule.forChild([{ path: '', component: MakeBookingComponent }]),
   ],
   providers: [

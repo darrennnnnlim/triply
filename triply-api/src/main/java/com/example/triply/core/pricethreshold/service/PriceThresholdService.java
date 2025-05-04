@@ -18,7 +18,7 @@ public interface PriceThresholdService {
      * @param username The username of the user creating the threshold.
      * @return The created PriceThresholdDTO.
      */
-    PriceThresholdDTO createThreshold(CreatePriceThresholdRequest request, String username);
+    PriceThresholdDTO createThreshold(CreatePriceThresholdRequest request);
 
     /**
      * Retrieves all price thresholds for the specified user.
@@ -39,11 +39,11 @@ public interface PriceThresholdService {
     /**
      * Finds users whose flight price thresholds are met by a new price.
      *
-     * @param flight   The flight entity.
+     * @param flightId   The flight entity.
      * @param newPrice The new price of the flight.
      * @return A list of User entities to notify.
      */
-    List<User> findUsersToNotifyForFlight(Flight flight, BigDecimal newPrice);
+    List<User> findUsersToNotifyForFlight(Long flightId, BigDecimal newPrice);
 
     /**
      * Finds users whose hotel price thresholds are met by a new price.

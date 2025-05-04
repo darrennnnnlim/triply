@@ -14,8 +14,8 @@ public interface PriceThresholdMapper {
     PriceThresholdMapper INSTANCE = Mappers.getMapper(PriceThresholdMapper.class);
 
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "flight.id", target = "flightId")
-    @Mapping(source = "hotel.id", target = "hotelId")
+    //@Mapping(source = "flight.id", target = "flightId")
+    //@Mapping(source = "hotel.id", target = "hotelId")
     PriceThresholdDTO toDto(PriceThreshold priceThreshold);
 
     // MapStruct automatically handles list mapping if the single element mapping is defined

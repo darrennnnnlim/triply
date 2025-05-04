@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { AbstractControl, ValidationErrors, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { FlightSearchPageService } from './flight-search-page.service';
 import { Router } from '@angular/router';
 import { FlightOfferDataService } from '../flight-offer/flight-offer-data.service';
@@ -34,8 +34,8 @@ export class FlightSearchPageComponent {
     this.searchForm = this.fb.group({
       origin: [''],
       destination: [''],
-      departureDate: [''],
-      arrivalDate: [''],
+      departureDate: ['', [Validators.required, this.strictDateFormat]],
+      arrivalDate: ['', [Validators.required, this.strictDateFormat]],
       maxPrice: ['']
     });
   }
@@ -65,6 +65,29 @@ export class FlightSearchPageComponent {
     this.router.navigate(['/flight-offer'], {
       state: { selectedFlightOffer : flightOffer }
     });
+  }
+
+  strictDateFormat(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return null;
+  
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  
+    if (!dateRegex.test(value)) {
+      return { invalidDateFormat: true };
+    }
+  
+    const date = new Date(value);
+    const [year, month, day] = value.split('-').map(Number);
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() + 1 !== month ||
+      date.getDate() !== day
+    ) {
+      return { invalidDateFormat: true };
+    }
+  
+    return null;
   }
 }
 

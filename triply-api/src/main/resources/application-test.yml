@@ -23,9 +23,20 @@ spring:
         envers:
           store_data_at_delete: true
           autoRegisterListeners: true
-#  sql:
-#    init:
+  sql:
+    init:
+      enabled: false
 #      mode: always
+  mail:
+    host: fake
+    port: 000
+    username: fake
+    password: fake
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls.enable: false
 
 jwt:
   issuer: TriplyTest

@@ -77,6 +77,7 @@ public class FlightInformationFacadeServiceImpl {
 			 foDTO.setArrivalDate(thisFlight.getArrivalTime());
 			 foDTO.setFlightPriceId(thisFlightPrice.getId());
 			 foDTO.setBasePrice(thisFlightPrice.getBasePrice());
+			 foDTO.setFlightId(thisFlight.getId());
 			 foDTO.setFlightNumber(thisFlight.getFlightNumber());
 
 			 //Set FlightClass Name + Id

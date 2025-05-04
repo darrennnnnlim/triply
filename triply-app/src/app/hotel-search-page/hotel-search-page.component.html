@@ -34,6 +34,12 @@
         <button mat-flat-button color="primary" type="submit">Search</button>
       </div>
     </form>
+    <div 
+    *ngIf="(searchForm.get('checkInDate')?.hasError('invalidDateFormat') && searchForm.get('checkInDate')?.touched)
+      || (searchForm.get('checkOutDate')?.hasError('invalidDateFormat') && searchForm.get('checkOutDate')?.touched) " 
+    class="validation-error">
+      Date must be in YYYY-MM-DD format and valid!
+    </div>
   </mat-card>
 
   <mat-card *ngIf="filteredHotelOffers.length > 0" class="search-card">
@@ -44,6 +50,7 @@
          <div class="hotel-details">
            <h2>{{ hotel.hotelName }}</h2>
            <p>Location: {{ hotel.location }}</p>
+           <p>Guests: {{ hotel.capacity }}</p>
          </div>
          <div class="hotel-price">
            <p class="price">$ {{ hotel.totalPrice }}</p>

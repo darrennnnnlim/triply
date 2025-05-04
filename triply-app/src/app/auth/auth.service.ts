@@ -177,4 +177,10 @@ export class AuthService {
   isAdmin(): boolean {
     return localStorage.getItem('user_role') === 'ROLE_ADMIN';
   }
+
+  getUserId(): Observable<number> {
+    return this.http.get<number>(`${this.API_URL}/userid`, {
+      withCredentials: true,
+    });
+  }
 }

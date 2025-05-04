@@ -84,3 +84,9 @@
   color: #28a745;
   margin-top: 10px;
 }
+
+.validation-error {
+  color: #cc0000;
+  font-size: 0.875rem;
+  margin-top: 4px;
+}

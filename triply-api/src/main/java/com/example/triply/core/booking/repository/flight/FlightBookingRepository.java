@@ -1,7 +1,6 @@
 package com.example.triply.core.booking.repository.flight;
 
 import com.example.triply.core.booking.entity.flight.FlightBooking;
-import com.example.triply.core.flight.model.entity.Flight;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,4 +19,7 @@ public interface FlightBookingRepository extends JpaRepository<FlightBooking, Lo
     List<FlightBooking> findByBookingId(Long bookingId);
 
     List<FlightBooking> findAllByFlightIdIn(List<Long> flightsWithAirlineId);
+
+    @Query("SELECT fb FROM FlightBooking fb WHERE fb.booking.id IN :bookingIds")
+    List<FlightBooking> findByBookingIdsIn(List<Long> bookingIds);
 }

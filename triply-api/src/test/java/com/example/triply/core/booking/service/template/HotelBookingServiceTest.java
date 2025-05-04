@@ -6,13 +6,13 @@ import com.example.triply.core.booking.dto.HotelBookingDTO;
 import com.example.triply.core.booking.dto.HotelBookingResponse;
 import com.example.triply.core.booking.entity.Booking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
-import com.example.triply.core.booking.entity.hotel.HotelBookingAddon;
 import com.example.triply.core.booking.mapper.BookingMapper;
 import com.example.triply.core.booking.mapper.hotel.HotelBookingAddonMapper;
 import com.example.triply.core.booking.mapper.hotel.HotelBookingMapper;
 import com.example.triply.core.booking.repository.BookingRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingAddonRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
+import com.example.triply.core.hotel.mapper.HotelAddonMapper;
 import com.example.triply.core.hotel.model.entity.Hotel;
 import com.example.triply.core.hotel.model.entity.HotelAddon;
 import com.example.triply.core.hotel.model.entity.HotelRoomPrice;
@@ -23,6 +23,7 @@ import com.example.triply.core.hotel.repository.HotelRoomPriceRepository;
 import com.example.triply.core.hotel.repository.HotelRoomTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -47,6 +48,8 @@ class HotelBookingServiceTest {
     private HotelBookingAddonMapper hotelBookingAddonMapper;
     private HotelBookingAddonRepository hotelBookingAddonRepository;
     private BookingRepository bookingRepository;
+    private ApplicationEventPublisher eventPublisher;
+    private HotelAddonMapper hotelAddonMapper;
 
     @BeforeEach
     void setUp() {
@@ -60,11 +63,14 @@ class HotelBookingServiceTest {
         hotelBookingAddonMapper = mock(HotelBookingAddonMapper.class);
         hotelBookingAddonRepository = mock(HotelBookingAddonRepository.class);
         bookingRepository = mock(BookingRepository.class);
+        eventPublisher = mock(ApplicationEventPublisher.class);
+        hotelAddonMapper = mock(HotelAddonMapper.class);
 
         hotelBookingService = new HotelBookingService(hotelRepository, hotelRoomTypeRepository, hotelAddonRepository,
                 hotelRoomPriceRepository, bookingMapper, hotelBookingMapper,
                 hotelBookingRepository, hotelBookingAddonMapper,
-                hotelBookingAddonRepository, bookingRepository);
+                hotelBookingAddonRepository, bookingRepository,
+                eventPublisher, hotelAddonMapper);
     }
 
     @Test

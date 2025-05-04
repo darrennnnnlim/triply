@@ -9,7 +9,6 @@ import {
 } from '@angular/common/http';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { HomeComponent } from './home.component';
-import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -17,7 +16,6 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: HomeComponent }]),
-    MatButtonModule
   ],
   providers: [
     provideHttpClient(

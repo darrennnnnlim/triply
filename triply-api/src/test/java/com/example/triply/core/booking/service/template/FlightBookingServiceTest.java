@@ -11,17 +11,16 @@ import com.example.triply.core.booking.mapper.flight.FlightBookingMapper;
 import com.example.triply.core.booking.repository.BookingRepository;
 import com.example.triply.core.booking.repository.flight.FlightBookingAddonRepository;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
+import com.example.triply.core.flight.mapper.FlightAddonMapper;
 import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.flight.model.entity.FlightAddon;
 import com.example.triply.core.flight.model.entity.FlightAddonPrice;
 import com.example.triply.core.flight.model.entity.FlightClass;
 import com.example.triply.core.flight.model.entity.FlightPrice;
-import com.example.triply.core.flight.repository.FlightAddonPriceRepository;
-import com.example.triply.core.flight.repository.FlightClassRepository;
-import com.example.triply.core.flight.repository.FlightPriceRepository;
-import com.example.triply.core.flight.repository.FlightRepository;
+import com.example.triply.core.flight.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,6 +44,9 @@ class FlightBookingServiceTest {
     private FlightBookingAddonRepository flightBookingAddonRepository;
     private FlightBookingAddonMapper flightBookingAddonMapper;
     private BookingRepository bookingRepository;
+    private ApplicationEventPublisher eventPublisher;
+    private FlightAddonRepository flightAddonRepository;
+    private FlightAddonMapper flightAddonMapper;
 
     @BeforeEach
     void setUp() {
@@ -58,13 +60,17 @@ class FlightBookingServiceTest {
         flightBookingAddonRepository = mock(FlightBookingAddonRepository.class);
         flightBookingAddonMapper = mock(FlightBookingAddonMapper.class);
         bookingRepository = mock(BookingRepository.class);
+        eventPublisher = mock(ApplicationEventPublisher.class);
+        flightAddonRepository = mock(FlightAddonRepository.class);
+        flightAddonMapper = mock(FlightAddonMapper.class);
 
         flightBookingService = new FlightBookingService(
                 flightRepository, flightClassRepository,
                 flightAddonPriceRepository, flightPriceRepository,
                 bookingMapper, flightBookingMapper,
                 flightBookingRepository, flightBookingAddonRepository,
-                flightBookingAddonMapper, bookingRepository);
+                flightBookingAddonMapper, bookingRepository,
+                eventPublisher, flightAddonRepository, flightAddonMapper);
     }
 
     @Test
