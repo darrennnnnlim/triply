@@ -2,15 +2,32 @@
   <mat-card>
     <div class="flight-offer-container">
       <div class="flight-info">
-        <p class="origin">Origin: {{selectedFlightOffer?.origin}}</p>
-        <p class="destination">Destination: {{selectedFlightOffer?.destination}}</p>
-        <p class="price">Price: ${{selectedFlightOffer?.basePrice}}</p>
+        <div style="margin-bottom: 0.5em">
+          <div>
+            <strong>{{selectedFlightOffer?.airlineName}} </strong>
+          </div>
+          <div>
+            {{selectedFlightOffer?.flightNumber}}
+          </div>
+          <div>
+            {{selectedFlightOffer?.flightClassName}}
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content: space-between;">
+          <span><strong>From:</strong> {{selectedFlightOffer?.origin}}</span>
+          <span><strong>Departure:</strong> {{selectedFlightOffer?.departureDate | date:'MMM d, y, h:mm a'}}</span>
+        </div>
+        <div style="display:flex; justify-content: space-between;">
+          <span><strong>To:</strong> {{selectedFlightOffer?.destination}}</span>
+          <span><strong>Arrival:</strong> {{selectedFlightOffer?.arrivalDate | date:'MMM d, y, h:mm a'}}</span>
+        </div>
+
+        <p class="price"><strong>Price:</strong> ${{selectedFlightOffer?.basePrice}}</p>
       </div>
       <div class="buttons-wrapper" style="display: flex; gap: 20px;">
         <div class="button-container">
           <button mat-flat-button class="booking-button" (click)="setPriceThreshold()">Set price threshold</button>
-        </div>
-        <div class="button-container">
           <button mat-flat-button class="booking-button" (click)="makeBooking()">Make a Booking!</button>
         </div>
       </div>

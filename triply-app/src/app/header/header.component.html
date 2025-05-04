@@ -38,7 +38,7 @@
   </ng-template>
 
   <!-- Hamburger Button remains unchanged -->
-  <button
+  <button *ngIf="isLoggedIn"
     #hamburgerButton
     class="btn btn-outline-light rounded-pill border-0"
     (click)="toggleHamburgerMenu()"
@@ -73,6 +73,22 @@
         class="text-decoration-none"
         (click)="toggleHamburgerMenu()"
         >Ban Ratings</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/flight-search"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Search Flights</a
+      >
+    </li>
+    <li>
+      <a
+        routerLink="/hotel-search"
+        class="text-decoration-none"
+        (click)="toggleHamburgerMenu()"
+        >Search Hotels</a
       >
     </li>
     <li>

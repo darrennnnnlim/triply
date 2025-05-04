@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, AbstractControl, ValidationErrors, Validators } from '@angular/forms';
 import { HotelSearchPageService } from './hotel-search-page.service';
 import { Router } from '@angular/router';
 import { HotelOffer, HotelSearchDTO } from './hotel-search.model';
@@ -60,8 +60,8 @@ export class HotelSearchPageComponent {
   ) {
     this.searchForm = this.fb.group({
       location: [''],
-      checkInDate: [''],
-      checkOutDate: [''],
+      checkInDate: ['', [Validators.required, this.strictDateFormat]],
+      checkOutDate: ['', [Validators.required, this.strictDateFormat]],
       maxPrice: [''],
       guests: ['']
     });
@@ -75,7 +75,6 @@ export class HotelSearchPageComponent {
       maxPrice: this.searchForm.value.maxPrice,
       guests: this.searchForm.value.guests
     };
-    console.log(searchRequest)
     this.hotelSearchPageService.searchHotels(searchRequest).subscribe(response => {
       console.log('Search Results:', response);
       this.filteredHotelOffers = response;
@@ -95,10 +94,32 @@ export class HotelSearchPageComponent {
 
     // Navigate to the hotel offer details page
     // this.router.navigate(['/hotel-offer']);
-    console.log(hotelOffer)
     this.router.navigate(['/hotel-offer'], {
       state: { selectedHotelOffer : hotelOffer }
     });
+  }
+
+  strictDateFormat(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) return null;
+  
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  
+    if (!dateRegex.test(value)) {
+      return { invalidDateFormat: true };
+    }
+  
+    const date = new Date(value);
+    const [year, month, day] = value.split('-').map(Number);
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() + 1 !== month ||
+      date.getDate() !== day
+    ) {
+      return { invalidDateFormat: true };
+    }
+  
+    return null;
   }
 }
 
