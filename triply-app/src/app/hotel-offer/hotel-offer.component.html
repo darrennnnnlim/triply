@@ -3,14 +3,21 @@
     <div class="hotel-offer-container">
       <div class="hotel-info">
         <h2>{{ selectedHotelOffer?.hotelName }}</h2>
-        <p class="location">Location: {{ selectedHotelOffer?.location }}</p>
-        <p class="price">Price: ${{ selectedHotelOffer?.totalPrice }}</p>
+        <strong>Location:</strong> {{ selectedHotelOffer?.location }}
+        <div>
+          <strong>Room Type:</strong> {{ selectedHotelOffer?.hotelRoomTypeName }}
+        </div>
+        <div>
+          <strong>Check-in Date:</strong> {{ selectedHotelOffer?.checkInDate | date:'MMM d, y, h:mm a'}}
+        </div>
+        <div>
+          <strong>Check-out Date:</strong> {{ selectedHotelOffer?.checkOutDate | date:'MMM d, y, h:mm a'}}
+        </div>
+        <strong>Price:</strong> ${{ selectedHotelOffer?.totalPrice }}
       </div>
-      <div class="buttons-wrapper" style="display: flex; gap: 20px;">
+      <div class="buttons-wrapper" style="display: flex; gap: 20px; margin-top: 0.5em">
         <div class="button-container">
           <button mat-flat-button class="booking-button" (click)="setPriceThreshold()">Set price threshold</button>
-        </div>
-        <div class="button-container">
           <button mat-flat-button class="booking-button" (click)="makeBooking()">Make a Booking!</button>
         </div>
       </div>

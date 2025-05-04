@@ -43,15 +43,25 @@
           <h2>
             {{ flightOffer.origin }} to {{ flightOffer.destination }}
           </h2>
-          <p>
-            Departure: {{ flightOffer.departureDate | date:'MMMM d, yyyy, h:mm a' }}
-          </p>
-          <p>
-            Arrival: {{ flightOffer.arrivalDate | date:'MMMM d, yyyy, h:mm a' }}
-          </p>
-          <p>
-            Flight: {{ flightOffer.flightNumber }}
-          </p>
+          <div>
+            <div>
+              Departure: {{ flightOffer.departureDate | date:'MMMM d, yyyy, h:mm a' }}
+            </div>
+            <div>
+              Arrival: {{ flightOffer.arrivalDate | date:'MMMM d, yyyy, h:mm a' }}
+            </div>
+          </div>
+          <div style="margin-top: 0.45em;">
+            <div>
+              Airline: {{ flightOffer.airlineName }}
+            </div>
+            <div>
+              Flight: {{ flightOffer.flightNumber }}
+            </div>
+            <div>
+              Flight Class: {{ flightOffer.flightClassName }}
+            </div>
+          </div>
         </div>
         <div class="flight-price">
           <p class="price">$ {{ flightOffer.basePrice }}</p>
