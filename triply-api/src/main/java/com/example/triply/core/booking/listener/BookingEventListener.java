@@ -25,7 +25,7 @@ public class BookingEventListener {
         Booking booking = event.getBooking();
         LOGGER.info("Received BookingConfirmedEvent for booking ID: {}", booking.getId());
 
-        if (booking != null && booking.getUser() != null && booking.getStatus().equals(BookingStatusEnum.PENDING.name())) {
+        if (booking.getUser() != null && booking.getStatus().equals(BookingStatusEnum.PENDING.name())) {
             try {
                 String userEmail = booking.getUser().getEmail();
                 emailService.sendBookingConfirmationEmail(userEmail, booking);
@@ -35,7 +35,7 @@ public class BookingEventListener {
             }
         } else {
             LOGGER.warn("Skipping booking confirmation email via event listener for booking ID: {} due to null data or non-PENDING status.", 
-                booking != null ? booking.getId() : "null");
+                booking.getId());
         }
     }
 }
