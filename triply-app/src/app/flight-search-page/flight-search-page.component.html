@@ -29,7 +29,7 @@
         <button mat-flat-button color="primary" type="submit">Search</button>
       </div>
     </form>
-    <div *ngIf="searchForm.get('departureDate')?.hasError('invalidDateFormat')" class="validation-error">
+    <div *ngIf="searchForm.get('departureDate')?.hasError('invalidDateFormat') && searchForm.get('departureDate')?.touched" class="validation-error">
       Date must be in YYYY-MM-DD format and valid!
     </div>
   </mat-card>
