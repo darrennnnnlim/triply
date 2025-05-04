@@ -205,7 +205,7 @@ class RatingServiceTest {
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(Optional.empty()); // Flight booking not found
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -224,7 +224,7 @@ class RatingServiceTest {
         ratingRequest.setUserId(1L);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.empty()); // Hotel booking not found
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ratingService.saveRating(ratingRequest);
