@@ -42,7 +42,7 @@ pipeline {
             }
         }
 
-        stage('SonarCloud analysis') {
+        stage('SonarCloud Analysis') {
             steps {
                 dir(env.BACKEND_DIR) {
                     withSonarQubeEnv(credentialsId: env.SONARCLOUD_CREDENTIAL_ID, installationName: 'SonarCloud') {
