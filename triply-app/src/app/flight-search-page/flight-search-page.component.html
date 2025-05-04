@@ -29,6 +29,9 @@
         <button mat-flat-button color="primary" type="submit">Search</button>
       </div>
     </form>
+    <div *ngIf="searchForm.get('departureDate')?.hasError('invalidDateFormat') && searchForm.get('departureDate')?.touched" class="validation-error">
+      Date must be in YYYY-MM-DD format and valid!
+    </div>
   </mat-card>
 
   <mat-card *ngIf="filteredFlightOffers.length > 0" class="search-card">
@@ -40,15 +43,25 @@
           <h2>
             {{ flightOffer.origin }} to {{ flightOffer.destination }}
           </h2>
-          <p>
-            Departure: {{ flightOffer.departureDate | date:'MMMM d, yyyy, h:mm a' }}
-          </p>
-          <p>
-            Arrival: {{ flightOffer.arrivalDate | date:'MMMM d, yyyy, h:mm a' }}
-          </p>
-          <p>
-            Flight: {{ flightOffer.flightNumber }}
-          </p>
+          <div>
+            <div>
+              Departure: {{ flightOffer.departureDate | date:'MMMM d, yyyy, h:mm a' }}
+            </div>
+            <div>
+              Arrival: {{ flightOffer.arrivalDate | date:'MMMM d, yyyy, h:mm a' }}
+            </div>
+          </div>
+          <div style="margin-top: 0.45em;">
+            <div>
+              Airline: {{ flightOffer.airlineName }}
+            </div>
+            <div>
+              Flight: {{ flightOffer.flightNumber }}
+            </div>
+            <div>
+              Flight Class: {{ flightOffer.flightClassName }}
+            </div>
+          </div>
         </div>
         <div class="flight-price">
           <p class="price">$ {{ flightOffer.basePrice }}</p>

@@ -1,6 +1,5 @@
 package com.example.triply.common.config;
 
-import com.example.triply.common.filter.CsrfTokenResponseFilter;
 import com.example.triply.common.filter.JwtAuthenticationFilter;
 import com.example.triply.common.handler.CsrfAccessDeniedHandler;
 import com.example.triply.core.auth.service.impl.UserDetailsServiceImpl;
@@ -64,7 +63,6 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             org.springframework.security.config.annotation.web.builders.HttpSecurity http) throws Exception {
         System.out.println("Configuring security filter chain...");
-        CsrfTokenRequestAttributeHandler requestAttributeHandler = new CsrfTokenRequestAttributeHandler();
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password", "/test/**", "/api/v1/priceThreshold")
@@ -74,9 +72,9 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/{version}/auth/login/**", "/api/{version}/auth/register/**", "/api/{version}/auth/reset-password/**").permitAll()
-                        .requestMatchers("/api/{version}/auth/reset-password", "/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/ratings/**", "/api/v1/booking/**", "/api/v1/flight/**", "/api/v1/hotel/**", "/api/v1/flightsearch", "/api/v1/priceThreshold").authenticated()
+                        .requestMatchers("/api/{version}/auth/reset-password", "/api/{version}/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/api/v1/ratings/**", "/api/v1/booking/**", "/api/v1/flight/**", "/api/v1/hotel/**", "/api/v1/flightsearch", "/api/v1/priceThreshold").permitAll()
                         .requestMatchers("/api/{version}/auth/check-session").authenticated()
-                        .requestMatchers("/api/{version}/auth/refresh").authenticated()
+                        .requestMatchers("/api/{version}/auth/refresh").permitAll()
                         .requestMatchers("/api/{version}/admin/user/**").authenticated()
                         .requestMatchers("/api/{version}/admin/currentuser").authenticated()
                         .requestMatchers("/api/{version}/booking/test").hasRole("USER")
@@ -87,7 +85,6 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.addFilterAfter(new CsrfTokenResponseFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

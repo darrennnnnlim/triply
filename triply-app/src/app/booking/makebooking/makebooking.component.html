@@ -11,9 +11,9 @@
       <p class="card-text">
         <strong>From:</strong> {{ selectedFlightOffer.origin }}<br />
         <strong>To:</strong> {{ selectedFlightOffer.destination }}<br />
-        <strong>Departure:</strong> {{ selectedFlightOffer.departureDate
+        <strong>Departure:</strong> {{ selectedFlightOffer.departureDate | date:'MMM d, y, h:mm a'
         }}<br />
-        <strong>Arrival:</strong> {{ selectedFlightOffer.arrivalDate }}<br />
+        <strong>Arrival:</strong> {{ selectedFlightOffer.arrivalDate  | date:'MMM d, y, h:mm a'}}<br />
         <strong>Class:</strong> {{ selectedFlightOffer.flightClassName }}<br />
         <strong>Price:</strong> SGD {{ selectedFlightOffer.basePrice }}
       </p>
@@ -24,9 +24,9 @@
       <p class="card-text">
         <strong>Room Type:</strong> {{ selectedHotelOffer.hotelRoomTypeName
         }}<br />
-        <strong>Check-in Date:</strong> {{ selectedHotelOffer.checkInDate
+        <strong>Check-in Date:</strong> {{ selectedHotelOffer.checkInDate | date:'MMM d, y, h:mm a'
         }}<br />
-        <strong>Check-out Date:</strong> {{ selectedHotelOffer.checkOutDate
+        <strong>Check-out Date:</strong> {{ selectedHotelOffer.checkOutDate | date:'MMM d, y, h:mm a'
         }}<br />
         <strong>Price:</strong> SGD {{ selectedHotelOffer.totalPrice }}
       </p>

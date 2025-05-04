@@ -78,57 +78,64 @@ class RatingServiceTest {
 
     @Test
     void testSaveFlightRating() {
+        ratingRequest.setUserId(1L);
+        ratingRequest.setRating(3);
+        ratingRequest.setDelete("F");
         ratingRequest.setType("Flight");
         ratingRequest.setFlightId(1L);
-        ratingRequest.setUserId(1L);
-        ratingRequest.setDelete("F");
-        ratingRequest.setRating(5);
         ratingRequest.setHotelId(null);
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.of(flightBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(null);
 
-
         Ratings savedRating = new Ratings();
-        savedRating.setId(1L);
+        savedRating.setId(2L);
+        savedRating.setRating(4);
+        savedRating.setUser(user);
+        savedRating.setFlightBooking(flightBooking);
         when(ratingRepository.save(any(Ratings.class))).thenReturn(savedRating);
-
 
         RatingResponse response = ratingService.saveRating(ratingRequest);
 
         assertNotNull(response);
-        assertEquals(1L, response.getFlightId());
-        assertNull(response.getHotelId());
-        assertEquals(1L, response.getId());
+        assertEquals(4, response.getRating());
+        assertEquals(1L, response.getFlightId()); // Make sure flightId is set
+        assertNull(response.getHotelId()); // Hotel should be null
+        assertEquals(2L, response.getId());
+        assertEquals(1L, response.getUserId());
     }
 
     @Test
     void testSaveHotelRating() {
+        ratingRequest.setUserId(1L);
+        ratingRequest.setRating(4);
+        ratingRequest.setDelete("F");
         ratingRequest.setType("Hotel");
         ratingRequest.setHotelId(1L);
-        ratingRequest.setUserId(1L);
-        ratingRequest.setDelete("F");
-        ratingRequest.setRating(3);
         ratingRequest.setFlightId(null);
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(java.util.Optional.of(hotelBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.of(hotelBooking));
         when(ratingRepository.findByUserAndHotelBooking(user, hotelBooking)).thenReturn(null);
-
 
         Ratings savedRating = new Ratings();
         savedRating.setId(2L);
+        savedRating.setRating(4);
+        savedRating.setUser(user);
+        savedRating.setHotelBooking(hotelBooking);
         when(ratingRepository.save(any(Ratings.class))).thenReturn(savedRating);
 
         RatingResponse response = ratingService.saveRating(ratingRequest);
 
-
         assertNotNull(response);
+        assertEquals(4, response.getRating());
         assertEquals(1L, response.getHotelId());
         assertNull(response.getFlightId());
         assertEquals(2L, response.getId());
+        assertEquals(1L, response.getUserId());
     }
+
 
     @Test
     void testUpdateFlightRating() {
@@ -139,15 +146,15 @@ class RatingServiceTest {
         ratingRequest.setRating(5);
         ratingRequest.setFlightId(1L);
 
-
         Ratings existingRating = new Ratings();
+        existingRating.setId(1L);
         existingRating.setRating(3);
         existingRating.setUser(user);
         existingRating.setFlightBooking(flightBooking);
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.of(flightBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(existingRating);
 
 
@@ -155,12 +162,11 @@ class RatingServiceTest {
         savedRating.setId(1L);
         savedRating.setUser(user);
         savedRating.setFlightBooking(flightBooking);
+        savedRating.setRating(5);
 
         when(ratingRepository.save(any(Ratings.class))).thenReturn(savedRating);
 
-
         RatingResponse response = ratingService.saveRating(ratingRequest);
-
 
         assertNotNull(response);
         assertEquals(5, response.getRating());
@@ -169,6 +175,9 @@ class RatingServiceTest {
         assertEquals(1L, response.getId());
     }
 
+
+
+
     @Test
     void testUserNotFound() {
         ratingRequest.setType("Flight");
@@ -176,7 +185,7 @@ class RatingServiceTest {
         ratingRequest.setUserId(1L);
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.empty()); // User not found
+        when(userRepository.findById(1L)).thenReturn(Optional.empty()); // User not found
 
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -195,8 +204,8 @@ class RatingServiceTest {
         ratingRequest.setUserId(1L);
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty()); // Flight booking not found
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -214,8 +223,8 @@ class RatingServiceTest {
         ratingRequest.setHotelId(1L);
         ratingRequest.setUserId(1L);
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty()); // Hotel booking not found
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ratingService.saveRating(ratingRequest);
@@ -423,8 +432,8 @@ class RatingServiceTest {
         rating.setDelete("F");
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.of(flightBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(rating);
 
         ratingService.softDelete(1L, 1L, null);
@@ -440,8 +449,8 @@ class RatingServiceTest {
         rating.setDelete("F");
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(java.util.Optional.of(hotelBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.of(hotelBooking));
         when(ratingRepository.findByUserAndHotelBooking(user, hotelBooking)).thenReturn(rating);
 
 
@@ -455,8 +464,8 @@ class RatingServiceTest {
     @Test
     void testSoftDeleteNotFoundForFlight() {
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ratingService.softDelete(1L, 2L, null);
@@ -468,8 +477,8 @@ class RatingServiceTest {
     @Test
     void testSoftDeleteNotFoundForHotel() {
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             ratingService.softDelete(1L, null, 2L);
@@ -482,8 +491,8 @@ class RatingServiceTest {
     void testSoftDeleteRatingsNotFound() {
 
 
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(flightBookingRepository.findById(3L)).thenReturn(java.util.Optional.of(flightBooking));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(flightBookingRepository.findById(3L)).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(null); // No rating found
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -495,16 +504,6 @@ class RatingServiceTest {
 
     @Test
     void testGetRatingsByAirlineId() {
-        Airline airline = new Airline();
-        airline.setId(1L);
-
-        Flight flight = new Flight();
-        flight.setId(1L);
-        flight.setAirline(airline);
-
-        FlightBooking flightBooking = new FlightBooking();
-        flightBooking.setId(1L);
-        flightBooking.setFlight(flight);
 
         Ratings rating1 = new Ratings();
         rating1.setId(1L);

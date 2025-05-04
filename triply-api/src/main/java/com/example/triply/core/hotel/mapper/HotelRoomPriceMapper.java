@@ -15,7 +15,7 @@ public class HotelRoomPriceMapper implements BaseMapper<HotelRoomPrice, HotelRoo
         HotelRoomPriceDTO hotelPriceDTO = new HotelRoomPriceDTO();
         hotelPriceDTO.setHotelRoomTypeId(entity.getHotelRoomType().getId());
         hotelPriceDTO.setId(entity.getId());
-        hotelPriceDTO.setStartDate(hotelPriceDTO.getStartDate());
+        hotelPriceDTO.setStartDate(entity.getStartDate());
         hotelPriceDTO.setEndDate(entity.getEndDate());
         hotelPriceDTO.setPrice(entity.getPrice());
         return hotelPriceDTO;

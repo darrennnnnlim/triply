@@ -10,6 +10,14 @@ import java.util.List;
 @Component
 public class FlightPriceMapper implements BaseMapper<FlightPrice, FlightPriceDTO> {
 
+    private FlightMapper flightMapper;
+    private FlightClassMapper flightClassMapper;
+
+    public FlightPriceMapper(FlightMapper flightMapper, FlightClassMapper flightClassMapper) {
+        this.flightMapper = flightMapper;
+        this.flightClassMapper = flightClassMapper;
+    }
+
     @Override
     public FlightPriceDTO toDto(FlightPrice entity) {
         if (entity == null) {
@@ -22,9 +30,8 @@ public class FlightPriceMapper implements BaseMapper<FlightPrice, FlightPriceDTO
         flightPriceDTO.setDiscount(entity.getDiscount());
         flightPriceDTO.setSurgeMultiplier(entity.getSurgeMultiplier());
 
-        // Keep original entities
-        flightPriceDTO.setFlight(entity.getFlight());
-        flightPriceDTO.setFlightClass(entity.getFlightClass());
+        flightPriceDTO.setFlightDTO(flightMapper.toDto(entity.getFlight()));
+        flightPriceDTO.setFlightClassDTO(flightClassMapper.toDto(entity.getFlightClass()));
 
         // Populate primitive fields from related entities (handle nulls)
         if (entity.getFlight() != null) {

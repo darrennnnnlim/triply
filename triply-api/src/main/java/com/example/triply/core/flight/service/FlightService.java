@@ -13,17 +13,32 @@ import java.util.Optional;
 @Service
 @Transactional
 public class FlightService{
+
+    private final FlightRepository flightRepository;
+
+
     @Autowired
-    private FlightRepository flightRepository;
+    public FlightService(FlightRepository flightRepository) {
+        this.flightRepository = flightRepository;
+    }
 
     public FlightResponse getFlightById(Long flightId){
         Optional<Flight> flight = flightRepository.findById(flightId);
         FlightResponse flightResponse = new FlightResponse();
-        flightResponse.setId(flight.get().getId());
-        flightResponse.setFlightNumber(flight.get().getFlightNumber());
-        flightResponse.setAirline(flight.get().getAirline().getCode());
-        flightResponse.setArrivalTime(flight.get().getArrivalTime());
-        flightResponse.setDepartureTime(flight.get().getDepartureTime());
+        if (flight.isPresent()) {
+            flightResponse.setId(flight.get().getId());
+            flightResponse.setFlightNumber(flight.get().getFlightNumber());
+            flightResponse.setAirline(flight.get().getAirline().getCode());
+            flightResponse.setArrivalTime(flight.get().getArrivalTime());
+            flightResponse.setDepartureTime(flight.get().getDepartureTime());
+
+        } else {
+            flightResponse.setId(null);
+            flightResponse.setFlightNumber("N/A");
+            flightResponse.setAirline("Unknown");
+            flightResponse.setArrivalTime(null);
+            flightResponse.setDepartureTime(null);
+        }
 
         return flightResponse;
 
