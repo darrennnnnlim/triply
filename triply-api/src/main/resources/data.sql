@@ -1711,7 +1711,9 @@ INSERT INTO Booking (user_id, final_price, status, booking_time, created_dt, cre
                                                                                                                      (1, 200.00, 'Confirmed', '2025-05-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
                                                                                                                      (1, 300.00, 'Confirmed', '2025-05-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
                                                                                                                      (2, 250.00, 'Confirmed', '2025-05-02 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
-                                                                                                                     (2, 350.00, 'Confirmed', '2025-05-02 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+                                                                                                                     (2, 350.00, 'Confirmed', '2025-05-02 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+                                                                                                                     (3, 400.00, 'Confirmed', '2025-05-02 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+                                                                                                                     (3, 450.00, 'Confirmed', '2025-05-02 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'); 
 
 
 INSERT INTO Flight_Booking (flight_id, flight_class_id, booking_id, user_id, departure_date, created_dt, created_by, updated_dt, updated_by) VALUES
