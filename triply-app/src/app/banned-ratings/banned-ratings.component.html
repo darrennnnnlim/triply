@@ -30,8 +30,8 @@
                     <td *ngIf = "user.type=='Hotel'">Check In: {{ user.checkInDate}}<br> Check Out: {{ user.checkOutDate}}</td>
                     <td><span class="star" *ngFor="let r of [].constructor(user.rating); let i = index">★</span></td>
                     <td>
-                        <button *ngIf = "user.type=='Flight'" (click)="banORunban(user.user, user.flightId, user.type, 'unban')" class="button">Unban</button>
-                        <button *ngIf = "user.type=='Hotel'" (click)="banORunban(user.user, user.hotelId, user.type, 'unban')" class="button">Unban</button>
+                        <button *ngIf = "user.type=='Flight'" (click)="banORunban(user.user, user.userId, user.flightId, user.type, 'unban')" class="button">Unban</button>
+                        <button *ngIf = "user.type=='Hotel'" (click)="banORunban(user.user, user.userId, user.hotelId, user.type, 'unban')" class="button">Unban</button>
                     </td>
                 </tr>
             </tbody>
@@ -41,7 +41,7 @@
     <!-- Tab Content for Active Users (delete = 'F') -->
     <div *ngIf="!showDeleted">
         <h3>Active Users</h3>
-        <app-popup *ngIf="isPopup" [message]="popupMsg"></app-popup>
+        <app-popup *ngIf="isPopup" [message]="popupMsg" (close)="handlePopupClose()"></app-popup>
         <table class="table">
             <thead>
                 <tr>
@@ -61,8 +61,8 @@
                     <td *ngIf = "user.type=='Hotel'">Check In: {{ user.checkInDate}}<br> Check Out: {{ user.checkOutDate}}</td>
                     <td><span class="star" *ngFor="let r of [].constructor(user.rating); let i = index">★</span></td>
                     <td>
-                        <button *ngIf = "user.type=='Flight'" (click)="banORunban(user.user, user.flightId, user.type, 'ban')" class="button">Ban</button>
-                        <button *ngIf = "user.type=='Hotel'" (click)="banORunban(user.user, user.hotelId, user.type, 'ban')" class="button">Ban</button>
+                        <button *ngIf = "user.type=='Flight'" (click)="banORunban(user.user, user.userId, user.flightId, user.type, 'ban')" class="button">Ban</button>
+                        <button *ngIf = "user.type=='Hotel'" (click)="banORunban(user.user, user.userId, user.hotelId, user.type, 'ban')" class="button">Ban</button>
                     </td>
                 </tr>
             </tbody>

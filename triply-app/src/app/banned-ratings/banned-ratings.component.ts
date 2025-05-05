@@ -100,7 +100,7 @@ export class BannedRatingsComponent {
       );
     }
 
-  banORunban(userid: number, flightHotelId: number, type: string, action: string) {
+  banORunban(user: string, userid: number, flightHotelId: number, type: string, action: string) {
     this.banned = this.banned.filter((user: { id: number; }) => user.id !== userid);
     this.isPopup = !this.isPopup;
     if (type == "Flight") {
@@ -112,13 +112,24 @@ export class BannedRatingsComponent {
 
     console.log(action)
     if (action == "ban") {
-      this.popupMsg = "user with ID: " + userid + " has been banned";
+      this.popupMsg =  user + " has been banned";
     }
     else {
-      this.popupMsg = "user with ID: " + userid + " has been unbanned";
+      this.popupMsg = user + " has been unbanned";
     }
 
+  }
 
+  handlePopupClose(): void {
+    console.log('Popup closed');
+    this.isPopup = false;
+    this.showDeleted = true;
+    this.banned = [];
+    this.active = [];
+    this.counter = 1;
+    this.isPopup = false;
+    this.popupMsg = "";
+    this.loadBookingData();
   }
 
   loadBookingData(): void {
@@ -175,6 +186,7 @@ export class BannedRatingsComponent {
               user, 
               delete: rating.delete,
               rating: rating.rating,
+              userId:rating.userId,
               rateType,
               type: 'Flight',
             };
@@ -190,6 +202,7 @@ export class BannedRatingsComponent {
               user,
               delete: rating.delete,
               rating: rating.rating,
+              userId:rating.userId,
               rateType,
               type: 'Hotel',
             };
@@ -222,7 +235,8 @@ export class BannedRatingsComponent {
           rating: result.rating || 0,
           rateType: result.rateType,
           type: result.type,
-          user: result.user
+          user: result.user,
+          userId: result.userId
         });
       } else if (result.type === 'Hotel' && result.delete == 'T') {
         this.banned.push({
@@ -235,7 +249,8 @@ export class BannedRatingsComponent {
           rateType: result.rateType,
           type: result.type,
           description: result.hotelDetails.description,
-          user: result.user
+          user: result.user,
+          userId: result.userId
         });
       }
       else if (result.type === 'Flight' && result.delete == 'F') {
@@ -251,7 +266,8 @@ export class BannedRatingsComponent {
           rating: result.rating || 0,
           rateType: result.rateType,
           type: result.type,
-          user: result.user
+          user: result.user,
+          userId: result.userId
         });
       }
       else {
@@ -265,7 +281,8 @@ export class BannedRatingsComponent {
           rateType: result.rateType,
           type: result.type,
           description: result.hotelDetails.description,
-          user: result.user
+          user: result.user,
+          userId: result.userId
         });
       }
 

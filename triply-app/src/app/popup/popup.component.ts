@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,10 +9,10 @@ import { CommonModule } from '@angular/common';
 })
 export class PopupComponent {
   @Input() message: string = '';
-  isVisible: boolean = true;
+  @Output() close = new EventEmitter<void>();
 
-  close(): void{
-    this.isVisible = false
-    window.location.reload();
+  onClose(): void{
+    console.log('Closing popup...');
+    this.close.emit(); 
   }
 }
