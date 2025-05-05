@@ -210,7 +210,7 @@ export class HistoryComponent implements OnInit {
       };
       if (type=="Flight"){
         ratingData = {
-          "userId": 1,
+          "userId": this.userId,
           "flightId": id,
           "rating": newRating,
           "hotelId": null,
@@ -219,7 +219,7 @@ export class HistoryComponent implements OnInit {
       }
       else{
         ratingData = {
-          "userId": 1,
+          "userId": this.userId,
           "flightId": null,
           "rating": newRating,
           "hotelId": id,
