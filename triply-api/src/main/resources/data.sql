@@ -1705,7 +1705,8 @@ INSERT INTO Roles (name, created_dt, created_by, updated_dt, updated_by) VALUES
 
 INSERT INTO users (username, password, email, status_id, role_id, created_dt, created_by, updated_dt, updated_by) VALUES
                                                                                                                       ('System', '$2a$10$giPlj1WXG3RDyLddXUVrY.5AmMYQOIIi0CmFserGhd8eRZx/0ao8e', 'confidentgoldstine1@heywhatsoup.com', 1, 1, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM'),
-                                                                                                                      ('System2', '$2a$10$giPlj1WXG3RDyLddXUVrY.5AmMYQOIIi0CmFserGhd8eRZx/0ao8e', 'perafe3113@exitings.com', 1, 1, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM');
+                                                                                                                      ('System2', '$2a$10$giPlj1WXG3RDyLddXUVrY.5AmMYQOIIi0CmFserGhd8eRZx/0ao8e', 'perafe3113@exitings.com', 1, 1, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM'),
+                                                                                                                      ('System3', '$2a$10$giPlj1WXG3RDyLddXUVrY.5AmMYQOIIi0CmFserGhd8eRZx/0ao8e', 'fake@tempmail.com', 1, 2, 'NOW()', 'SYSTEM', 'NOW()', 'SYSTEM');
 
 INSERT INTO Booking (user_id, final_price, status, booking_time, created_dt, created_by, updated_dt, updated_by) VALUES
                                                                                                                      (1, 200.00, 'Confirmed', '2025-05-01 12:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
