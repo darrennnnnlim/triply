@@ -10,7 +10,7 @@
     <!-- Tab Content for Banned Users (delete = 'T') -->
     <div *ngIf="showDeleted">
         <h3>Banned Users</h3>
-        <app-popup *ngIf="isPopup" [message]="popupMsg"></app-popup>
+        <app-popup *ngIf="isPopup" [message]="popupMsg" (close)="handlePopupClose()"></app-popup>
         <table class="table">
             <thead>
                 <tr>
