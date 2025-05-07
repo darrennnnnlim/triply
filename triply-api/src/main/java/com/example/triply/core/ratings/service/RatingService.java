@@ -103,9 +103,9 @@ public class RatingService {
             resp.setDelete(rating.getDelete());
             if (rating.getFlightBooking() == null) {
                 resp.setFlightId(null);
-                resp.setHotelId(rating.getHotelBooking().getId());
+                resp.setHotelId(rating.getHotelBooking().getHotel().getId());
             } else {
-                resp.setFlightId(rating.getFlightBooking().getId());
+                resp.setFlightId(rating.getFlightBooking().getFlight().getId());
                 resp.setHotelId(null);
             }
             ratingResponses.add(resp);
