@@ -26,6 +26,8 @@ services:
       - "8082:8080" # Publish port 8080 for the backend
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    volumes:
+      - backend-logs:/app/logs
 
   database:
     image: postgres:16
@@ -49,3 +51,4 @@ networks:
 
 volumes:
   db-data:
+  backend-logs:
