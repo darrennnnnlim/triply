@@ -168,6 +168,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CheckSessionDTO checkSession(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = jwtAuthenticationFilter.extractAccessTokenFromCookie(request);
+        String refreshToken = jwtAuthenticationFilter.extractRefreshTokenFromCookie(request);
+
+        if (accessToken == null && refreshToken != null) {
+            accessToken = tokenValidation(response, refreshToken);
+        }
 
         CheckSessionDTO checkSessionDTO = new CheckSessionDTO();
         checkSessionDTO.setLoggedIn(false);
