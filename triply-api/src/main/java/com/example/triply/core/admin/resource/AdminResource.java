@@ -6,7 +6,6 @@ import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ public class AdminResource {
     @PostMapping("/{action}/{userId}")
     public ResponseEntity<String> performAction(@PathVariable String action, @PathVariable Long userId) {
         adminService.performUserAction(userId, action);
-        return ResponseEntity.ok("Action performed: " + action);
+        return ResponseEntity.ok(action);
     }
 
     @GetMapping("/users")
