@@ -9,6 +9,7 @@ import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
 import com.example.triply.core.flight.model.entity.Airline;
 import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.flight.repository.FlightRepository;
+import com.example.triply.core.hotel.model.entity.Hotel;
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
 import com.example.triply.core.ratings.entity.Ratings;
@@ -69,9 +70,12 @@ class RatingServiceTest {
         flightBooking.setId(1L);
         flightBooking.setFlight(flight);
 
+        Hotel hotel = new Hotel();
+        hotel.setId(1L);
 
         hotelBooking = new HotelBooking();
         hotelBooking.setId(1L);
+        hotelBooking.setHotel(hotel);
 
         ratingRequest = new RatingRequest();
     }
