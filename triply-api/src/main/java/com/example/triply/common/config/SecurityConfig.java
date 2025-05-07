@@ -29,6 +29,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 @Configuration
@@ -97,7 +98,7 @@ public class SecurityConfig {
             public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
                 delegate.handle(request, response, csrfToken);
 
-                if (csrfToken != null) {
+                if (csrfToken != null && !hasXsrfCookieAlreadySet(response)) {
                     ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", csrfToken.get().getToken())
                             .path("/")
                             .httpOnly(false)
@@ -112,6 +113,10 @@ public class SecurityConfig {
         };
     }
 
+    private boolean hasXsrfCookieAlreadySet(HttpServletResponse response) {
+        Collection<String> setCookies = response.getHeaders(HttpHeaders.SET_COOKIE);
+        return setCookies.stream().anyMatch(header -> header.startsWith("XSRF-TOKEN="));
+    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
