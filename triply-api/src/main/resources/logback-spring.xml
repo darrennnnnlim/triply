@@ -1,12 +1,21 @@
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT" />
-    </root>
+    <!-- Use this config for 'dev' and 'test' profiles -->
+    <springProfile name="dev,test">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+    <!-- Use external config for 'prod' profile -->
+    <springProfile name="prod">
+        <include resource="logback-prod.xml"/>
+    </springProfile>
+
 </configuration>
-
