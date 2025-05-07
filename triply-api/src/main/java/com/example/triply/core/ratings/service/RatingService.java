@@ -6,6 +6,7 @@ import com.example.triply.core.booking.entity.flight.FlightBooking;
 import com.example.triply.core.booking.entity.hotel.HotelBooking;
 import com.example.triply.core.booking.repository.flight.FlightBookingRepository;
 import com.example.triply.core.booking.repository.hotel.HotelBookingRepository;
+import com.example.triply.core.flight.model.entity.Flight;
 import com.example.triply.core.flight.repository.FlightRepository;
 import com.example.triply.core.ratings.dto.RatingRequest;
 import com.example.triply.core.ratings.dto.RatingResponse;
@@ -246,8 +247,8 @@ public class RatingService {
     }
 
     public List<RatingResponse> getRatingsByAirlineId(Long airlineId) {
-        List<Long> flightsWithAirlineId = flightRepository.findAllByAirlineId(airlineId).stream().map(flight -> flight.getAirline().getId()).toList();
-        List<Long> flightBookingsWithAirlineId = flightBookingRepository.findAllByFlightIdIn(flightsWithAirlineId).stream().map(flightBooking -> flightBooking.getFlight().getId()).toList();
+        List<Long> flightsWithAirlineId = flightRepository.findAllByAirlineId(airlineId).stream().map(Flight::getId).toList();
+        List<Long> flightBookingsWithAirlineId = flightBookingRepository.findAllByFlightIdIn(flightsWithAirlineId).stream().map(FlightBooking::getId).toList();
         List<Ratings> ratings = ratingRepository.findAllByFlightBookingIdIn(flightBookingsWithAirlineId);
         List<RatingResponse> ratingResponses = new ArrayList<>();
         for (Ratings rating : ratings) {

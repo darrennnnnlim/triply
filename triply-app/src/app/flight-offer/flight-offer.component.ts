@@ -163,6 +163,7 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
   }
 
   loadRatings(): void {
+    console.log(this.selectedFlightOffer)
     // Ensure selectedFlightOffer is not null before accessing airlineId
     if (this.selectedFlightOffer?.airlineId) {
         const airlineId: number = this.selectedFlightOffer.airlineId;
@@ -173,6 +174,7 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
         const userDetailsPromises = userIds.map((userId: number) =>
           this.bannedUserRatingService.getUser(userId).toPromise()
         );
+        console.log("hi")
 
         Promise.all(userDetailsPromises)
           .then(userDetailsResponses => {
@@ -181,6 +183,8 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
               // Assuming user response needs parsing if it's a stringified JSON
               try {
                   const parsedUser = typeof user === 'string' ? JSON.parse(user) : user;
+                  console.log(user)
+                  console.log(parsedUser)
                   if(parsedUser && parsedUser.id) {
                      userDetailsMap.set(parsedUser.id, parsedUser.username);
                   }
@@ -191,6 +195,8 @@ export class FlightOfferComponent implements OnInit { // Implement OnInit
 
             this.ratings = this.ratings.map(rating => {
               const username = userDetailsMap.get(rating.userId);
+              console.log(rating)
+              console.log(username)
               return {
                 ...rating,
                 username: username || 'Unknown User', // Provide fallback username
