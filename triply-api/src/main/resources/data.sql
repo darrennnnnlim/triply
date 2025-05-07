@@ -1653,8 +1653,8 @@ INSERT INTO Booking (user_id, final_price, status, booking_time, created_dt, cre
 INSERT INTO Flight_Booking (flight_id, flight_class_id, booking_id, user_id, departure_date, created_dt, created_by, updated_dt, updated_by) VALUES
 (1, 1, 1, 1, '2025-06-01 09:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
 (1, 1, 3, 2, '2025-06-02 10:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
-(151, 1, 5, 3, '2025-01-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
-(151, 1, 7, 2, '2025-01-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
+(151, 1, 5, 2, '2025-01-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM'),
+(151, 1, 7, 3, '2025-01-01 11:00:00', NOW(), 'SYSTEM', NOW(), 'SYSTEM');
 
 
 INSERT INTO Hotel_Booking (hotel_id, hotel_room_type_id, booking_id, user_id, check_in, check_out, created_dt, created_by, updated_dt, updated_by) VALUES

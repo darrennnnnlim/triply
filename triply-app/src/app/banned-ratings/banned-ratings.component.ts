@@ -136,10 +136,10 @@ export class BannedRatingsComponent {
     this.ratingService.getAllRatings().subscribe(allRatings => {
       const flightRatings = allRatings.filter((rating: { flightId: number }) => rating.flightId);
       const hotelRatings = allRatings.filter((rating: { hotelId: number }) => rating.hotelId);
-  
-      const flightIds = [...new Set(flightRatings.map((rating: any) => rating.flightId))] as number[];
-      const hotelIds = [...new Set(hotelRatings.map((rating: any) => rating.hotelId))] as number[];
-  
+
+      const flightIds = [...flightRatings.map((rating: any) => rating.flightId)] as number[];
+      const hotelIds = [...hotelRatings.map((rating: any) => rating.hotelId)] as number[];
+      
       const userIds = [
         ...new Set([
           ...flightRatings.map((rating: any) => rating.userId),
@@ -166,7 +166,7 @@ export class BannedRatingsComponent {
             responses.slice(flightDetailsPromises.length, flightDetailsPromises.length + hotelDetailsPromises.length),
             ...responses.slice(flightDetailsPromises.length + hotelDetailsPromises.length),
           ];
-  
+          
           const userDetailsMap = new Map<number, any>();
           userDetailsResponses.forEach((data: any) => {
             const newdata = JSON.parse(data);
@@ -175,7 +175,6 @@ export class BannedRatingsComponent {
             userDetailsMap.set(newdata.id, username); 
           });
   
-          
           const flightResults = flightRatings.map((rating: { rating: number, userId: number, delete: string }, index: number) => {
             const flightDetails = flightDetailsResponses[index];
             const user = userDetailsMap.get(rating.userId);

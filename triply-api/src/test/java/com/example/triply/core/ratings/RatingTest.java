@@ -90,7 +90,7 @@ class RatingServiceTest {
         ratingRequest.setHotelId(null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(Optional.of(flightBooking));
+        when(flightBookingRepository.findByFlightIdAndUserId(any(), any())).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(null);
 
         Ratings savedRating = new Ratings();
@@ -120,7 +120,7 @@ class RatingServiceTest {
         ratingRequest.setFlightId(null);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.of(hotelBooking));
+        when(hotelBookingRepository.findByHotelIdAndUserId(any(), any())).thenReturn(Optional.of(hotelBooking));
         when(ratingRepository.findByUserAndHotelBooking(user, hotelBooking)).thenReturn(null);
 
         Ratings savedRating = new Ratings();
@@ -158,7 +158,7 @@ class RatingServiceTest {
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(Optional.of(flightBooking));
+        when(flightBookingRepository.findByFlightIdAndUserId(any(), any())).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(existingRating);
 
 
@@ -437,8 +437,8 @@ class RatingServiceTest {
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(flightBookingRepository.findById(1L)).thenReturn(Optional.of(flightBooking));
-        when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(rating);
+        when(flightBookingRepository.findByFlightIdAndUserId(any(), any())).thenReturn(Optional.of(flightBooking));
+        when(ratingRepository.findByUserIdAndFlightBookingId(any(), any())).thenReturn(rating);
 
         ratingService.softDelete(1L, 1L, null);
 
@@ -454,8 +454,8 @@ class RatingServiceTest {
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(hotelBookingRepository.findById(1L)).thenReturn(Optional.of(hotelBooking));
-        when(ratingRepository.findByUserAndHotelBooking(user, hotelBooking)).thenReturn(rating);
+        when(hotelBookingRepository.findByHotelIdAndUserId(any(), any())).thenReturn(Optional.of(hotelBooking));
+        when(ratingRepository.findByUserIdAndHotelBookingId(any(), any())).thenReturn(rating);
 
 
         ratingService.softDelete(1L, null, 1L);
@@ -496,7 +496,7 @@ class RatingServiceTest {
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(flightBookingRepository.findById(3L)).thenReturn(Optional.of(flightBooking));
+        when(flightBookingRepository.findByFlightIdAndUserId(any(), any())).thenReturn(Optional.of(flightBooking));
         when(ratingRepository.findByUserAndFlightBooking(user, flightBooking)).thenReturn(null); // No rating found
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
