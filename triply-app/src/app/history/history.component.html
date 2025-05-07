@@ -1,32 +1,46 @@
 <div class="container">
-    <h2 class="text-center">Rate Booking</h2>
-    <div class="row">
-        <div class="col-sm">
-            <div *ngFor="let item of items">
-                <div class="card" *ngIf = "item.type=='Flight' && isAfterDateTime(item.arrivalTime)">
-                    <h3>{{ item.name }}</h3>
-                    <p>Flight Number: {{ item.flightNumber }}</p>
-                    <p> Arrtival Date Time: {{ item.arrivalTime }}</p>
-                    <p>Departure Date Time:  {{item.departureTime}}</p>
-                    <rating *ngIf="expandedId===item.id" [currentRating]="item.rating" [totalStars]="5"
-                        (ratingChange)="onRatingChange($event, item.flightId, item.type)" />
-                    <button (click)="toggleExpand(item.id)">
-                        {{ expandedId === item.id? 'Collapse': 'Rate Booking'}}
-                    </button>
-                </div>
-
-                <div class="card" *ngIf = "item.type=='Hotel' && isAfterDateTime(item.checkOutDate)">
-                    <h3>{{ item.name }}</h3>
-                    <p>Check In Date Time: {{ item.checkInDate }}</p>
-                    <p>Check Out Date Time: {{ item.checkOutDate }}</p>
-                    <p>Description:  {{item.description}}</p>
-                    <rating *ngIf="expandedId===item.id" [currentRating]="item.rating" [totalStars]="5"
-                        (ratingChange)="onRatingChange($event, item.hotelId, item.type)" />
-                    <button (click)="toggleExpand(item.id)">
-                        {{ expandedId === item.id? 'Collapse': 'Rate Booking'}}
-                    </button>
-                </div>
-            </div>
+  <h2 class="text-center">Rate Booking</h2>
+  <div class="row">
+    <div class="col-sm">
+      <div *ngFor="let item of items">
+        <div
+          class="card"
+          *ngIf="item.type == 'Flight' && isAfterDateTime(item.arrivalTime)"
+        >
+          <h3>{{ item.name }}</h3>
+          <p>Flight Number: {{ item.flightNumber }}</p>
+          <p>Arrtival Date Time: {{ item.arrivalTime }}</p>
+          <p>Departure Date Time: {{ item.departureTime }}</p>
+          <rating
+            *ngIf="expandedId === item.id"
+            [currentRating]="item.rating"
+            [totalStars]="5"
+            (ratingChange)="onRatingChange($event, item.id, item.type)"
+          />
+          <button (click)="toggleExpand(item.id)">
+            {{ expandedId === item.id ? "Collapse" : "Rate Booking" }}
+          </button>
         </div>
+
+        <div
+          class="card"
+          *ngIf="item.type == 'Hotel' && isAfterDateTime(item.checkOutDate)"
+        >
+          <h3>{{ item.name }}</h3>
+          <p>Check In Date Time: {{ item.checkInDate }}</p>
+          <p>Check Out Date Time: {{ item.checkOutDate }}</p>
+          <p>Description: {{ item.description }}</p>
+          <rating
+            *ngIf="expandedId === item.id"
+            [currentRating]="item.rating"
+            [totalStars]="5"
+            (ratingChange)="onRatingChange($event, item.id, item.type)"
+          />
+          <button (click)="toggleExpand(item.id)">
+            {{ expandedId === item.id ? "Collapse" : "Rate Booking" }}
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
