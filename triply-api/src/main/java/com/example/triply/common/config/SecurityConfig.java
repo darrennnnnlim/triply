@@ -66,7 +66,6 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/{version}/auth/**", "/api/{version}/booking/**", "/api/v1/ratings/**", "/api/v1/reset-password", "/test/**", "/api/v1/priceThreshold")
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(customCsrfTokenRequestHandler()))
                 .exceptionHandling(exception -> exception.accessDeniedHandler(csrfAccessDeniedHandler))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -97,7 +96,7 @@ public class SecurityConfig {
             public void handle(HttpServletRequest request, HttpServletResponse response, Supplier<CsrfToken> csrfToken) {
                 delegate.handle(request, response, csrfToken);
 
-                if (csrfToken != null) {
+//                if (csrfToken != null) {
                     ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", csrfToken.get().getToken())
                             .path("/")
                             .httpOnly(false)
@@ -107,7 +106,7 @@ public class SecurityConfig {
                             .build();
 
                     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-                }
+//                }
             }
         };
     }
