@@ -44,7 +44,7 @@
         </p>
 
         <div *ngFor="let rating of ratings" class="rating-item">
-          <span class="username">{{rating.user}}:</span>
+          <span class="username">{{rating.username}}:</span>
           <div class="stars">
             <span *ngFor="let r of [].constructor(rating.rating); let i = index" class="star">★</span>
             <span *ngFor="let r of [].constructor(5 - rating.rating); let i = index" class="star empty-star">★</span>
