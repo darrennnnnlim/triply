@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HotelBookingRepository extends JpaRepository<HotelBooking, Long> {
@@ -20,4 +21,6 @@ public interface HotelBookingRepository extends JpaRepository<HotelBooking, Long
 
     @Query("SELECT hb FROM HotelBooking hb WHERE hb.booking.id IN :bookingIds")
     List<HotelBooking> findByBookingIdsIn(List<Long> bookingIds);
+
+    Optional<HotelBooking> findByHotelIdAndUserId(Long hotelId, Long userId);
 }
