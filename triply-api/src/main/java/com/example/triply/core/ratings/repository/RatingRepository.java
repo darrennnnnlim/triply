@@ -23,7 +23,11 @@ public interface  RatingRepository extends JpaRepository<Ratings, Long> {
 
     Ratings findByUserAndFlightBooking(User user, FlightBooking flightBooking);
 
+    Ratings findByUserIdAndFlightBookingId(Long userId, Long flightBookingId);
+
     Ratings findByUserAndHotelBooking(User user, HotelBooking hotelBooking);
 
     List<Ratings> findAllByFlightBookingIdIn(List<Long> flightsWithAirlineId);
+
+    Ratings findByUserIdAndHotelBookingId(Long userId, Long flightId);
 }

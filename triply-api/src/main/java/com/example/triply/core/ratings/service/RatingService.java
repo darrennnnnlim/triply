@@ -50,10 +50,10 @@ public class RatingService {
         HotelBooking hotelBooking = null;
 
         if (FLIGHT.equalsIgnoreCase(ratingRequest.getType())) {
-            flightBooking = flightBookingRepository.findById(ratingRequest.getFlightId())
+            flightBooking = flightBookingRepository.findByFlightIdAndUserId(ratingRequest.getFlightId(), ratingRequest.getUserId())
                     .orElseThrow(() -> new RuntimeException("Flight Booking not found"));
         } else {
-            hotelBooking = hotelBookingRepository.findById(ratingRequest.getHotelId())
+            hotelBooking = hotelBookingRepository.findByHotelIdAndUserId(ratingRequest.getHotelId(), ratingRequest.getUserId())
                     .orElseThrow(() -> new RuntimeException("Hotel Booking not found"));
         }
 
@@ -185,15 +185,15 @@ public class RatingService {
         Ratings ratings = null;
 
         if (flightId != null) {
-            FlightBooking flightBooking = flightBookingRepository.findById(flightId)
+            FlightBooking flightBooking = flightBookingRepository.findByFlightIdAndUserId(flightId, userId)
                     .orElseThrow(() -> new RuntimeException("FlightBooking not found"));
 
-            ratings = ratingRepository.findByUserAndFlightBooking(user, flightBooking);
+            ratings = ratingRepository.findByUserIdAndFlightBookingId(user.getId(), flightBooking.getId());
         } else if (hotelId != null) {
-            HotelBooking hotelBooking = hotelBookingRepository.findById(hotelId)
+            HotelBooking hotelBooking = hotelBookingRepository.findByHotelIdAndUserId(hotelId, userId)
                     .orElseThrow(() -> new RuntimeException("HotelBooking not found"));
 
-            ratings = ratingRepository.findByUserAndHotelBooking(user, hotelBooking);
+            ratings = ratingRepository.findByUserIdAndHotelBookingId(user.getId(), hotelBooking.getId());
         }
 
         if (ratings == null) {
