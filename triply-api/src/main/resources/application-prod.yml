@@ -55,6 +55,11 @@ springdoc:
 
 logging:
   level:
+    root: info
     org:
       springframework:
         security: info  # change to error/info in prod to reduce log noise
+  file:
+    name: /app/logs/triply-${spring.application.name}-${date:yyyy-MM-dd}.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
