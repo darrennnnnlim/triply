@@ -40,12 +40,12 @@ export class BannedRatingsComponent {
     private adminService: AdminService,
     private router: Router,
     public authService: AuthService) {
-      this.authState$ = this.authService.authState$ as Observable<{
-        isLoggedIn: boolean;
-        username?: string;
-        role?: string;
-      }>;
-     }
+    this.authState$ = this.authService.authState$ as Observable<{
+      isLoggedIn: boolean;
+      username?: string;
+      role?: string;
+    }>;
+  }
 
      ngOnInit(): void {
       // this.loadBookingData();
@@ -220,9 +220,11 @@ export class BannedRatingsComponent {
 
   addItemsToList(results: any[]): void {
     console.log(results)
+    let bannedTemp: any = []
+    let activeTemp: any = []
     results.forEach((result: any) => {
       if (result.type === 'Flight' && result.delete == 'T') {
-        this.banned.push({
+        bannedTemp.push({
           name: result.flightDetails.airline,
           arrivalTime: convertDateTime(result.flightDetails.arrivalTime),
           departureTime: convertDateTime(result.flightDetails.departureTime),
@@ -238,7 +240,7 @@ export class BannedRatingsComponent {
           userId: result.userId
         });
       } else if (result.type === 'Hotel' && result.delete == 'T') {
-        this.banned.push({
+        bannedTemp.push({
           name: result.hotelDetails.name,
           checkInDate: convertDateTime(result.hotelDetails.checkInDate),
           checkOutDate: convertDateTime(result.hotelDetails.checkOutDate),
@@ -253,7 +255,7 @@ export class BannedRatingsComponent {
         });
       }
       else if (result.type === 'Flight' && result.delete == 'F') {
-        this.active.push({
+        activeTemp.push({
           name: result.flightDetails.airline,
           arrivalTime: convertDateTime(result.flightDetails.arrivalTime),
           departureTime: convertDateTime(result.flightDetails.departureTime),
@@ -270,7 +272,7 @@ export class BannedRatingsComponent {
         });
       }
       else {
-        this.active.push({
+        activeTemp.push({
           name: result.hotelDetails.name,
           checkInDate: convertDateTime(result.hotelDetails.checkInDate),
           checkOutDate: convertDateTime(result.hotelDetails.checkOutDate),
@@ -286,7 +288,9 @@ export class BannedRatingsComponent {
       }
 
     });
-
+    
+    this.banned = bannedTemp;
+    this.active = activeTemp;
     console.log(this.banned);
     console.log(this.active)
   }
