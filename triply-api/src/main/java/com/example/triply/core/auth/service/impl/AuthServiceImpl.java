@@ -83,13 +83,13 @@ public class AuthServiceImpl implements AuthService {
             String accessToken = jwtService.generateAccessToken(authRequest.getUsername(), Set.of(userOptional.get().getRole()));
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(userOptional.get());
 
-            Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, accessToken);
+            Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, sanitizeForCookie(accessToken));
             accessTokenCookie.setHttpOnly(true);
             accessTokenCookie.setSecure(true);
             accessTokenCookie.setPath("/");
             accessTokenCookie.setMaxAge(accessTokenCookieExpiry);
 
-            Cookie refreshTokenCookie = new Cookie(CommonConstants.REFRESH_TOKEN, refreshToken.getToken());
+            Cookie refreshTokenCookie = new Cookie(CommonConstants.REFRESH_TOKEN, sanitizeForCookie(refreshToken.getToken()));
             refreshTokenCookie.setHttpOnly(true);
             refreshTokenCookie.setSecure(true);
             refreshTokenCookie.setPath("/");
@@ -106,6 +106,11 @@ public class AuthServiceImpl implements AuthService {
         } else {
             throw new UserNotFoundException();
         }
+    }
+
+    private String sanitizeForCookie(String value) {
+        if (value == null) return null;
+        return value.replaceAll("[\\r\\n]", "");
     }
 
     @Override
