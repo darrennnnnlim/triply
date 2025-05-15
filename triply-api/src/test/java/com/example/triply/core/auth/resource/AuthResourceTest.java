@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -21,12 +22,13 @@ class AuthResourceTest {
     private MockMvc mockMvc;
     private AuthService authService;
     private JwtService jwtService;
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
         authService = mock(AuthService.class);
         jwtService = mock(JwtService.class);
-        AuthResource authResource = new AuthResource(authService, jwtService);
+        AuthResource authResource = new AuthResource(authService, jwtService, passwordEncoder);
         mockMvc = MockMvcBuilders.standaloneSetup(authResource)
                 .addPlaceholderValue("triply.api-version", "v1")
                 .build();
