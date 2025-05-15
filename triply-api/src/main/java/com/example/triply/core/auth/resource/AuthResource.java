@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.example.triply.core.auth.service.JwtService;
 import org.springframework.util.StringUtils;
@@ -24,11 +25,13 @@ public class AuthResource {
     private static final String NEW_PASSWORD_SAME = "New password cannot be the same as current password";
     private static final String PASSWORD_UPDATED = "Password updated successfully";
     private static final String PASSWORD_NOT_UPDATED = "Password could not be updated";
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthResource(AuthService authService, JwtService jwtService) {
+    public AuthResource(AuthService authService, JwtService jwtService, PasswordEncoder passwordEncoder) {
         this.authService = authService;
         this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/loginTest")
@@ -99,7 +102,7 @@ public class AuthResource {
         if (!StringUtils.hasText(request.getCurrentPassword()) || !StringUtils.hasText(request.getNewPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MESSAGE, "Password fields cannot be blank"));
         }
-        if (request.getCurrentPassword().equals(request.getNewPassword())) {
+        if (!passwordEncoder.matches(request.getCurrentPassword(), request.getNewPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(MESSAGE, NEW_PASSWORD_SAME));
         }
         try {
