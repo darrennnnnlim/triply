@@ -240,7 +240,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = validToken.get().getUser();
         String newAccessToken = jwtService.generateAccessToken(user.getUsername(), Set.of(user.getRole()));
-        Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, newAccessToken);
+        Cookie accessTokenCookie = new Cookie(CommonConstants.ACCESS_TOKEN, sanitizeForCookie(newAccessToken));
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setSecure(true);
         accessTokenCookie.setPath("/");
