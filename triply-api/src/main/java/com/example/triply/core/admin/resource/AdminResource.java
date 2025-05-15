@@ -4,6 +4,7 @@ import com.example.triply.core.admin.dto.UserRoleDTO;
 import com.example.triply.core.admin.service.AdminService;
 import com.example.triply.core.auth.entity.User;
 import com.example.triply.core.auth.repository.UserRepository;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,8 @@ public class AdminResource {
     @PostMapping("/{action}/{userId}")
     public ResponseEntity<String> performAction(@PathVariable String action, @PathVariable Long userId) {
         adminService.performUserAction(userId, action);
-        return ResponseEntity.ok(action);
+        String safeAction = StringEscapeUtils.escapeHtml4(action);
+        return ResponseEntity.ok(safeAction);
     }
 
     @GetMapping("/users")
