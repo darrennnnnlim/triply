@@ -28,6 +28,7 @@ class AuthResourceTest {
     void setUp() {
         authService = mock(AuthService.class);
         jwtService = mock(JwtService.class);
+        passwordEncoder = mock(PasswordEncoder.class);
         AuthResource authResource = new AuthResource(authService, jwtService, passwordEncoder);
         mockMvc = MockMvcBuilders.standaloneSetup(authResource)
                 .addPlaceholderValue("triply.api-version", "v1")
