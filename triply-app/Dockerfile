@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # Serve stage
-FROM nginx:alpine
+FROM nginx:1.28.0-alpine3.21-slim
 WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*  # Remove any default Nginx files
 COPY --from=build /app/dist/triply-app/browser/* .
