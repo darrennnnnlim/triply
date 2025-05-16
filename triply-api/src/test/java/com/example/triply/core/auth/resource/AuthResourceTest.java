@@ -93,6 +93,7 @@ class AuthResourceTest {
     void resetPassword_shouldReturnUpdatedMessage() throws Exception {
         when(jwtService.extractUsernameFromRequest(any(HttpServletRequest.class))).thenReturn("user");
         when(authService.resetPassword(eq("user"), eq("oldpass"), eq("newpass"))).thenReturn(true);
+        when(passwordEncoder.matches("oldpass", "newpass")).thenReturn(true);
 
         String json = """
                 {
@@ -166,6 +167,7 @@ class AuthResourceTest {
     void testResetPassword_shouldReturnBadRequestWhenResetFails() throws Exception {
         when(jwtService.extractUsernameFromRequest(any(HttpServletRequest.class))).thenReturn("user");
         when(authService.resetPassword(eq("user"), eq("oldpass"), eq("newpass"))).thenReturn(false);
+        when(passwordEncoder.matches("oldpass", "newpass")).thenReturn(true);
 
         String json = """
         {
@@ -186,6 +188,7 @@ class AuthResourceTest {
         when(jwtService.extractUsernameFromRequest(any(HttpServletRequest.class))).thenReturn("user");
         when(authService.resetPassword(eq("user"), eq("oldpass"), eq("newpass")))
                 .thenThrow(new RuntimeException("Service error"));
+        when(passwordEncoder.matches("oldpass", "newpass")).thenReturn(true);
 
         String json = """
         {
