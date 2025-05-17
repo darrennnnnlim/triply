@@ -7,9 +7,9 @@
         <button (click)="showDeleted = false" [class.active]="!showDeleted">Active Ratings</button>
     </div>
 
-    <!-- Tab Content for Banned Users (delete = 'T') -->
+    <!-- Tab Content for Banned Ratings (delete = 'T') -->
     <div *ngIf="showDeleted">
-        <h3>Banned Users</h3>
+        <h3>Banned Ratings</h3>
         <app-popup *ngIf="isPopup" [message]="popupMsg" (close)="handlePopupClose()"></app-popup>
         <table class="table">
             <thead>
@@ -38,9 +38,9 @@
         </table>
     </div>
 
-    <!-- Tab Content for Active Users (delete = 'F') -->
+    <!-- Tab Content for Active Ratings (delete = 'F') -->
     <div *ngIf="!showDeleted">
-        <h3>Active Users</h3>
+        <h3>Active Ratings</h3>
         <app-popup *ngIf="isPopup" [message]="popupMsg" (close)="handlePopupClose()"></app-popup>
         <table class="table">
             <thead>
